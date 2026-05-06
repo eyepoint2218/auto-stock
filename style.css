@@ -1,0 +1,78 @@
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background: #06080f;
+  color: #d6e1ff;
+}
+
+.app {
+  max-width: 860px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+h1 {
+  color: #8eb1ff;
+}
+
+.hint {
+  color: #95a7d1;
+}
+
+.log {
+  border: 1px solid #24325c;
+  background: #0a1226;
+  border-radius: 10px;
+  min-height: 340px;
+  max-height: 60vh;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.msg {
+  margin: 0.45rem 0;
+  white-space: pre-wrap;
+}
+
+.msg.user {
+  color: #c0cfff;
+}
+
+.msg.bot {
+  color: #99f6b5;
+}
+
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+input {
+  flex: 1;
+  border: 1px solid #2a3e73;
+  background: #0d1630;
+  color: #f5f7ff;
+  border-radius: 8px;
+  padding: 0.7rem;
+}
+
+button {
+  border: 0;
+  background: #3f6ae8;
+  color: white;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+
+.site-url {
+  color: #7ec8ff;
+  font-size: 0.92rem;
+  margin-bottom: 0.8rem;
+}
