@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JARVIS Web Console</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>JARVIS Web Console</h1>
+      <p class="hint">명령은 <code>jarvis ...</code> 형태로 입력하세요.</p>
+      <p id="site-url" class="site-url"></p>
+
+      <section id="log" class="log" aria-live="polite"></section>
+
+      <form id="input-form" class="input-row">
+        <input id="command-input" autocomplete="off" placeholder="예: jarvis help" />
+        <button type="submit">Send</button>
+      </form>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
