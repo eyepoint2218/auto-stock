@@ -17,6 +17,15 @@
       "image": "img/ae8f8d_still.jpg",
       "layout": "cover",
       "poster": "img/ae8f8d_poster.jpg"
+    },
+    "엘리트들": {
+      "source": "tmdb",
+      "tmdb": "tv/76669",
+      "tmdb_name": "엘리트들",
+      "page_url": "https://www.themoviedb.org/tv/76669",
+      "image": "img/7ac64b_still.jpg",
+      "layout": "cover",
+      "poster": "img/7ac64b_poster.jpg"
     }
   }
 }
