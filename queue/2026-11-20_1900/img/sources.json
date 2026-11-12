@@ -1,0 +1,18 @@
+{
+  "img/d_p_tv_series.png": {
+    "page": "D.P. (TV series)",
+    "page_url": "https://en.wikipedia.org/wiki/D.P._%28TV_series%29",
+    "file": "D.P._(TV_series)_2.png",
+    "src": "https://upload.wikimedia.org/wikipedia/en/2/2f/D.P._%28TV_series%29_2.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "width": 255,
+    "height": 378
+  },
+  "img/the_queen_s_gambit_miniseries.png": {
+    "page": "The Queen's Gambit (miniseries)",
+    "page_url": "https://en.wikipedia.org/wiki/The_Queen%27s_Gambit_%28miniseries%29",
+    "file": "The_Queen's_Gambit_(miniseries).png",
+    "src": "https://upload.wikimedia.org/wikipedia/en/1/12/The_Queen%27s_Gambit_%28miniseries%29.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "width": 250,
+    "height": 370
+  }
+}
