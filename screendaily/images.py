@@ -303,7 +303,8 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
                         e["actor_photo"] = tagged[e["tmdb"]]
                         e["layout"] = "cover"
                         print(f"  ✓ {title}: {actor} 태그 사진 사용")
-                elif spare:
+                elif spare and not (e and e.get("image") and "_profile" not in e.get("image", "")):
+                    # 작품 사진이 아예 없을 때만 배우 프로필 사진으로 채움
                     fp = spare.pop(0)
                     entry = e or {"source": "tmdb"}
                     if entry.get("actor_photo") != fp or "_profile" not in entry.get("image", ""):
