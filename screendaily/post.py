@@ -13,7 +13,7 @@ import yaml
 
 from . import ROOT
 
-GENERATOR_VERSION = "8"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
+GENERATOR_VERSION = "9"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
 
 
 def load_config() -> dict:
@@ -37,6 +37,7 @@ class Item:
     role: str = ""    # 배우 소개: 배역 이름 (비우면 TMDB 출연 기록에서 자동)
     year: str = ""    # 배우 스토리: 큰 숫자 대신 연도 표시 (예: 1997)
     stage: str = ""   # 배우 스토리: 단계 표시 (예: 데뷔, 첫 주연, 전환점)
+    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음)
 
 
 @dataclass

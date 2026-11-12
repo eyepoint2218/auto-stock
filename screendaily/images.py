@@ -247,7 +247,8 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
     # 1) TMDB
     for it in items:
         title = str(it["title"])
-        if it.get("image") or not tmdb or str(it.get("tmdb") or "").lower() == "none":
+        if it.get("image") or not tmdb or str(it.get("tmdb") or "").lower() == "none" \
+                or str(it.get("type") or "") in ("story", "quote"):
             continue
         cur = by_title.get(title, {})
         override = str(it.get("tmdb") or "")
@@ -294,7 +295,7 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             spare = [p for p in profiles[1:]]  # 첫 번째는 표지에 사용
             for it in items:
                 title = str(it["title"])
-                if it.get("image"):
+                if it.get("image") or str(it.get("type") or "") in ("story", "quote"):
                     continue
                 e = by_title.get(title)
                 if e and e.get("tmdb") in tagged:

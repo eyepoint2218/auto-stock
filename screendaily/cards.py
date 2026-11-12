@@ -385,6 +385,72 @@ def render_outro(post: Post, config: dict) -> Image.Image:
     return canvas.convert("RGB")
 
 
+# ---------------------------------------------------------------- 인생 이야기 카드
+
+def _story_bg(post: Post, theme, accent, idx: int) -> Image.Image:
+    """배우 사진을 아주 흐리게 깐 어두운 배경 (사진이 없으면 그라데이션)."""
+    im = open_img(post.asset(post.actor_image)) if post.actor_image else None
+    if im:
+        bg = cover_crop(im, (W, H), (0.5, 0.25)).filter(ImageFilter.GaussianBlur(28)).convert("RGBA")
+        bg.alpha_composite(Image.new("RGBA", (W, H), (10, 10, 12, 200)))
+        glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(glow).ellipse((-W * 0.3, -H * 0.2, W * 0.7, H * 0.45), fill=accent + (60,))
+        bg.alpha_composite(glow.filter(ImageFilter.GaussianBlur(120)))
+        return bg
+    return placeholder_bg((W, H), accent, THEMES["dark"], idx)
+
+
+def render_story(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
+    """연도 + 헤드라인 + 본문으로 읽히는 이야기 카드. item.type == "quote" 면 인용 카드."""
+    theme = THEMES["dark"]
+    accent = hex2rgb(config.get("labels", {}).get(post.label, "#FF4D4D"))
+    brand = config.get("brand", "SCREEN DAILY")
+    canvas = _story_bg(post, theme, accent, idx)
+    d = ImageDraw.Draw(canvas)
+    d.text((M, 60), brand, font=font(EB, 28), fill=(255, 255, 255, 230))
+    if post.actor_name or post.actor:
+        d.text((W - M, 64), post.actor_name or post.actor, font=font(B, 26), fill=(255, 255, 255, 190), anchor="ra")
+
+    top, bottom = 150, H - 150  # 글을 놓을 수 있는 영역
+    if item.type == "quote":
+        mark_h = 150
+        qf, ql = fit(item.title, EB, W - M * 2, 5, 76, 50)
+        df = font(R, 40)
+        dl = fit(item.desc, R, W - M * 2, 6, 40, 40)[1] if item.desc else []
+        src = " · ".join(t for t in (item.year, item.stage) if t)
+        h = mark_h + block_h(qf, ql) + (40 + block_h(df, dl) if dl else 0) + (70 if src else 0)
+        y = max(top, top + (bottom - top - h) // 2)
+        d.text((M - 6, y - 60), "\u201c", font=font(EB, 240), fill=accent)
+        y = draw_lines(d, ql, qf, M, y + mark_h, theme["fg"])
+        if dl:
+            y = draw_lines(d, dl, df, M, y + 40, theme["sub"])
+        if src:
+            d.text((M, y + 40), "— " + src, font=font(B, 32), fill=accent)
+    else:
+        yf, sf_ = font(EB, 170), font(EB, 28)
+        hf, hl = fit(item.title, EB, W - M * 2, 3, 80, 56)
+        df = font(R, 42)
+        room = bottom - top - (210 if item.year else 0) - (80 if item.stage else 0) - block_h(hf, hl) - 36
+        dl = fit(item.desc, R, W - M * 2, max(2, room // line_h(df)), 42, 42)[1] if item.desc else []
+        h = (210 if item.year else 0) + (80 if item.stage else 0) + block_h(hf, hl) + (36 + block_h(df, dl) if dl else 0)
+        y = max(top, top + (bottom - top - h) // 2)
+        if item.year:
+            d.text((M - 4, y - 20), item.year, font=yf, fill=accent)
+            y += 210
+        if item.stage:
+            box = pill(d, M, y, item.stage, sf_, accent, (15, 15, 15))
+            y = box[3] + 30
+        y = draw_lines(d, hl, hf, M, y, theme["fg"])
+        if dl:
+            draw_lines(d, dl, df, M, y + 36, theme["sub"])
+
+    if item.bubble:
+        b = bubble_layer(item.bubble, size=34, angle=2.5)
+        paste_center(canvas, b, W - M - b.width // 2 + 10, H - 210)
+    footer(canvas, theme, brand, f"{idx + 1} / {total}")
+    return canvas.convert("RGB")
+
+
 def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.images:
         out = []
@@ -399,7 +465,10 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
     total = 1 + len(post.items) + (1 if post.outro else 0)
     slides = [render_cover(post, config)]
     for i, it in enumerate(post.items, 1):
-        slides.append(render_item(post, it, i, total, config))
+        if it.type in ("story", "quote"):
+            slides.append(render_story(post, it, i, total, config))
+        else:
+            slides.append(render_item(post, it, i, total, config))
     if post.outro:
         slides.append(render_outro(post, config))
     return slides

@@ -104,6 +104,7 @@ git add queue && git commit -m "다음 주 예약" && git push
 - 동명이인이면 `actor_tmdb: person/ID`, 마지막 장 질문은 `outro_question:` 으로 바꿀 수 있습니다.
 - 예시: `examples/actor_jeonjongseo/` (대표작 소개), `examples/actor_story_ohjungse/` (데뷔부터 지금까지 타임라인)
 - 배우 스토리 형식: 작품마다 `year: "1997"`(큰 숫자 대신 연도) 와 `stage: 데뷔`(단계 라벨) 를 적습니다.
+- **인생 이야기 카드**: `type: story` 는 작품 사진 없이 연도·헤드라인·본문으로 읽히는 카드 (배경은 배우 사진을 흐리게), `type: quote` 는 수상 소감·인터뷰 한마디를 크게 보여주는 인용 카드입니다.
 - 출연 기록에 없는 작품은 동명 작품이 잡히지 않도록 사진 없이 진행합니다. `tmdb: none` 으로 직접 끌 수도 있습니다.
 
 ## 3. 릴스(영상)
