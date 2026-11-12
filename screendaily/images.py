@@ -202,7 +202,8 @@ def load_sources(slot_dir: Path) -> dict:
 
 def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
     raw = yaml.safe_load((slot_dir / "post.yml").read_text(encoding="utf-8")) or {}
-    items = [it for it in raw.get("items") or [] if isinstance(it, dict) and it.get("title")]
+    items = [it for it in (raw.get("items") or []) + (raw.get("recommend") or [])
+             if isinstance(it, dict) and it.get("title")]
     img_dir = slot_dir / "img"
     sources = load_sources(slot_dir)
     by_title = sources["by_title"]

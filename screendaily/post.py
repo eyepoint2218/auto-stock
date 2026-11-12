@@ -13,7 +13,7 @@ import yaml
 
 from . import ROOT
 
-GENERATOR_VERSION = "10"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
+GENERATOR_VERSION = "11"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
 
 
 def load_config() -> dict:
@@ -66,6 +66,8 @@ class Post:
     outro_question: str = ""   # 마지막 장 질문 문구 (비우면 config 기본값)
     reveal: bool = False       # 배우 맞히기: 이름을 숨기고 마지막에 정답 공개
     reveal_text: str = ""      # 정답 카드의 한 줄 소개
+    recommend: list[Item] = field(default_factory=list)  # 정답 뒤 추천작 카드 (최대 4편)
+    recommend_title: str = ""  # 추천작 카드 제목
 
     @property
     def name(self) -> str:
@@ -142,6 +144,27 @@ def load_post(slot_dir: Path, config: dict) -> Post:
     by_title = sources.get("by_title", {})
     via = {"tmdb": "TMDB", "wikipedia": "Wikipedia"}
 
+    def parse_items(lst, kind="items"):
+        out = []
+        for i, it in enumerate(lst or [], 1):
+            if isinstance(it, str):
+                it = {"title": it}
+            if not it.get("title"):
+                raise ValueError(f"[{slot_dir.name}] {kind} {i}번에 title 이 없습니다")
+            item = Item(**{k: str(v) for k, v in it.items() if k in Item.__dataclass_fields__ and v is not None})
+            auto = by_title.get(item.title)
+            if auto and not item.role and re.search(r"[가-힣]", auto.get("role") or ""):
+                item.role = auto["role"]
+            if not item.image and auto and (slot_dir / auto["image"]).is_file():
+                item.image = auto["image"]
+                item.poster = auto.get("poster", "")
+                item.layout = auto.get("layout", "")
+                if not item.credit:
+                    item.credit = f"이미지 © {item.ott or '제작사'} · via {via.get(auto.get('source'), '웹')}"
+            out.append(item)
+        return out
+
+    recommend = parse_items(raw.get("recommend"), "recommend")[:4]
     items = []
     for i, it in enumerate(raw.get("items") or [], 1):
         if isinstance(it, str):
@@ -184,6 +207,8 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         outro_question=str(raw.get("outro_question", "") or ""),
         reveal=bool(raw.get("reveal", False)),
         reveal_text=str(raw.get("reveal_text", "") or ""),
+        recommend=recommend,
+        recommend_title=str(raw.get("recommend_title", "") or ""),
     )
 
     act = sources.get("actor", {})
@@ -194,7 +219,7 @@ def load_post(slot_dir: Path, config: dict) -> Post:
     if not post.images:
         if not post.title:
             raise ValueError(f"[{slot_dir.name}] title 이 없습니다")
-        slides = 1 + len(items) + (1 if post.outro else 0) + (1 if post.reveal else 0)
+        slides = 1 + len(items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if recommend else 0)
         if slides > 10:
             raise ValueError(f"[{slot_dir.name}] 표지+작품+마지막장이 {slides}장입니다. 최대 10장(작품 최대 8개)")
         if post.format == "carousel" and slides < 2:

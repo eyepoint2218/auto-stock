@@ -498,6 +498,53 @@ def render_reveal(post: Post, idx: int, total: int, config: dict) -> Image.Image
     return canvas.convert("RGB")
 
 
+def render_recommend(post: Post, idx: int, total: int, config: dict) -> Image.Image:
+    """정답 뒤 '이 배우 작품, 여기서 보세요' 카드: 포스터 2~4편."""
+    theme = THEMES["dark"]
+    accent = hex2rgb(config.get("labels", {}).get(post.label, "#FF4D4D"))
+    brand = config.get("brand", "SCREEN DAILY")
+    canvas = _story_bg(post, theme, accent, idx, blur=40, dark=215)
+    d = ImageDraw.Draw(canvas)
+    d.text((M, 60), brand, font=font(EB, 28), fill=(255, 255, 255, 230))
+    name = post.actor_name or post.actor
+    title = post.recommend_title or f"{name},\n이 작품에서 만나요"
+    tf, tl = fit(title, EB, W - M * 2, 2, 76, 56)
+    y = draw_lines(d, tl, tf, M, 150, theme["fg"]) + 50
+
+    recs = post.recommend
+    n = len(recs)
+    gap = 28
+    pw = int((W - M * 2 - gap * (n - 1)) / n) if n >= 3 else 380
+    ph = int(pw * 1.45)
+    x0 = (W - (pw * n + gap * (n - 1))) // 2
+    for i, it in enumerate(recs):
+        x = x0 + i * (pw + gap)
+        src = open_img(post.asset(it.poster or it.image))
+        if src:
+            card = cover_crop(src, (pw, ph), (0.5, 0.3)).convert("RGBA")
+        else:
+            card = placeholder_bg((pw, ph), accent, theme, i)
+        mask = Image.new("L", (pw, ph), 0)
+        ImageDraw.Draw(mask).rounded_rectangle((0, 0, pw, ph), 18, fill=255)
+        sh = Image.new("RGBA", (pw + 40, ph + 40), (0, 0, 0, 0))
+        ImageDraw.Draw(sh).rounded_rectangle((20, 26, pw + 20, ph + 26), 18, fill=(0, 0, 0, 140))
+        canvas.alpha_composite(sh.filter(ImageFilter.GaussianBlur(12)), (x - 20, y - 20))
+        canvas.paste(card, (x, y), mask)
+        d = ImageDraw.Draw(canvas)
+        ty = y + ph + 22
+        f1 = fit(it.title, EB, pw, 2, 34 if n >= 3 else 40, 24)
+        ty = draw_lines(d, f1[1], f1[0], x, ty, theme["fg"]) + 4
+        meta = " · ".join(t for t in ((f"‘{it.role}’ 역" if it.role else ""), it.ott) if t)
+        if meta:
+            mf = fit(meta, B, pw, 2, 26, 20)
+            draw_lines(d, mf[1], mf[0], x, ty, accent)
+
+    d.text((W / 2, H - 150), "저장해두고 하나씩 정주행", font=font(B, 32), fill=theme["sub"], anchor="ma")
+    d.text((W - M, 64), "이미지 © TMDB", font=font(R, 22), fill=(255, 255, 255, 190), anchor="ra")
+    footer(canvas, theme, brand, f"{idx + 1} / {total}")
+    return canvas.convert("RGB")
+
+
 def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.images:
         out = []
@@ -509,7 +556,7 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
                 im = cover_crop(im, (W, H), (0.5, 0.5))
             out.append(im)
         return out
-    total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0)
+    total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)
     slides = [render_cover(post, config)]
     for i, it in enumerate(post.items, 1):
         if it.type in ("story", "quote"):
@@ -517,7 +564,9 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
         else:
             slides.append(render_item(post, it, i, total, config))
     if post.reveal:
-        slides.append(render_reveal(post, len(post.items) + 1, total, config))
+        slides.append(render_reveal(post, len(slides), total, config))
+    if post.recommend:
+        slides.append(render_recommend(post, len(slides), total, config))
     if post.outro:
         slides.append(render_outro(post, config))
     return slides
