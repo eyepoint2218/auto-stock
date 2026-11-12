@@ -44,10 +44,13 @@ recommend_title: "허성태,\n이 작품에서 만나요"
 recommend:
   - title: 오징어 게임
     ott: 넷플릭스
+    role: 덕수
   - title: 범죄도시
     ott: 영화
+    role: 독사
   - title: 밀정
     ott: 영화
+    role: 하일수
 caption: |
   안정적인 대기업을 그만두고 배우가 된 남자가 있어요 🎬
   아파트는 경매로 넘어가고, 월세를 걱정하던 날들. 이 배우는 누굴까요?
