@@ -23,6 +23,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}   # 앞선 실행이 올린 커밋까지 받기 (충돌 방지)
 
       - uses: actions/setup-python@v5
         with:
