@@ -44,7 +44,8 @@ items:                   # 최대 8개
     ott: 넷플릭스
     genre: 코미디 · 드라마
     desc: 스포일러 없는 한 줄 소개를 적어 주세요.
-    image: ""            # 예: 01.jpg (이 폴더에 넣기)
+    wiki: ""             # 영문 위키백과 문서 제목 (예: Squid Game) → 포스터 자동
+    image: ""            # 직접 넣을 때: 01.jpg (이 폴더에 넣기)
     bubble: ""           # 작품별 반응 말풍선 (선택)
 
 caption: |
@@ -127,6 +128,17 @@ def cmd_list(a, config):
         print(f"{p.publish_at:%Y-%m-%d %H:%M}  {p.format:8s}  [{state}]  {p.name}  {p.title.splitlines()[0]}")
 
 
+def cmd_fetch_images(a, config):
+    from .images import fetch_for_post
+    total = 0
+    for d in sorted(x for x in QUEUE_DIR.iterdir() if (x / "post.yml").exists()):
+        if a.slots and d.name not in a.slots:
+            continue
+        print(f"[{d.name}]")
+        total += len(fetch_for_post(d))
+    print(f"이미지 {total}개 내려받음")
+
+
 def cmd_preview(a, config):
     posts = list_posts(QUEUE_DIR, config)
     if a.slots:
@@ -163,6 +175,9 @@ def cmd_refresh(a, config):
     from .instagram import Instagram
     ig = Instagram.from_env()
     data = ig.refresh_token()
+    if data.get("never_expires"):
+        print("시스템 사용자 토큰은 만료되지 않아 연장이 필요 없습니다.")
+        return
     new = data["access_token"]
     days = int(data.get("expires_in", 0)) // 86400
     if os.environ.get("GITHUB_ACTIONS"):
@@ -253,6 +268,9 @@ def main(argv=None):
 
     sub.add_parser("list", help="예약 목록")
 
+    s = sub.add_parser("fetch-images", help="wiki 항목의 작품 이미지 내려받기")
+    s.add_argument("slots", nargs="*")
+
     s = sub.add_parser("preview", help="미리보기 생성")
     s.add_argument("slots", nargs="*")
     s.add_argument("--force", action="store_true")
@@ -270,7 +288,7 @@ def main(argv=None):
     config = load_config()
     handler = {
         "new": cmd_new, "list": cmd_list, "due": cmd_due, "preview": cmd_preview, "check": cmd_check,
-        "refresh-token": cmd_refresh, "publish-due": cmd_publish_due,
+        "refresh-token": cmd_refresh, "fetch-images": cmd_fetch_images, "publish-due": cmd_publish_due,
     }[a.cmd]
     sys.exit(handler(a, config) or 0)
 

@@ -30,6 +30,15 @@ queue/2026-11-17_1900/post.yml  ──▶  카드 이미지 / 릴스 영상 자�
 | `IG_USER_ID` | 비워도 됨 (자동 조회) | |
 | `SECRETS_PAT` | 토큰 자동 갱신 저장용 GitHub 토큰 (아래 참고) | 선택 |
 
+### ②-B. 통합 로그인(비즈니스 설정의 시스템 사용자 토큰)을 쓰는 경우
+Meta 화면에 "Instagram 로그인" 대신 **통합 로그인**만 보이면 이 방식으로 합니다. 이 토큰은 **만료되지 않습니다.**
+1. business.facebook.com/settings → **계정 → Instagram 프로필** 에 계정 연결, **계정 → 앱** 에 앱 연결
+2. **사용자 → 시스템 사용자 → 추가** (관리자) → **자산 할당**: 앱·Instagram 프로필 전체 관리
+3. **토큰 생성**: 만료 "사용 안 함", 권한 `instagram_basic`, `instagram_content_publish`
+4. GitHub 에 저장
+   - Secrets: `IG_ACCESS_TOKEN` (토큰), `IG_USER_ID` (인스타 계정 숫자 ID, 보통 17841…)
+   - **Variables**: `IG_API_HOST` = `graph.facebook.com`
+
 ### ③ 기본 브랜치에 합치기 + 연결 테스트
 - 예약 실행(schedule)은 **기본 브랜치(main)에서만** 동작합니다. 이 코드를 main 에 합쳐 주세요.
 - **Actions 탭 → "인스타 연결 테스트" → Run workflow** → 로그에 `연결 확인: @아이디` 가 나오면 성공.
@@ -67,7 +76,9 @@ git add queue && git commit -m "다음 주 예약" && git push
 | `subtitle` | 제목 아래 한 줄 |
 | `bubble` | 빨간 테두리 반응 말풍선 ("3화부터 미쳐요ㅠ") |
 | `cover_image` | 표지 사진 (없으면 작품 사진들로 콜라주) |
-| `items` | 작품 목록 최대 8개: `title`, `ott`, `genre`, `desc`, `image`, `bubble` |
+| `items` | 작품 목록 최대 8개: `title`, `ott`, `genre`, `desc`, `image`, `bubble`, `wiki` |
+| `items[].tmdb` | TMDB 작품 지정 (예: `tv/93405`). 비우면 제목으로 검색. 다른 작품이 잡혔을 때만 적기 |
+| `items[].wiki` | 영문 위키백과 문서 제목 (예: `Squid Game`). 사진을 안 넣으면 대표 이미지(보통 공식 포스터)를 자동으로 가져오고 카드에 출처를 표시 |
 | `images` | 직접 만든 이미지로 올릴 때 (이걸 쓰면 자동 디자인 생략) |
 | `outro` | `false` 면 마지막 팔로우 유도 장 생략 |
 | `caption` / `hashtags` / `credits` | 본문, 해시태그, 출처 (기본 해시태그는 `config.yml`) |
@@ -75,6 +86,15 @@ git add queue && git commit -m "다음 주 예약" && git push
 | `bgm` | 릴스 배경음악 파일 (아래 참고) |
 
 ---
+
+## 공식 포스터·스틸컷 자동 가져오기 (TMDB)
+1. [themoviedb.org](https://www.themoviedb.org) 가입 → 설정 → API → 개인용 키 신청
+2. **API 읽기 액세스 토큰**(eyJ… 로 시작)을 GitHub **Secrets** 에 `TMDB_TOKEN` 으로 저장
+3. 이후 `queue/` 에 게시물을 올리면 미리보기 워크플로가 작품 제목으로 검색해
+   **글자 없는 공식 스틸컷**(작품 카드)과 **한국어 포스터**(표지 콜라주)를 `img/` 에 저장합니다.
+- TMDB 에 없으면 `wiki:` 로 적은 영문 위키백과 대표 이미지를 씁니다. 직접 넣은 `image:` 가 항상 우선입니다.
+- 카드 오른쪽 위에 `이미지 © OTT · via TMDB` 가 표시됩니다.
+- This product uses the TMDB API but is not endorsed or certified by TMDB.
 
 ## 3. 릴스(영상)
 - `format: reel` 이면 같은 카드들을 **9:16 영상**으로 만듭니다: 흐린 배경 + 천천히 확대 + 장면 전환.

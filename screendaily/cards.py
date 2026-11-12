@@ -197,7 +197,10 @@ def render_cover(post: Post, config: dict) -> Image.Image:
     canvas = Image.new("RGBA", (W, H), theme["bg"] + (255,))
 
     cover = open_img(post.asset(post.cover_image))
-    item_imgs = [open_img(post.asset(it.image)) for it in post.items if it.image][:3]
+    all_imgs = [open_img(post.asset(it.image)) for it in post.items if it.image]
+    posters = [open_img(post.asset(it.poster)) for it in post.items if it.poster]
+    item_imgs = (posters + [im for im in all_imgs if im.height >= im.width])[:3]  # 콜라주는 세로 포스터만
+    wide_imgs = [im for im in all_imgs if im.height < im.width]
 
     if cover:
         canvas.paste(cover_crop(cover, (W, H)), (0, 0))
@@ -214,6 +217,15 @@ def render_cover(post: Post, config: dict) -> Image.Image:
             x, y, a = spots[i] if len(item_imgs) > 1 else (W // 2, 470, -3)
             paste_center(canvas, poster_card(item_imgs[i], widths[i], a), x, y)
         canvas.alpha_composite(vgrad((W, H), theme["bg"], H * 0.48, H * 0.66, 0, 255))
+    elif wide_imgs:
+        im = wide_imgs[0]
+        canvas.paste(cover_crop(im, (W, H)).filter(ImageFilter.GaussianBlur(40)), (0, 0))
+        canvas.alpha_composite(Image.new("RGBA", (W, H), theme["bg"] + (150,)))
+        fw = W - 2 * M
+        fh = min(int(fw * im.height / im.width), 420)
+        fw = int(fh * im.width / im.height)
+        canvas.alpha_composite(im.resize((fw, fh), Image.LANCZOS).convert("RGBA"), ((W - fw) // 2, 150))
+        canvas.alpha_composite(vgrad((W, H), theme["bg"], H * 0.45, H * 0.62, 0, 255))
     else:
         canvas = placeholder_bg((W, H), accent, theme)
 
@@ -265,7 +277,31 @@ def render_item(post: Post, item: Item, idx: int, total: int, config: dict) -> I
 
     canvas = Image.new("RGBA", (W, H), theme["bg"] + (255,))
     im = open_img(post.asset(item.image))
-    if im:
+    if im and item.layout == "cover":
+        # 공식 스틸컷: 꽉 채움
+        canvas.paste(cover_crop(im, (W, img_h), (0.5, 0.4)), (0, 0))
+    elif im and im.width > im.height * 1.3:
+        # 가로로 긴 이미지(로고·타이틀 카드): 자르지 않고 전체를 보여줌
+        bg = cover_crop(im, (W, img_h)).filter(ImageFilter.GaussianBlur(40))
+        canvas.paste(bg, (0, 0))
+        canvas.alpha_composite(Image.new("RGBA", (W, img_h), (0, 0, 0, 110)), (0, 0))
+        fw = W - 2 * M
+        fh = min(int(fw * im.height / im.width), img_h - 330)
+        fw = int(fh * im.width / im.height)
+        frame = im.resize((fw, fh), Image.LANCZOS).convert("RGBA")
+        canvas.alpha_composite(frame, ((W - fw) // 2, max(130, (img_h - 200 - fh) // 2 + 40)))
+    elif im and (im.width < 800 or im.height > im.width * 1.1):
+        # 작은 이미지·세로 포스터: 흐린 배경 + 가운데 포스터
+        bg = cover_crop(im, (W, img_h)).filter(ImageFilter.GaussianBlur(30))
+        canvas.paste(bg, (0, 0))
+        canvas.alpha_composite(Image.new("RGBA", (W, img_h), (0, 0, 0, 90)), (0, 0))
+        pw = min(420, int((img_h - 170) / 1.42))
+        if im.width > im.height:  # 작은 가로 이미지
+            frame = cover_crop(im, (W - 2 * M, int((W - 2 * M) * 0.56)), (0.5, 0.5)).convert("RGBA")
+            canvas.alpha_composite(frame, (M, max(120, (img_h - frame.height) // 2 - 60)))
+        else:
+            paste_center(canvas, poster_card(im, pw, -2 if idx % 2 else 2), W // 2 + 140, img_h // 2 - 20)
+    elif im:
         canvas.paste(cover_crop(im, (W, img_h), (0.5, 0.3)), (0, 0))
     else:
         canvas.alpha_composite(placeholder_bg((W, img_h), accent, theme, idx), (0, 0))
@@ -274,6 +310,9 @@ def render_item(post: Post, item: Item, idx: int, total: int, config: dict) -> I
 
     d = ImageDraw.Draw(canvas)
     d.text((M, 60), brand, font=font(EB, 28), fill=(255, 255, 255, 230))
+    if item.credit:
+        d.text((W - M, 64), item.credit, font=font(R, 22), fill=(255, 255, 255, 200), anchor="ra",
+               stroke_width=2, stroke_fill=(0, 0, 0, 120))
     d.text((M - 4, y0 - 190), f"{idx:02d}", font=font(EB, 150), fill=accent)
 
     if item.bubble:

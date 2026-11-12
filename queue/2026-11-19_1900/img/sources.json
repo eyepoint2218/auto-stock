@@ -1,0 +1,19 @@
+{
+  "by_title": {
+    "킹덤": {
+      "source": "wikipedia",
+      "image": "img/kingdom_south_korean_tv_series.png",
+      "page_url": "https://en.wikipedia.org/wiki/Kingdom_%28South_Korean_TV_series%29"
+    },
+    "지금 우리 학교는": {
+      "source": "wikipedia",
+      "image": "img/all_of_us_are_dead.jpeg",
+      "page_url": "https://en.wikipedia.org/wiki/All_of_Us_Are_Dead"
+    },
+    "지옥": {
+      "source": "wikipedia",
+      "image": "img/hellbound_tv_series.png",
+      "page_url": "https://en.wikipedia.org/wiki/Hellbound_%28TV_series%29"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "by_title": {
+    "인간수업": {
+      "source": "wikipedia",
+      "image": "img/extracurricular_tv_series.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/Extracurricular_%28TV_series%29"
+    },
+    "살인자ㅇ난감": {
+      "source": "wikipedia",
+      "image": "img/a_killer_paradox.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/A_Killer_Paradox"
+    },
+    "마스크걸": {
+      "source": "wikipedia",
+      "image": "img/mask_girl.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/Mask_Girl"
+    }
+  }
+}

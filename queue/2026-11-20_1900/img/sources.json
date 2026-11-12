@@ -1,0 +1,14 @@
+{
+  "by_title": {
+    "D.P.": {
+      "source": "wikipedia",
+      "image": "img/d_p_tv_series.png",
+      "page_url": "https://en.wikipedia.org/wiki/D.P._%28TV_series%29"
+    },
+    "퀸스 갬빗": {
+      "source": "wikipedia",
+      "image": "img/the_queen_s_gambit_miniseries.png",
+      "page_url": "https://en.wikipedia.org/wiki/The_Queen%27s_Gambit_%28miniseries%29"
+    }
+  }
+}

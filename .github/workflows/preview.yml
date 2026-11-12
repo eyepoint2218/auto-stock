@@ -34,8 +34,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: 미리보기 만들기
+        env:
+          TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
         run: |
           git config user.name "screendaily-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           python -m screendaily list
+          python -m screendaily fetch-images || echo "::warning::이미지 가져오기 일부 실패"
           python -m screendaily preview --commit
