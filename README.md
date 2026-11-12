@@ -99,7 +99,8 @@ git add queue && git commit -m "다음 주 예약" && git push
 ## 배우 소개 게시물
 `post.yml` 에 `actor: 배우이름` 과 `label: ACTOR` 를 적으면
 - 표지에 TMDB 배우 프로필 사진이 들어가고 (`사진 © TMDB` 표시)
-- 각 작품 카드에 TMDB 출연 기록의 **배역 이름**(예: ‘영숙’ 역)이 자동으로 들어갑니다. 직접 쓰려면 `role:`.
+- 작품은 **그 배우의 출연작 안에서** 찾아서 동명 작품과 헷갈리지 않습니다.
+- 작품 카드에 **배역 이름**(예: ‘영숙’ 역)이 들어갑니다. TMDB 배역은 영어인 경우가 많아 `role: 영숙` 처럼 한국어로 적는 것을 권장합니다 (한글 배역만 자동 표시).
 - 동명이인이면 `actor_tmdb: person/ID`, 마지막 장 질문은 `outro_question:` 으로 바꿀 수 있습니다.
 - 예시: `queue/sample_actor/post.yml` (draft 라 업로드되지 않음)
 

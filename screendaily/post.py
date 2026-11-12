@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -144,7 +145,8 @@ def load_post(slot_dir: Path, config: dict) -> Post:
             raise ValueError(f"[{slot_dir.name}] items {i}번에 title 이 없습니다")
         item = Item(**{k: str(v) for k, v in it.items() if k in Item.__dataclass_fields__ and v is not None})
         auto = by_title.get(item.title)
-        if auto and not item.role and auto.get("role"):
+        # TMDB 배역은 영어인 경우가 많아, 한글이 들어 있을 때만 자동으로 쓴다 (아니면 role: 로 직접)
+        if auto and not item.role and re.search(r"[가-힣]", auto.get("role") or ""):
             item.role = auto["role"]
         if not item.image and auto and (slot_dir / auto["image"]).is_file():
             item.image = auto["image"]

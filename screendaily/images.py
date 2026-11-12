@@ -39,6 +39,10 @@ def _get(url: str, headers: dict | None = None, **kw) -> requests.Response:
     raise RuntimeError(f"요청이 계속 거절됩니다 (429/5xx): {url.split('?')[0]}")
 
 
+def _norm(s: str) -> str:
+    return re.sub(r"[\s:·!?,.'\"-]+", "", (s or "")).lower()
+
+
 def slug(s: str) -> str:
     """파일 이름용 (이미지 주소에 쓰이므로 영문·숫자만)."""
     import hashlib
@@ -114,15 +118,18 @@ class TMDB:
             return None
         return max(profiles, key=lambda x: (x.get("vote_average", 0), x.get("height", 0)))["file_path"]
 
-    def person_roles(self, pid: int) -> dict[str, str]:
-        """{"tv/123": "배역 이름", "movie/456": ...}"""
+    def person_credits(self, pid: int) -> tuple[dict[str, str], dict[str, str]]:
+        """(배역 {"tv/123": "배역"}, 제목 {정규화된 한국어 제목: "tv/123"})"""
         d = self.get(f"person/{pid}/combined_credits", language="ko-KR")
-        roles = {}
-        for c in d.get("cast", []):
+        roles, titles = {}, {}
+        for c in sorted(d.get("cast", []), key=lambda c: -(c.get("popularity") or 0)):
             key = f"{c.get('media_type')}/{c.get('id')}"
             if c.get("character") and key not in roles:
                 roles[key] = c["character"]
-        return roles
+            for t in (c.get("title"), c.get("name"), c.get("original_title"), c.get("original_name")):
+                if t:
+                    titles.setdefault(_norm(t), key)
+        return roles, titles
 
     def images(self, kind: str, tid: int) -> tuple[str | None, str | None]:
         """(스틸컷 경로, 포스터 경로)"""
@@ -192,16 +199,50 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
         saved.append(rel)
         return rel
 
+    # 0) 배우 소개: 배우를 먼저 찾고, 작품은 그 배우의 출연작 안에서 고른다 (동명 작품 방지)
+    actor = str(raw.get("actor") or "").strip()
+    roles: dict[str, str] = {}
+    credit_titles: dict[str, str] = {}
+    if actor and tmdb:
+        cur = sources.get("actor", {})
+        try:
+            if cur.get("name_query") != actor or refresh or not (slot_dir / cur.get("image", "_")).is_file():
+                found = tmdb.find_person(actor, str(raw.get("actor_tmdb") or ""))
+                if not found:
+                    print(f"  ⚠ TMDB 배우 검색 결과 없음: {actor} (actor_tmdb: \"person/ID\" 지정)")
+                    cur = {}
+                else:
+                    pid, pname = found
+                    cur = {"name_query": actor, "name": pname, "tmdb": f"person/{pid}",
+                           "page_url": f"https://www.themoviedb.org/person/{pid}"}
+                    prof = tmdb.person_profile(pid)
+                    if prof:
+                        cur["image"] = save(f"{TMDB_IMG}/h632{prof}", "actor_" + slug(actor))
+                    sources["actor"] = cur
+                    print(f"  ✓ TMDB 배우 {actor} → {pname} (person/{pid})")
+            if cur.get("tmdb"):
+                roles, credit_titles = tmdb.person_credits(int(cur["tmdb"].split("/")[-1]))
+        except Exception as e:  # noqa: BLE001
+            print(f"  ⚠ TMDB 배우 정보 실패: {actor}: {e}")
+
     # 1) TMDB
     for it in items:
         title = str(it["title"])
         if it.get("image") or not tmdb:
             continue
         cur = by_title.get(title, {})
-        if cur.get("source") == "tmdb" and not refresh:
+        override = str(it.get("tmdb") or "")
+        if not override and credit_titles:
+            override = credit_titles.get(_norm(title), "")
+            if not override:
+                print(f"  ⚠ {actor} 출연작에서 찾지 못함: {title} (제목 확인 또는 tmdb: \"movie/ID\" 지정)")
+        if cur.get("source") == "tmdb" and not refresh and (not override or "/" not in override
+                                                            or cur.get("tmdb") == override):
+            if roles:
+                cur["role"] = roles.get(cur.get("tmdb"), "")
             continue
         try:
-            found = tmdb.find(title, str(it.get("tmdb") or ""))
+            found = tmdb.find(title, override)
             if not found:
                 print(f"  ⚠ TMDB 검색 결과 없음: {title} (items 에 tmdb: \"tv/ID\" 지정)")
                 continue
@@ -215,43 +256,14 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             if poster:
                 entry["poster"] = save(f"{TMDB_IMG}/w780{poster}", slug(title) + "_poster")
                 entry.setdefault("image", entry["poster"])
+            if roles:
+                entry["role"] = roles.get(entry["tmdb"], "")
             if "image" in entry:
                 by_title[title] = entry
                 print(f"  ✓ TMDB {title} → {name} ({kind}/{tid})")
         except Exception as e:  # noqa: BLE001
             print(f"  ⚠ TMDB 실패: {title}: {e}")
         time.sleep(0.3)
-
-    # 1-2) 배우 소개: 프로필 사진 + 작품별 배역 이름
-    actor = str(raw.get("actor") or "").strip()
-    if actor and tmdb:
-        cur = sources.get("actor", {})
-        try:
-            if cur.get("name_query") != actor or refresh or not (slot_dir / cur.get("image", "_")).is_file():
-                found = tmdb.find_person(actor, str(raw.get("actor_tmdb") or ""))
-                if not found:
-                    print(f"  ⚠ TMDB 배우 검색 결과 없음: {actor} (actor_tmdb: \"person/ID\" 지정)")
-                else:
-                    pid, pname = found
-                    cur = {"name_query": actor, "name": pname, "tmdb": f"person/{pid}",
-                           "page_url": f"https://www.themoviedb.org/person/{pid}"}
-                    prof = tmdb.person_profile(pid)
-                    if prof:
-                        cur["image"] = save(f"{TMDB_IMG}/h632{prof}", "actor_" + slug(actor))
-                    sources["actor"] = cur
-                    print(f"  ✓ TMDB 배우 {actor} → {pname} (person/{pid})")
-            if cur.get("tmdb"):
-                roles = tmdb.person_roles(int(cur["tmdb"].split("/")[-1]))
-                for t, e in by_title.items():
-                    if e.get("tmdb") in roles:
-                        e["role"] = roles[e["tmdb"]]
-                    elif "role" in e:
-                        del e["role"]
-                missing = [t for t, e in by_title.items() if e.get("source") == "tmdb" and "role" not in e]
-                if missing:
-                    print(f"  ⚠ 출연 기록에 없는 작품: {', '.join(missing)} (작품이나 배우가 맞는지 확인)")
-        except Exception as e:  # noqa: BLE001
-            print(f"  ⚠ TMDB 배우 정보 실패: {actor}: {e}")
 
     # 2) 위키백과 (TMDB 결과가 없는 작품만)
     need = [it for it in items if it.get("wiki") and not it.get("image") and str(it["title"]) not in by_title]
