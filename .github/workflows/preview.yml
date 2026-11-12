@@ -1,0 +1,41 @@
+name: 미리보기 생성
+
+# queue/ 에 게시물을 올리거나 고치면 카드 이미지·릴스를 만들어 out/ 폴더에 저장합니다.
+on:
+  push:
+    paths:
+      - "queue/**"
+      - "config.yml"
+      - "screendaily/**"
+      - "assets/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: screendaily-content
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -r requirements.txt
+
+      - name: 미리보기 만들기
+        run: |
+          git config user.name "screendaily-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python -m screendaily list
+          python -m screendaily preview --commit
