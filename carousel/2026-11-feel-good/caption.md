@@ -1,7 +1,7 @@
 # 인스타 캐러셀 — 기분이 바닥인 날 틀어두는 것들
 
 슬라이드: `slide-01.png` ~ `slide-10.png` (1080×1350, 4:5)
-디자인: 종이 질감 배경 + 테이프로 붙인 포스터 + 손글씨 메모 (Nanum Pen Script, Gowun Batang, Noto Sans KR)
+디자인: 종이 질감 배경 + 테이프로 붙인 포스터 + 노란 포스트잇 메모 (Noto Sans KR, Gowun Batang)
 포스터: `posters/` (TMDB에 등록된 공식 한국어 포스터)
 원본 HTML: `carousel.html`
 
