@@ -1,0 +1,28 @@
+name: 인스타 토큰 연장
+
+# 장기 토큰은 60일 뒤 만료됩니다. 한 달에 두 번 자동으로 연장합니다.
+on:
+  schedule:
+    - cron: "23 3 1,15 * *"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: 토큰 연장
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          GH_TOKEN: ${{ secrets.SECRETS_PAT }}   # 선택: 새 토큰을 Secret 에 자동 저장
+        run: python -m screendaily refresh-token

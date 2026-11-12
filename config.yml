@@ -1,0 +1,33 @@
+# 스크린데일리 자동 업로드 설정
+brand: SCREEN DAILY
+handle: "@screendaily"        # ← 실제 인스타 아이디로 바꿔 주세요
+timezone: Asia/Seoul          # post.yml 의 publish_at 은 이 시간대 기준
+
+# 모든 게시물 캡션 끝에 붙는 기본 해시태그 (5~8개 권장, 인스타 최대 30개)
+default_hashtags:
+  - 영화추천
+  - 드라마추천
+  - 넷플릭스추천
+  - OTT추천
+  - 스크린데일리
+
+# 마지막 장 (팔로우 유도)
+outro:
+  title: "매일 한 편,\n오늘 뭐 볼지\n고민 끝"
+  cta: "팔로우하고 매일 추천 받기"
+  save: "저장해두고 주말에 꺼내 보기"
+  question: "여러분의 인생작은? 댓글로 알려주세요"
+
+# 카테고리 라벨 색상
+labels:
+  MOOD: "#FFB547"
+  WEEKEND: "#FF4D4D"
+  HIDDEN: "#8B6CFF"
+  ISSUE: "#36C5F0"
+  default: "#FF4D4D"
+
+reel:
+  seconds_per_slide: 3.0      # 장당 노출 시간(초)
+  transition: 0.4             # 장면 전환 시간(초)
+  bgm: ""                     # 예: assets/bgm/calm.mp3 (저작권 없는 음원만!)
+  bgm_volume: 0.8
