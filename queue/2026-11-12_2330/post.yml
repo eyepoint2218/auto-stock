@@ -1,5 +1,6 @@
 publish_at: "2026-11-12 23:30"
 format: carousel
+draft: true             # 인스타 활동 제한(403)으로 보류. 제한이 풀리면 false 로
 label: MOOD
 theme: dark
 title: "오늘 밤\n딱 하나만 본다면"
