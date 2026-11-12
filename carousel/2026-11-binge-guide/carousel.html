@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/local.css">
+<style>
+:root{--bg:#0F1016;--card:#1B1D27;--line:#2C2F3D;--coral:#FF5E4D;--sun:#FFC94A;--mint:#5FD3B4;--ink:#F5F1E8;--mute:#9C9CAB}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;font-family:'Noto Sans KR',sans-serif;color:var(--ink)}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--bg);padding:96px 88px;display:flex;flex-direction:column;margin-bottom:20px}
+.h{font-family:'Black Han Sans',sans-serif;font-weight:400;letter-spacing:-1px;line-height:1.12}
+.tag{display:inline-block;align-self:flex-start;font-weight:700;font-size:28px;padding:10px 22px;border-radius:999px;background:var(--coral);color:#140806}
+.tag.o{background:transparent;border:2px solid var(--line);color:var(--mute)}
+.pg{position:absolute;right:88px;bottom:56px;font-size:24px;color:var(--mute);font-weight:700;letter-spacing:2px}
+.brand{position:absolute;left:88px;bottom:56px;font-size:24px;color:var(--mute);font-weight:700}
+.mute{color:var(--mute)} .coral{color:var(--coral)} .sun{color:var(--sun)} .mint{color:var(--mint)}
+p.b{font-size:34px;line-height:1.6;font-weight:400}
+.glow{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
+.poster{border-radius:22px;object-fit:cover;box-shadow:0 30px 60px rgba(0,0,0,.6),0 0 0 2px rgba(255,255,255,.08)}
+/* cover */
+.cover .big{font-size:150px;margin-top:40px;position:relative;z-index:2}
+.cover .sub{font-size:44px;font-weight:700;margin-top:36px;line-height:1.45;position:relative;z-index:2}
+.fan{position:absolute;left:0;right:0;bottom:-60px;height:560px}
+.fan img{position:absolute;width:300px;height:450px;bottom:0}
+/* title slides: poster right, text left */
+.hero{display:flex;gap:40px;margin-top:40px}
+.hero .txt{flex:1;display:flex;flex-direction:column;min-width:0}
+.hero .pw{position:relative;width:340px;flex:none}
+.hero .pw img{width:340px;height:510px;display:block}
+.rk{position:absolute;left:-34px;top:-34px;width:108px;height:108px;border-radius:50%;background:var(--coral);color:#140806;font-family:'Black Han Sans';font-size:68px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.title{font-size:96px;margin-top:50px}
+.orig{font-size:28px;color:var(--mute);margin-top:18px;font-weight:700;line-height:1.5}
+.hook{font-size:28px;color:var(--ink);margin-top:auto;font-weight:700;line-height:1.5;background:var(--card);border-radius:18px;padding:20px 24px}
+.stat{display:flex;gap:24px;margin-top:36px}
+.stat div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:26px;padding:24px 30px}
+.stat b{display:block;font-family:'Black Han Sans';font-size:60px;font-weight:400;color:var(--sun)}
+.stat span{font-size:25px;color:var(--mute);font-weight:700}
+.why{margin-top:28px;background:var(--card);border-left:8px solid var(--coral);border-radius:20px;padding:28px 36px}
+.why .b{font-size:32px;line-height:1.55}
+.why h4{font-size:26px;color:var(--coral);margin-bottom:8px}
+/* bars */
+.bars{margin-top:56px;display:flex;flex-direction:column;gap:30px}
+.bar{display:flex;gap:26px;align-items:center}
+.bar img{width:96px;height:144px;border-radius:12px;object-fit:cover;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+.bar .ph{width:96px;height:144px;border-radius:12px;flex:none;border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:26px;font-weight:700}
+.bar .col{flex:1;min-width:0}
+.bar .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:32px;font-weight:700;margin-bottom:14px}
+.bar .lab small{display:block;font-size:22px;color:var(--mute);font-weight:700;margin-top:4px}
+.bar .lab em{font-style:normal;font-family:'Black Han Sans';font-size:48px;color:var(--sun)}
+.track{height:36px;background:var(--card);border-radius:12px;overflow:hidden}
+.fill{height:100%;border-radius:12px;background:var(--coral)}
+.bar.ref .fill{background:#4A4D5E} .bar.ref .lab em{color:var(--mute)}
+/* insights */
+.ins{margin-top:56px;display:flex;flex-direction:column;gap:30px}
+.ins div{background:var(--card);border:2px solid var(--line);border-radius:28px;padding:36px 40px;display:flex;gap:30px}
+.ins i{font-style:normal;font-family:'Black Han Sans';font-size:64px;color:var(--coral);line-height:1}
+.ins h3{font-size:40px;font-weight:900;margin-bottom:10px}
+.ins p{font-size:29px;line-height:1.55;color:#D8D4CC}
+/* timetable */
+.tt{margin-top:48px;display:flex;flex-direction:column;gap:22px}
+.tt div{display:grid;grid-template-columns:200px 1fr 92px;gap:20px;align-items:center;background:var(--card);border-radius:26px;padding:20px 24px 20px 34px;border:2px solid var(--line)}
+.tt img{width:92px;height:138px;border-radius:12px;object-fit:cover}
+.tt .when{font-family:'Black Han Sans';font-size:38px;color:var(--sun);line-height:1.15}
+.tt .when small{display:block;font-family:'Noto Sans KR';font-size:22px;color:var(--mute);font-weight:700;margin-top:6px}
+.tt h3{font-size:34px;font-weight:900;line-height:1.3}
+.tt p{font-size:25px;color:var(--mute);margin-top:6px;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
+.chips span{font-size:28px;font-weight:700;padding:12px 24px;border-radius:999px;border:2px solid var(--line);color:#D8D4CC}
+</style><style>
+.rl{margin-top:48px;display:flex;flex-direction:column;gap:22px}
+.rl div{display:flex;align-items:center;gap:28px;background:var(--card);border:2px solid var(--line);border-radius:26px;padding:20px 30px 20px 20px}
+.rl img{width:100px;height:150px;border-radius:12px;object-fit:cover;flex:none}
+.rl .n{font-family:'Black Han Sans';font-weight:400;font-size:72px;color:var(--coral);width:70px;text-align:center;flex:none}
+.rl h3{font-size:40px;font-weight:900}
+.rl p{font-size:26px;color:var(--mute);font-weight:700;margin-top:6px}
+.rl .ref{border-style:dashed}
+.rl .ref .n{font-size:52px}
+</style><style>
+.ov{margin-top:30px;display:flex;flex-direction:column;gap:14px}
+.ov div{display:flex;align-items:center;gap:24px;background:var(--card);border:2px solid var(--line);border-radius:22px;padding:14px 24px 14px 14px}
+.ov img{width:72px;height:108px;border-radius:10px;object-fit:cover;flex:none}
+.ov section{flex:1;min-width:0}
+.ov h3{font-size:34px;font-weight:900}
+.ov p{font-size:24px;color:var(--mute);font-weight:700;margin-top:4px}
+.ck{font-size:24px;font-weight:900;padding:8px 18px;border-radius:999px;color:#140806;flex:none}
+.tag.ck{font-size:28px;padding:10px 22px}
+.c1{background:var(--sun)} .c2{background:var(--coral)} .c3{background:#B79CFF} .c4{background:var(--mint)}
+</style></head><body>
+<!-- 1 COVER -->
+<section class="s cover" id="s1">
+  <div class="glow" style="width:620px;height:620px;background:var(--coral);right:-200px;top:-160px"></div>
+  <div class="glow" style="width:420px;height:420px;background:#5B4BFF;left:-160px;bottom:-120px;opacity:.35"></div>
+  <span class="tag">11/14–11/15 주말 방콕 가이드 · 완결작 편</span>
+  <h1 class="h big" style="font-size:136px">다음 화<br>안 기다리는<br>완결 정주행</h1>
+  <p class="sub" style="font-size:40px">막 끝난 드라마 6편,<br><span class="sun">걸리는 시간별로</span> 골랐어요 🛋</p>
+  <div class="fan">
+    <img class="poster" src="posters/doctor-x.jpg" style="left:40px;transform:rotate(-14deg);bottom:-80px">
+    <img class="poster" src="posters/between-steps.jpg" style="left:280px;transform:rotate(-5deg);bottom:-40px">
+    <img class="poster" src="posters/make-me-tingle.jpg" style="left:520px;transform:rotate(5deg);bottom:-40px">
+    <img class="poster" src="posters/dead-end-job.jpg" style="left:760px;transform:rotate(14deg);bottom:-80px">
+  </div>
+</section>
+
+<!-- 2 OVERVIEW -->
+<section class="s" id="s2">
+  <span class="tag o">10/30–11/14 완결작</span>
+  <h2 class="h" style="font-size:84px;margin-top:28px">한눈에 보기</h2>
+  <div class="ov">
+    <div><img src="posters/dead-end-job.jpg"><section><h3>꿀알바</h3><p>넷플릭스 · 8화</p></section><span class="ck c1">반나절</span></div>
+    <div><img src="posters/office-workers-s3.jpg"><section><h3>직장인들 시즌3</h3><p>쿠팡플레이 · 10화</p></section><span class="ck c2">하루</span></div>
+    <div><img src="posters/make-me-tingle.jpg"><section><h3>내가 떨릴 수 있게</h3><p>티빙 · 10화</p></section><span class="ck c2">하루</span></div>
+    <div><img src="posters/between-steps.jpg"><section><h3>연애박사</h3><p>지니TV · 디즈니+ · 12화</p></section><span class="ck c3">이틀</span></div>
+    <div><img src="posters/a-love-other-than-yours.jpg"><section><h3>너 말고 다른 연애</h3><p>쿠팡플레이 · 14화</p></section><span class="ck c3">이틀</span></div>
+    <div><img src="posters/doctor-x.jpg"><section><h3>닥터X: 하얀 마피아의 시대</h3><p>SBS · 넷플릭스 · 12화</p></section><span class="ck c4">본방 결말</span></div>
+  </div>
+  <span class="pg">02 / 10</span>
+</section>
+
+<!-- 3 -->
+<section class="s" id="s3">
+  <span class="tag ck c1">반나절 코스 · 넷플릭스</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:120px">꿀알바</h2>
+      <p class="orig">이재욱 · 고민시 · 이희준<br>오컬트 호러 · 10/30 전편 공개</p>
+      <p class="hook">👉 회당 40분 안팎,<br>토요일 오후면 끝</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/dead-end-job.jpg"></div>
+  </div>
+  <div class="stat"><div><b>8화</b><span>회당 33~44분</span></div><div><b>약 5시간</b><span>전편 정주행</span></div></div>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">빚에 쫓기던 30대 혁준이 시급 50배를 준다는<br><b class="sun">수상한 알바</b>를 받으면서 지옥 같은<br>일터에 끌려 들어가는 이야기.</p></div>
+  <span class="pg">03 / 10</span>
+</section>
+
+<!-- 4 -->
+<section class="s" id="s4">
+  <span class="tag ck c2">하루 코스 · 쿠팡플레이</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:92px">직장인들<br><span class="sun" style="font-size:72px">시즌3</span></h2>
+      <p class="orig">신동엽 · 김민교 · 이수지<br>오피스 코미디 · 10/30 완결</p>
+      <p class="hook">👉 아무 화부터 봐도 웃긴<br>에피소드식 구성</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/office-workers-s3.jpg"></div>
+  </div>
+  <div class="stat"><div><b>10화</b><span>시즌 완결</span></div><div><b>1위</b><span>지난주 쿠팡플레이 일간</span></div></div>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">사업 실패만 해온 신동엽이 차린 광고회사<br>DY기획. 아재·MZ·낀대 사원들이 펼치는<br><b class="sun">극사실주의 오피스 코미디</b>.</p></div>
+  <span class="pg">04 / 10</span>
+</section>
+
+<!-- 5 -->
+<section class="s" id="s5">
+  <span class="tag ck c2">하루 코스 · 티빙</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:84px">내가<br>떨릴 수<br>있게</h2>
+      <p class="orig">남지현 · 김재영<br>로맨틱 코미디 · 11/5 완결</p>
+      <p class="hook">👉 해외 OTT 비키에서<br>주간 1위 한 입소문작</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/make-me-tingle.jpg"></div>
+  </div>
+  <div class="stat"><div><b>10화</b><span>티빙 오리지널</span></div><div><b>정반대</b><span>연애관 두 사람</span></div></div>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">맞선에서 어긋난 종갓집 장녀 연수와<br>스타트업 CEO 달이 <b class="sun">광고주와 대행사</b>로 다시<br>만나며 서로의 세상을 넓혀 가는 로코.</p></div>
+  <span class="pg">05 / 10</span>
+</section>
+
+<!-- 6 -->
+<section class="s" id="s6">
+  <span class="tag ck c3">이틀 코스 · 지니TV · 디즈니+</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:104px">연애<br>박사</h2>
+      <p class="orig">추영우 · 김소현<br>멜로 · 11/10 종영</p>
+      <p class="hook">👉 故 안판석 감독의 유작,<br>최종회 자체 최고 시청률</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/between-steps.jpg"></div>
+  </div>
+  <div class="stat"><div><b>12화</b><span>회당 약 60분</span></div><div><b>약 12시간</b><span>전편 정주행</span></div></div>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">상처받기 싫어서 늘 도망칠 핑계부터<br>만들던 민재와 유진. <b class="sun">사랑 앞에서 겁 많은</b><br>두 사람의 현실 연애 이야기.</p></div>
+  <span class="pg">06 / 10</span>
+</section>
+
+<!-- 7 -->
+<section class="s" id="s7">
+  <span class="tag ck c3">이틀 코스 · 쿠팡플레이</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:84px">너 말고<br>다른<br>연애</h2>
+      <p class="orig">서강준 · 안은진<br>로맨스 · 11/1 종영</p>
+      <p class="hook">👉 장기연애 해본 사람이라면<br>너무 아픈 공감</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/a-love-other-than-yours.jpg"></div>
+  </div>
+  <div class="stat"><div><b>14화</b><span>회당 약 63분</span></div><div><b>약 15시간</b><span>주말 이틀 꽉</span></div></div>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">10년째 연애 중인 호와 미도. 가족처럼<br>익숙해진 둘 앞에 <b class="sun">새로운 사람</b>이 나타나며<br>오래된 사랑이 흔들리기 시작해요.</p></div>
+  <span class="pg">07 / 10</span>
+</section>
+
+<!-- 8 -->
+<section class="s" id="s8">
+  <div class="glow" style="width:560px;height:560px;background:var(--mint);right:-220px;top:-180px;opacity:.3"></div>
+  <span class="tag ck c4">이번 주말 완결 · SBS · 넷플릭스</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:96px">닥터X</h2>
+      <p class="orig" style="margin-top:6px;font-size:32px;color:var(--mint)">하얀 마피아의 시대</p>
+      <p class="orig">김지원 · 이정은<br>메디컬 · 매주 금·토 밤</p>
+      <p class="hook">👉 11화까지 따라잡고<br>토요일 밤 결말은 본방으로</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/doctor-x.jpg"></div>
+  </div>
+  <div class="stat"><div><b style="color:var(--mint)">12화</b><span>11/14(토) 최종회</span></div><div><b style="color:var(--mint)">원작</b><span>일본 '닥터X' 리메이크</span></div></div>
+  <div class="why" style="border-color:var(--mint)"><h4 style="color:var(--mint)">어떤 작품?</h4><p class="b">어느 병원에도 속하지 않는 천재 외과의<br>계수정이 <b class="sun">권력 다툼 가득한 병원</b>에<br>뛰어들며 벌어지는 메디컬 드라마.</p></div>
+  <span class="pg">08 / 10</span>
+</section>
+
+<!-- 9 COURSE -->
+<section class="s" id="s9">
+  <span class="tag">저장 필수 📌</span>
+  <h2 class="h" style="font-size:84px;margin-top:36px">내 주말에 맞는 코스</h2>
+  <div class="tt">
+    <div><span class="when">반나절<small>약 5시간 ⏱</small></span><section><h3>꿀알바</h3><p>넷플릭스 · 오컬트 호러</p></section><img src="posters/dead-end-job.jpg"></div>
+    <div><span class="when">하루<small>웃음 or 설렘 😆</small></span><section><h3>직장인들 시즌3<br>내가 떨릴 수 있게</h3><p>쿠팡플레이 · 티빙</p></section><img src="posters/make-me-tingle.jpg"></div>
+    <div><span class="when">주말 이틀<small>12~15시간 🛋</small></span><section><h3>연애박사<br>너 말고 다른 연애</h3><p>지니TV·디즈니+ · 쿠팡플레이</p></section><img src="posters/between-steps.jpg"></div>
+    <div><span class="when">본방 사수<small>토요일 밤 📺</small></span><section><h3>닥터X: 하얀 마피아의 시대</h3><p>11/14 최종회 · SBS · 넷플릭스</p></section><img src="posters/doctor-x.jpg"></div>
+  </div>
+  <span class="pg">09 / 10</span>
+</section>
+
+<!-- 10 CTA -->
+<section class="s" id="s10">
+  <div class="glow" style="width:640px;height:640px;background:var(--coral);left:50%;top:40%;margin-left:-320px;opacity:.35"></div>
+  <h2 class="h" style="font-size:112px;margin-top:180px;text-align:center">주말 방콕,<br>준비 끝 🍿</h2>
+  <p class="b" style="text-align:center;margin-top:40px;font-size:38px;font-weight:700">요즘 정주행 중인 작품은?<br><span class="sun">댓글로 추천해 주세요 👇</span></p>
+  <div class="chips" style="justify-content:center;margin-top:60px"><span>💾 저장하고 주말에 꺼내보기</span><span>📤 같이 볼 친구에게 공유</span></div>
+  <p class="mute" style="font-size:22px;text-align:center;margin-top:auto;margin-bottom:60px;line-height:1.6">정주행 시간은 회당 러닝타임 기준 대략적인 값이에요.<br>포스터 이미지 © 각 제작·배급사</p>
+  <span class="pg">10 / 10</span>
+</section>
+</body></html>
