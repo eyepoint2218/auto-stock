@@ -198,7 +198,8 @@ def render_cover(post: Post, config: dict) -> Image.Image:
 
     cover = open_img(post.asset(post.cover_image))
     all_imgs = [open_img(post.asset(it.image)) for it in post.items if it.image]
-    item_imgs = [im for im in all_imgs if im.height >= im.width][:3]  # 콜라주는 세로 포스터만
+    posters = [open_img(post.asset(it.poster)) for it in post.items if it.poster]
+    item_imgs = (posters + [im for im in all_imgs if im.height >= im.width])[:3]  # 콜라주는 세로 포스터만
     wide_imgs = [im for im in all_imgs if im.height < im.width]
 
     if cover:
@@ -276,7 +277,10 @@ def render_item(post: Post, item: Item, idx: int, total: int, config: dict) -> I
 
     canvas = Image.new("RGBA", (W, H), theme["bg"] + (255,))
     im = open_img(post.asset(item.image))
-    if im and im.width > im.height * 1.3:
+    if im and item.layout == "cover":
+        # 공식 스틸컷: 꽉 채움
+        canvas.paste(cover_crop(im, (W, img_h), (0.5, 0.4)), (0, 0))
+    elif im and im.width > im.height * 1.3:
         # 가로로 긴 이미지(로고·타이틀 카드): 자르지 않고 전체를 보여줌
         bg = cover_crop(im, (W, img_h)).filter(ImageFilter.GaussianBlur(40))
         canvas.paste(bg, (0, 0))

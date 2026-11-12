@@ -1,18 +1,14 @@
 {
-  "img/when_life_gives_you_tangerines.png": {
-    "page": "When Life Gives You Tangerines",
-    "page_url": "https://en.wikipedia.org/wiki/When_Life_Gives_You_Tangerines",
-    "file": "When_Life_Gives_You_Tangerines_poster.png",
-    "src": "https://upload.wikimedia.org/wikipedia/en/e/e8/When_Life_Gives_You_Tangerines_poster.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
-    "width": 260,
-    "height": 384
-  },
-  "img/daily_dose_of_sunshine.jpg": {
-    "page": "Daily Dose of Sunshine",
-    "page_url": "https://en.wikipedia.org/wiki/Daily_Dose_of_Sunshine",
-    "file": "Daily_Dose_of_Sunshine.jpg",
-    "src": "https://upload.wikimedia.org/wikipedia/en/c/c3/Daily_Dose_of_Sunshine.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
-    "width": 259,
-    "height": 384
+  "by_title": {
+    "폭싹 속았수다": {
+      "source": "wikipedia",
+      "image": "img/when_life_gives_you_tangerines.png",
+      "page_url": "https://en.wikipedia.org/wiki/When_Life_Gives_You_Tangerines"
+    },
+    "정신병동에도 아침이 와요": {
+      "source": "wikipedia",
+      "image": "img/daily_dose_of_sunshine.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/Daily_Dose_of_Sunshine"
+    }
   }
 }

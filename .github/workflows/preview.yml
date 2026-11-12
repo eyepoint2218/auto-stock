@@ -34,6 +34,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: 미리보기 만들기
+        env:
+          TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
         run: |
           git config user.name "screendaily-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

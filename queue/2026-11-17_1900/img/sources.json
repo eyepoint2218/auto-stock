@@ -1,26 +1,19 @@
 {
-  "img/extracurricular_tv_series.jpg": {
-    "page": "Extracurricular (TV series)",
-    "page_url": "https://en.wikipedia.org/wiki/Extracurricular_%28TV_series%29",
-    "file": "Extracurricular_2020.jpg",
-    "src": "https://upload.wikimedia.org/wikipedia/en/9/9a/Extracurricular_2020.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
-    "width": 250,
-    "height": 368
-  },
-  "img/a_killer_paradox.jpg": {
-    "page": "A Killer Paradox",
-    "page_url": "https://en.wikipedia.org/wiki/A_Killer_Paradox",
-    "file": "A_Killer_Paradox_poster.jpg",
-    "src": "https://upload.wikimedia.org/wikipedia/en/d/d6/A_Killer_Paradox_poster.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
-    "width": 260,
-    "height": 384
-  },
-  "img/mask_girl.jpg": {
-    "page": "Mask Girl",
-    "page_url": "https://en.wikipedia.org/wiki/Mask_Girl",
-    "file": "Mask_Girl.jpg",
-    "src": "https://upload.wikimedia.org/wikipedia/en/a/a3/Mask_Girl.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
-    "width": 260,
-    "height": 385
+  "by_title": {
+    "인간수업": {
+      "source": "wikipedia",
+      "image": "img/extracurricular_tv_series.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/Extracurricular_%28TV_series%29"
+    },
+    "살인자ㅇ난감": {
+      "source": "wikipedia",
+      "image": "img/a_killer_paradox.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/A_Killer_Paradox"
+    },
+    "마스크걸": {
+      "source": "wikipedia",
+      "image": "img/mask_girl.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/Mask_Girl"
+    }
   }
 }

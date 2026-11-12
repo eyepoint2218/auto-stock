@@ -8,20 +8,17 @@ bubble: "2화부터 못 멈춤"
 items:
   - title: 인간수업
     wiki: Extracurricular (TV series)
-    image: img/extracurricular_tv_series.jpg
     ott: 넷플릭스
     genre: 범죄 · 드라마
     desc: 돈을 벌기 위해 범죄에 발을 들인 평범한 고등학생. 10부작이 순식간에 지나갑니다.
   - title: 살인자ㅇ난감
     wiki: A Killer Paradox
-    image: img/a_killer_paradox.jpg
     ott: 넷플릭스
     genre: 스릴러
     desc: 우연한 사건 이후 인생이 뒤틀리는 평범한 대학생. 최우식·손석구 조합만으로도 볼 이유 충분.
     bubble: "연출 미쳤어요"
   - title: 마스크걸
     wiki: Mask Girl
-    image: img/mask_girl.jpg
     ott: 넷플릭스
     genre: 스릴러 · 드라마
     desc: 외모 콤플렉스를 가진 직장인이 밤마다 마스크를 쓰고 방송을 하면서 벌어지는 이야기. 7부작.
@@ -37,4 +34,4 @@ caption: |
   이 중에 본 작품 있나요? 댓글로 알려주세요 👇
   저장해두고 주말에 몰아보기 🔖
 hashtags: [스릴러추천, 넷플릭스드라마, 숨은명작, 정주행]
-credits: "이미지 출처: 넷플릭스, 디즈니+ 공식 포스터·스틸 (via Wikipedia). 모든 이미지의 저작권은 각 제작사에 있습니다."
+credits: "이미지 출처: 넷플릭스, 디즈니+ 공식 포스터·스틸 (via TMDB·Wikipedia). 모든 이미지의 저작권은 각 제작사에 있습니다."
