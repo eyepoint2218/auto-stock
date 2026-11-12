@@ -12,7 +12,7 @@ import yaml
 
 from . import ROOT
 
-GENERATOR_VERSION = "6"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
+GENERATOR_VERSION = "7"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
 
 
 def load_config() -> dict:
@@ -33,6 +33,7 @@ class Item:
     credit: str = ""  # 카드에 작게 표시할 이미지 출처 (자동)
     poster: str = ""  # 표지 콜라주용 세로 포스터 (자동)
     layout: str = ""  # cover = 사진을 꽉 채움 (자동)
+    role: str = ""    # 배우 소개: 배역 이름 (비우면 TMDB 출연 기록에서 자동)
 
 
 @dataclass
@@ -54,6 +55,11 @@ class Post:
     credits: str = ""
     draft: bool = False
     bgm: str = ""
+    actor: str = ""            # 배우 소개 게시물: 배우 이름
+    actor_tmdb: str = ""       # 동명이인일 때 person/ID
+    actor_image: str = ""      # (자동) 배우 프로필 사진
+    actor_name: str = ""       # (자동) TMDB 의 배우 이름
+    outro_question: str = ""   # 마지막 장 질문 문구 (비우면 config 기본값)
 
     @property
     def name(self) -> str:
@@ -138,6 +144,8 @@ def load_post(slot_dir: Path, config: dict) -> Post:
             raise ValueError(f"[{slot_dir.name}] items {i}번에 title 이 없습니다")
         item = Item(**{k: str(v) for k, v in it.items() if k in Item.__dataclass_fields__ and v is not None})
         auto = by_title.get(item.title)
+        if auto and not item.role and auto.get("role"):
+            item.role = auto["role"]
         if not item.image and auto and (slot_dir / auto["image"]).is_file():
             item.image = auto["image"]
             item.poster = auto.get("poster", "")
@@ -164,7 +172,15 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         credits=str(raw.get("credits", "") or ""),
         draft=bool(raw.get("draft", False)),
         bgm=str(raw.get("bgm", "") or ""),
+        actor=str(raw.get("actor", "") or ""),
+        actor_tmdb=str(raw.get("actor_tmdb", "") or ""),
+        outro_question=str(raw.get("outro_question", "") or ""),
     )
+
+    act = sources.get("actor", {})
+    if post.actor and act.get("image") and (slot_dir / act["image"]).is_file():
+        post.actor_image = act["image"]
+        post.actor_name = act.get("name", "")
 
     if not post.images:
         if not post.title:

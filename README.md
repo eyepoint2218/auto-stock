@@ -96,6 +96,13 @@ git add queue && git commit -m "다음 주 예약" && git push
 - 카드 오른쪽 위에 `이미지 © OTT · via TMDB` 가 표시됩니다.
 - This product uses the TMDB API but is not endorsed or certified by TMDB.
 
+## 배우 소개 게시물
+`post.yml` 에 `actor: 배우이름` 과 `label: ACTOR` 를 적으면
+- 표지에 TMDB 배우 프로필 사진이 들어가고 (`사진 © TMDB` 표시)
+- 각 작품 카드에 TMDB 출연 기록의 **배역 이름**(예: ‘영숙’ 역)이 자동으로 들어갑니다. 직접 쓰려면 `role:`.
+- 동명이인이면 `actor_tmdb: person/ID`, 마지막 장 질문은 `outro_question:` 으로 바꿀 수 있습니다.
+- 예시: `queue/sample_actor/post.yml` (draft 라 업로드되지 않음)
+
 ## 3. 릴스(영상)
 - `format: reel` 이면 같은 카드들을 **9:16 영상**으로 만듭니다: 흐린 배경 + 천천히 확대 + 장면 전환.
 - 장당 시간·전환 속도는 `config.yml` 의 `reel:` 에서 조절.

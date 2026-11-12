@@ -94,6 +94,36 @@ class TMDB:
             return best["media_type"], best["id"], best.get("name") or best.get("title")
         return None
 
+    def find_person(self, name: str, override: str = "") -> tuple[int, str] | None:
+        """배우 (id, 이름). override 는 "person/1234"."""
+        if override:
+            pid = int(override.split("/")[-1])
+            return pid, self.get(f"person/{pid}", language="ko-KR").get("name") or name
+        res = self.get("search/person", query=name, language="ko-KR", include_adult="false")
+        cands = [r for r in res.get("results", []) if r.get("known_for_department") == "Acting"] \
+            or res.get("results", [])
+        if not cands:
+            return None
+        best = max(cands, key=lambda r: r.get("popularity", 0))
+        return best["id"], best.get("name") or name
+
+    def person_profile(self, pid: int) -> str | None:
+        d = self.get(f"person/{pid}/images")
+        profiles = d.get("profiles", [])
+        if not profiles:
+            return None
+        return max(profiles, key=lambda x: (x.get("vote_average", 0), x.get("height", 0)))["file_path"]
+
+    def person_roles(self, pid: int) -> dict[str, str]:
+        """{"tv/123": "배역 이름", "movie/456": ...}"""
+        d = self.get(f"person/{pid}/combined_credits", language="ko-KR")
+        roles = {}
+        for c in d.get("cast", []):
+            key = f"{c.get('media_type')}/{c.get('id')}"
+            if c.get("character") and key not in roles:
+                roles[key] = c["character"]
+        return roles
+
     def images(self, kind: str, tid: int) -> tuple[str | None, str | None]:
         """(스틸컷 경로, 포스터 경로)"""
         d = self.get(f"{kind}/{tid}/images", include_image_language="ko,null,en")
@@ -192,6 +222,37 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             print(f"  ⚠ TMDB 실패: {title}: {e}")
         time.sleep(0.3)
 
+    # 1-2) 배우 소개: 프로필 사진 + 작품별 배역 이름
+    actor = str(raw.get("actor") or "").strip()
+    if actor and tmdb:
+        cur = sources.get("actor", {})
+        try:
+            if cur.get("name_query") != actor or refresh or not (slot_dir / cur.get("image", "_")).is_file():
+                found = tmdb.find_person(actor, str(raw.get("actor_tmdb") or ""))
+                if not found:
+                    print(f"  ⚠ TMDB 배우 검색 결과 없음: {actor} (actor_tmdb: \"person/ID\" 지정)")
+                else:
+                    pid, pname = found
+                    cur = {"name_query": actor, "name": pname, "tmdb": f"person/{pid}",
+                           "page_url": f"https://www.themoviedb.org/person/{pid}"}
+                    prof = tmdb.person_profile(pid)
+                    if prof:
+                        cur["image"] = save(f"{TMDB_IMG}/h632{prof}", "actor_" + slug(actor))
+                    sources["actor"] = cur
+                    print(f"  ✓ TMDB 배우 {actor} → {pname} (person/{pid})")
+            if cur.get("tmdb"):
+                roles = tmdb.person_roles(int(cur["tmdb"].split("/")[-1]))
+                for t, e in by_title.items():
+                    if e.get("tmdb") in roles:
+                        e["role"] = roles[e["tmdb"]]
+                    elif "role" in e:
+                        del e["role"]
+                missing = [t for t, e in by_title.items() if e.get("source") == "tmdb" and "role" not in e]
+                if missing:
+                    print(f"  ⚠ 출연 기록에 없는 작품: {', '.join(missing)} (작품이나 배우가 맞는지 확인)")
+        except Exception as e:  # noqa: BLE001
+            print(f"  ⚠ TMDB 배우 정보 실패: {actor}: {e}")
+
     # 2) 위키백과 (TMDB 결과가 없는 작품만)
     need = [it for it in items if it.get("wiki") and not it.get("image") and str(it["title"]) not in by_title]
     if need:
@@ -217,11 +278,13 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             print(f"  ✓ 위키 {it['title']} → {rel}")
             time.sleep(1)
 
-    if saved or by_title:
+    if saved or by_title or sources.get("actor"):
         img_dir.mkdir(exist_ok=True)
         (img_dir / "sources.json").write_text(json.dumps(sources, ensure_ascii=False, indent=2), encoding="utf-8")
     # 더 이상 안 쓰는 이미지 정리
     used = {v for e in by_title.values() for k, v in e.items() if k in ("image", "poster")}
+    if sources.get("actor", {}).get("image"):
+        used.add(sources["actor"]["image"])
     for it in items:
         if it.get("image"):
             used.add(str(it["image"]))
