@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/local.css">
+<style>
+:root{--bg:#0F1016;--card:#1B1D27;--line:#2C2F3D;--coral:#FF5E4D;--sun:#FFC94A;--mint:#5FD3B4;--ink:#F5F1E8;--mute:#9C9CAB}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;font-family:'Noto Sans KR',sans-serif;color:var(--ink)}
+.s{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--bg);padding:96px 88px;display:flex;flex-direction:column;margin-bottom:20px}
+.h{font-family:'Black Han Sans',sans-serif;font-weight:400;letter-spacing:-1px;line-height:1.12}
+.tag{display:inline-block;align-self:flex-start;font-weight:700;font-size:28px;padding:10px 22px;border-radius:999px;background:var(--coral);color:#140806}
+.tag.o{background:transparent;border:2px solid var(--line);color:var(--mute)}
+.pg{position:absolute;right:88px;bottom:56px;font-size:24px;color:var(--mute);font-weight:700;letter-spacing:2px}
+.brand{position:absolute;left:88px;bottom:56px;font-size:24px;color:var(--mute);font-weight:700}
+.mute{color:var(--mute)} .coral{color:var(--coral)} .sun{color:var(--sun)} .mint{color:var(--mint)}
+p.b{font-size:34px;line-height:1.6;font-weight:400}
+.glow{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
+.poster{border-radius:22px;object-fit:cover;box-shadow:0 30px 60px rgba(0,0,0,.6),0 0 0 2px rgba(255,255,255,.08)}
+/* cover */
+.cover .big{font-size:150px;margin-top:40px;position:relative;z-index:2}
+.cover .sub{font-size:44px;font-weight:700;margin-top:36px;line-height:1.45;position:relative;z-index:2}
+.fan{position:absolute;left:0;right:0;bottom:-60px;height:560px}
+.fan img{position:absolute;width:300px;height:450px;bottom:0}
+/* title slides: poster right, text left */
+.hero{display:flex;gap:40px;margin-top:40px}
+.hero .txt{flex:1;display:flex;flex-direction:column;min-width:0}
+.hero .pw{position:relative;width:340px;flex:none}
+.hero .pw img{width:340px;height:510px;display:block}
+.rk{position:absolute;left:-34px;top:-34px;width:108px;height:108px;border-radius:50%;background:var(--coral);color:#140806;font-family:'Black Han Sans';font-size:68px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.title{font-size:96px;margin-top:50px}
+.orig{font-size:28px;color:var(--mute);margin-top:18px;font-weight:700;line-height:1.5}
+.hook{font-size:28px;color:var(--ink);margin-top:auto;font-weight:700;line-height:1.5;background:var(--card);border-radius:18px;padding:20px 24px}
+.stat{display:flex;gap:24px;margin-top:36px}
+.stat div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:26px;padding:24px 30px}
+.stat b{display:block;font-family:'Black Han Sans';font-size:60px;font-weight:400;color:var(--sun)}
+.stat span{font-size:25px;color:var(--mute);font-weight:700}
+.why{margin-top:28px;background:var(--card);border-left:8px solid var(--coral);border-radius:20px;padding:28px 36px}
+.why .b{font-size:32px;line-height:1.55}
+.why h4{font-size:26px;color:var(--coral);margin-bottom:8px}
+/* bars */
+.bars{margin-top:56px;display:flex;flex-direction:column;gap:30px}
+.bar{display:flex;gap:26px;align-items:center}
+.bar img{width:96px;height:144px;border-radius:12px;object-fit:cover;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+.bar .ph{width:96px;height:144px;border-radius:12px;flex:none;border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:26px;font-weight:700}
+.bar .col{flex:1;min-width:0}
+.bar .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:32px;font-weight:700;margin-bottom:14px}
+.bar .lab small{display:block;font-size:22px;color:var(--mute);font-weight:700;margin-top:4px}
+.bar .lab em{font-style:normal;font-family:'Black Han Sans';font-size:48px;color:var(--sun)}
+.track{height:36px;background:var(--card);border-radius:12px;overflow:hidden}
+.fill{height:100%;border-radius:12px;background:var(--coral)}
+.bar.ref .fill{background:#4A4D5E} .bar.ref .lab em{color:var(--mute)}
+/* insights */
+.ins{margin-top:56px;display:flex;flex-direction:column;gap:30px}
+.ins div{background:var(--card);border:2px solid var(--line);border-radius:28px;padding:36px 40px;display:flex;gap:30px}
+.ins i{font-style:normal;font-family:'Black Han Sans';font-size:64px;color:var(--coral);line-height:1}
+.ins h3{font-size:40px;font-weight:900;margin-bottom:10px}
+.ins p{font-size:29px;line-height:1.55;color:#D8D4CC}
+/* timetable */
+.tt{margin-top:48px;display:flex;flex-direction:column;gap:22px}
+.tt div{display:grid;grid-template-columns:200px 1fr 92px;gap:20px;align-items:center;background:var(--card);border-radius:26px;padding:20px 24px 20px 34px;border:2px solid var(--line)}
+.tt img{width:92px;height:138px;border-radius:12px;object-fit:cover}
+.tt .when{font-family:'Black Han Sans';font-size:38px;color:var(--sun);line-height:1.15}
+.tt .when small{display:block;font-family:'Noto Sans KR';font-size:22px;color:var(--mute);font-weight:700;margin-top:6px}
+.tt h3{font-size:34px;font-weight:900;line-height:1.3}
+.tt p{font-size:25px;color:var(--mute);margin-top:6px;font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
+.chips span{font-size:28px;font-weight:700;padding:12px 24px;border-radius:999px;border:2px solid var(--line);color:#D8D4CC}
+</style><style>
+.rl{margin-top:48px;display:flex;flex-direction:column;gap:22px}
+.rl div{display:flex;align-items:center;gap:28px;background:var(--card);border:2px solid var(--line);border-radius:26px;padding:20px 30px 20px 20px}
+.rl img{width:100px;height:150px;border-radius:12px;object-fit:cover;flex:none}
+.rl .n{font-family:'Black Han Sans';font-weight:400;font-size:72px;color:var(--coral);width:70px;text-align:center;flex:none}
+.rl h3{font-size:40px;font-weight:900}
+.rl p{font-size:26px;color:var(--mute);font-weight:700;margin-top:6px}
+.rl .ref{border-style:dashed}
+.rl .ref .n{font-size:52px}
+</style></head><body>
+<!-- 1 COVER -->
+<section class="s cover" id="s1">
+  <div class="glow" style="width:620px;height:620px;background:var(--coral);right:-200px;top:-160px"></div>
+  <div class="glow" style="width:420px;height:420px;background:#5B4BFF;left:-160px;bottom:-120px;opacity:.35"></div>
+  <span class="tag">11/14–11/15 주말 방콕 가이드 · 쿠팡플레이 편</span>
+  <h1 class="h big">이번 주말,<br>쿠플에선<br>뭐 보지?</h1>
+  <p class="sub">지난주 쿠팡플레이 <span class="sun">인기 TOP 3</span>와<br>이번 주 신작까지 🍿</p>
+  <div class="fan">
+    <img class="poster" src="posters/colony.jpg" style="left:40px;transform:rotate(-14deg);bottom:-60px">
+    <img class="poster" src="posters/love-on-the-menu.jpg" style="left:280px;transform:rotate(-5deg);bottom:-20px">
+    <img class="poster" src="posters/a-love-other-than-yours.jpg" style="left:520px;transform:rotate(5deg);bottom:-20px">
+    <img class="poster" src="posters/office-workers-s3.jpg" style="left:760px;transform:rotate(14deg);bottom:-60px">
+  </div>
+</section>
+
+<!-- 2 RANK LIST -->
+<section class="s" id="s2">
+  <span class="tag o">쿠팡플레이 한국 일간 차트 · 11/1, 11/6</span>
+  <h2 class="h" style="font-size:92px;margin-top:36px">지난주 <span class="coral">TOP 3</span> 한눈에</h2>
+  <p class="b mute" style="font-size:27px;margin-top:16px">FlixPatrol 일간 순위 기준 (시리즈·영화 통합)</p>
+  <div class="rl">
+    <div><img src="posters/office-workers-s3.jpg"><b class="n">1</b><section><h3>직장인들 시즌3</h3><p>오피스 코미디 · 11/1, 11/6 모두 1위</p></section></div>
+    <div><img src="posters/a-love-other-than-yours.jpg"><b class="n">2</b><section><h3>너 말고 다른 연애</h3><p>로맨스 · 서강준 · 안은진</p></section></div>
+    <div><img src="posters/love-on-the-menu.jpg"><b class="n">3</b><section><h3>사랑이 온다</h3><p>가족 로맨스 · 하석진 · 하니</p></section></div>
+    <div class="ref"><img src="posters/colony.jpg"><b class="n">🎬</b><section><h3>군체</h3><p>영화 부문 1위 · 전지현 · 구교환</p></section></div>
+  </div>
+  <p class="mute" style="font-size:22px;margin-top:auto;margin-bottom:30px;line-height:1.5">*쿠팡플레이는 조회수를 공개하지 않아 일간 순위로 정리했어요.<br>&nbsp;앱 내 '인기작' 순위와는 다를 수 있어요.</p>
+  <span class="pg">02 / 10</span>
+</section>
+
+<!-- 3 #1 -->
+<section class="s" id="s3">
+  <span class="tag">쿠팡플레이 오리지널 · 전체 1위</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:92px">직장인들<br><span class="sun" style="font-size:72px">시즌3</span></h2>
+      <p class="orig">신동엽 · 김민교 · 이수지<br>현봉식 · 김원훈</p>
+      <p class="hook">👉 한 회 보면 멈출 수 없는<br>'우리 회사 얘기'</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/office-workers-s3.jpg"><div class="rk">1</div></div>
+  </div>
+  <div class="stat"><div><b>10부작</b><span>10/30 완결 · 정주행 가능</span></div><div><b>2번</b><span>확인한 날 모두 1위</span></div></div>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">사업 실패만 해온 신동엽이 차린 광고회사<br>DY기획. 아재·MZ·낀대 사원들이 펼치는<br><b class="sun">극사실주의 오피스 코미디</b>.</p></div>
+  <span class="pg">03 / 10</span>
+</section>
+
+<!-- 4 #2 -->
+<section class="s" id="s4">
+  <span class="tag">드라마 · 11/1 종영</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:84px">너 말고<br>다른<br>연애</h2>
+      <p class="orig">서강준 · 안은진</p>
+      <p class="hook">👉 장기연애 해본 사람이라면<br>너무 아픈 공감</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/a-love-other-than-yours.jpg"><div class="rk">2</div></div>
+  </div>
+  <div class="stat"><div><b>14부작</b><span>막 끝나서 몰아보기 딱</span></div><div><b>4.6점</b><span>쿠팡플레이 평점(10월 기준)</span></div></div>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">10년째 연애 중인 호와 미도. 가족처럼<br>익숙해진 둘 앞에 <b class="sun">새로운 사람</b>이 나타나며<br>오래된 사랑이 흔들리기 시작해요.</p></div>
+  <span class="pg">04 / 10</span>
+</section>
+
+<!-- 5 #3 -->
+<section class="s" id="s5">
+  <span class="tag">KBS2 주말극 · 방영 중</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:96px">사랑이<br>온다</h2>
+      <p class="orig">하석진 · 하니 · 박유나</p>
+      <p class="hook">👉 주말 저녁 가족이랑<br>같이 보기 좋은 드라마</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/love-on-the-menu.jpg"><div class="rk">3</div></div>
+  </div>
+  <div class="stat"><div><b>8년</b><span>만에 다시 만난 연인</span></div><div><b>주말</b><span>매주 토·일 본방</span></div></div>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">매일 싸워도 결국 저녁엔 마주 앉는 가족.<br>산산조각 난 가족과 8년 만에 재회한<br>옛 연인의 <b class="sun">가족 로맨스</b>.</p></div>
+  <span class="pg">05 / 10</span>
+</section>
+
+<!-- 6 MOVIE -->
+<section class="s" id="s6">
+  <span class="tag" style="background:var(--sun)">영화 부문 1위</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:120px">군체</h2>
+      <p class="orig">감독 연상호<br>전지현 · 구교환 · 지창욱</p>
+      <p class="hook">👉 극장에서 놓쳤다면<br>이번 주말에</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/colony.jpg"><div class="rk" style="background:var(--sun);font-size:52px">🎬</div></div>
+  </div>
+  <div class="stat"><div><b>595만</b><span>극장 누적 관객</span></div><div><b>1위</b><span>쿠팡플레이 영화 일간</span></div></div>
+  <div class="why" style="border-color:var(--sun)"><h4 style="color:var(--sun)">어떤 작품?</h4><p class="b">봉쇄된 초고층 빌딩, 점점 <b class="sun">진화하는 감염자들</b>.<br>생존자들은 구조대가 기다리는 옥상으로<br>올라가야 해요. 생존 스릴러.</p></div>
+  <span class="pg">06 / 10</span>
+</section>
+
+<!-- 7 INSIGHTS -->
+<section class="s" id="s7">
+  <span class="tag o">순위에서 읽은 흐름</span>
+  <h2 class="h" style="font-size:92px;margin-top:40px">지난주 인사이트 <span class="sun">3</span></h2>
+  <div class="ins">
+    <div><i>01</i><section><h3>쿠플은 웃음과 설렘 😆</h3><p>오피스 코미디 · 로맨스 · 가족극이 TOP 3.<br>스릴러가 휩쓴 넷플릭스와는 정반대예요.</p></section></div>
+    <div><i>02</i><section><h3>'완결'이 정주행을 부른다</h3><p>1·2위 모두 10/30, 11/1에 막 끝난 작품.<br>끝나자마자 몰아보는 수요가 몰렸어요.</p></section></div>
+    <div><i>03</i><section><h3>극장 흥행작은 OTT에서도</h3><p>595만 관객 〈군체〉가 영화 부문 1위.<br>극장에서 본 작품을 집에서 다시 찾았어요.</p></section></div>
+  </div>
+  <span class="pg">07 / 10</span>
+</section>
+
+<!-- 8 NEW PICK -->
+<section class="s" id="s8">
+  <div class="glow" style="width:560px;height:560px;background:var(--mint);right:-220px;top:-180px;opacity:.3"></div>
+  <span class="tag" style="background:var(--mint)">이번 주 신작 PICK</span>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:120px">마이클</h2>
+      <p class="orig">마이클 잭슨 전기 영화<br>쿠팡플레이 11/13 공개</p>
+      <p class="hook">👉 금요일 밤, 볼륨 키우고<br>보기 좋은 음악 영화</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/michael.jpg"><div class="rk" style="background:var(--mint);font-size:34px">NEW</div></div>
+  </div>
+  <div class="stat"><div><b style="color:var(--mint)">11/13</b><span>쿠팡플레이 공개</span></div><div><b style="color:var(--mint)">전기</b><span>음악 영화</span></div></div>
+  <div class="why" style="border-color:var(--mint)"><h4 style="color:var(--mint)">어떤 작품?</h4><p class="b">잭슨 파이브의 막내로 데뷔해 세계적인 스타가<br>되기까지. 가족에 대한 책임과 <b class="sun">자신만의 음악</b><br>사이에서 고민한 마이클 잭슨의 이야기.</p></div>
+  <span class="pg">08 / 10</span>
+</section>
+
+<!-- 9 TIMETABLE -->
+<section class="s" id="s9">
+  <span class="tag">저장 필수 📌</span>
+  <h2 class="h" style="font-size:88px;margin-top:36px">쿠플 주말 타임테이블</h2>
+  <div class="tt">
+    <div><span class="when">금요일 밤<small>볼륨 업 🎧</small></span><section><h3>마이클</h3><p>이번 주 신작 음악 영화</p></section><img src="posters/michael.jpg"></div>
+    <div><span class="when">토요일 오후<small>깔깔 타임 😆</small></span><section><h3>직장인들 시즌3</h3><p>완결 10부작 몰아보기</p></section><img src="posters/office-workers-s3.jpg"></div>
+    <div><span class="when">토요일 밤<small>불 끄고 🧟</small></span><section><h3>군체</h3><p>극장 595만 생존 스릴러</p></section><img src="posters/colony.jpg"></div>
+    <div><span class="when">일요일<small>이불 속 정주행 🛋</small></span><section><h3>너 말고 다른 연애</h3><p>완결 14부작 로맨스</p></section><img src="posters/a-love-other-than-yours.jpg"></div>
+  </div>
+  <span class="pg">09 / 10</span>
+</section>
+
+<!-- 10 CTA -->
+<section class="s" id="s10">
+  <div class="glow" style="width:640px;height:640px;background:var(--coral);left:50%;top:40%;margin-left:-320px;opacity:.35"></div>
+  <h2 class="h" style="font-size:112px;margin-top:180px;text-align:center">주말 방콕,<br>준비 끝 🍿</h2>
+  <p class="b" style="text-align:center;margin-top:40px;font-size:38px;font-weight:700">여러분의 이번 주말 PICK은?<br><span class="sun">댓글로 추천해 주세요 👇</span></p>
+  <div class="chips" style="justify-content:center;margin-top:60px"><span>💾 저장하고 주말에 꺼내보기</span><span>📤 같이 볼 친구에게 공유</span></div>
+  <p class="mute" style="font-size:22px;text-align:center;margin-top:auto;margin-bottom:60px;line-height:1.6">출처: FlixPatrol 쿠팡플레이 한국 일간 순위(2026.11.1, 11.6) 및 관련 보도<br>포스터 이미지 © 각 제작·배급사</p>
+  <span class="pg">10 / 10</span>
+</section>
+</body></html>
