@@ -17,15 +17,6 @@
       "image": "img/ae8f8d_still.jpg",
       "layout": "cover",
       "poster": "img/ae8f8d_poster.jpg"
-    },
-    "엘리트": {
-      "source": "tmdb",
-      "tmdb": "tv/281281",
-      "tmdb_name": "GIGN: 엘리트 포스",
-      "page_url": "https://www.themoviedb.org/tv/281281",
-      "image": "img/fa4818_still.jpg",
-      "layout": "cover",
-      "poster": "img/fa4818_poster.jpg"
     }
   }
 }
