@@ -77,7 +77,7 @@ git add queue && git commit -m "다음 주 예약" && git push
 | `bubble` | 빨간 테두리 반응 말풍선 ("3화부터 미쳐요ㅠ") |
 | `cover_image` | 표지 사진 (없으면 작품 사진들로 콜라주) |
 | `items` | 작품 목록 최대 8개: `title`, `ott`, `genre`, `desc`, `image`, `bubble`, `wiki` |
-| `items[].tmdb` | TMDB 작품 지정 (예: `tv/93405`). 비우면 제목으로 검색. 다른 작품이 잡혔을 때만 적기 |
+| `items[].tmdb` | TMDB 작품 지정. `tv/93405`(ID) · `tv` 또는 `movie`(드라마/영화만 검색) · `movie:검색어`(검색어 지정). 비우면 제목으로 검색 |
 | `items[].wiki` | 영문 위키백과 문서 제목 (예: `Squid Game`). 사진을 안 넣으면 대표 이미지(보통 공식 포스터)를 자동으로 가져오고 카드에 출처를 표시 |
 | `images` | 직접 만든 이미지로 올릴 때 (이걸 쓰면 자동 디자인 생략) |
 | `outro` | `false` 면 마지막 팔로우 유도 장 생략 |

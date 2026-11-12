@@ -61,19 +61,38 @@ class TMDB:
                     params={**self.params, **params}).json()
 
     def find(self, title: str, override: str = "") -> tuple[str, int, str] | None:
-        """(tv|movie, id, 이름) 반환."""
+        """(tv|movie, id, 이름) 반환.
+
+        override 형식: "tv/93405"(ID 지정) · "tv" 또는 "movie"(종류만 지정) · "movie:글래스 어니언"(종류+검색어)
+        """
+        kind_filter, query = "", title
         if override:
-            kind, _, tid = override.partition("/")
-            d = self.get(f"{kind}/{tid}", language="ko-KR")
-            return kind, int(tid), d.get("name") or d.get("title") or title
-        res = self.get("search/multi", query=title, language="ko-KR", include_adult="false")
-        cands = [r for r in res.get("results", []) if r.get("media_type") in ("tv", "movie")]
-        if not cands:
-            return None
-        norm = lambda s: re.sub(r"\s+", "", (s or "")).lower()  # noqa: E731
-        exact = [r for r in cands if norm(r.get("name") or r.get("title")) == norm(title)]
-        best = (exact or cands)[0]
-        return best["media_type"], best["id"], best.get("name") or best.get("title")
+            kind, sep, rest = override.partition("/")
+            if sep and rest.strip().isdigit():
+                d = self.get(f"{kind}/{rest.strip()}", language="ko-KR")
+                return kind, int(rest), d.get("name") or d.get("title") or title
+            kind, _, q = override.partition(":")
+            kind_filter = kind.strip() if kind.strip() in ("tv", "movie") else ""
+            query = q.strip() or title
+        norm = lambda s: re.sub(r"[\s:·!?,.'\"-]+", "", (s or "")).lower()  # noqa: E731
+        queries = [query]
+        short = re.split(r"[:：]", query)[0].strip()
+        if short and short != query:
+            queries.append(short)  # "글래스 어니언: 나이브스 아웃 미스터리" → "글래스 어니언"
+        for q in queries:
+            if kind_filter:
+                res = self.get(f"search/{kind_filter}", query=q, language="ko-KR", include_adult="false")
+                cands = [{**r, "media_type": kind_filter} for r in res.get("results", [])]
+            else:
+                res = self.get("search/multi", query=q, language="ko-KR", include_adult="false")
+                cands = [r for r in res.get("results", []) if r.get("media_type") in ("tv", "movie")]
+            if not cands:
+                continue
+            exact = [r for r in cands if norm(r.get("name") or r.get("title")) in (norm(title), norm(q))]
+            # 같은 이름이면 인기도(popularity)가 높은 쪽
+            best = max(exact, key=lambda r: r.get("popularity", 0)) if exact else cands[0]
+            return best["media_type"], best["id"], best.get("name") or best.get("title")
+        return None
 
     def images(self, kind: str, tid: int) -> tuple[str | None, str | None]:
         """(스틸컷 경로, 포스터 경로)"""
