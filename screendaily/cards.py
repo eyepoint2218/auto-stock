@@ -196,14 +196,20 @@ def render_cover(post: Post, config: dict) -> Image.Image:
     brand = config.get("brand", "SCREEN DAILY")
     canvas = Image.new("RGBA", (W, H), theme["bg"] + (255,))
 
-    cover = open_img(post.asset(post.cover_image))
+    cover = open_img(post.asset(post.cover_image or post.actor_image))
     all_imgs = [open_img(post.asset(it.image)) for it in post.items if it.image]
     posters = [open_img(post.asset(it.poster)) for it in post.items if it.poster]
     item_imgs = (posters + [im for im in all_imgs if im.height >= im.width])[:3]  # 콜라주는 세로 포스터만
     wide_imgs = [im for im in all_imgs if im.height < im.width]
 
-    if cover:
-        canvas.paste(cover_crop(cover, (W, H)), (0, 0))
+    if cover and post.reveal and not post.cover_image:
+        # 배우 맞히기: 알아볼 수 없게 아주 흐린 실루엣 + 큰 물음표
+        canvas.paste(cover_crop(cover, (W, H), (0.5, 0.2)).filter(ImageFilter.GaussianBlur(75)), (0, 0))
+        canvas.alpha_composite(Image.new("RGBA", (W, H), (10, 10, 12, 120)))
+        ImageDraw.Draw(canvas).text((W / 2, H * 0.30), "?", font=font(EB, 520), fill=accent + (235,), anchor="mm")
+        canvas.alpha_composite(vgrad((W, H), theme["bg"], H * 0.45, H * 0.72, 0, 245))
+    elif cover:
+        canvas.paste(cover_crop(cover, (W, H), (0.5, 0.2 if post.actor_image else 0.35)), (0, 0))
         canvas.alpha_composite(vgrad((W, H), (0, 0, 0), 0, 220, 110, 0))
         canvas.alpha_composite(vgrad((W, H), theme["bg"], H * 0.38, H * 0.74, 0, 245))
     elif item_imgs:
@@ -233,6 +239,9 @@ def render_cover(post: Post, config: dict) -> Image.Image:
     d.text((M, 60), brand, font=font(EB, 28), fill=theme["fg"] + (230,))
     date = post.publish_at.strftime("%m.%d")
     d.text((W - M, 60), date, font=font(B, 28), fill=theme["fg"] + (200,), anchor="ra")
+    if post.actor_image and not post.cover_image:
+        d.text((W - M, 100), "사진 © TMDB", font=font(R, 22), fill=(255, 255, 255, 200), anchor="ra",
+               stroke_width=2, stroke_fill=(0, 0, 0, 120))
 
     # 아래에서 위로 쌓기: 부제 → 제목 → 라벨 → 말풍선
     y_bottom = H - 140
@@ -248,7 +257,8 @@ def render_cover(post: Post, config: dict) -> Image.Image:
 
     if post.bubble:
         b = bubble_layer(post.bubble)
-        paste_center(canvas, b, W // 2, y_label - 30 - b.height // 2)
+        bx = W - M - b.width // 2 + 10 if post.actor_image else W // 2
+        paste_center(canvas, b, bx, y_label - 30 - b.height // 2)
         d = ImageDraw.Draw(canvas)
 
     pill(d, M, y_label, post.label, font(EB, 26), accent, (15, 15, 15))
@@ -270,8 +280,11 @@ def render_item(post: Post, item: Item, idx: int, total: int, config: dict) -> I
     tf, tl = fit(item.title, EB, W - M * 2, 2, 80, 52)
     df = font(R, 38)
     dl = fit(item.desc, R, W - M * 2, 4, 38, 38)[1] if item.desc else []
-    meta_h = 80 if (item.ott or item.genre) else 0
-    text_h = meta_h + block_h(tf, tl) + (16 + block_h(df, dl) if dl else 0)
+    meta_h = 80 if (item.ott or item.genre or item.stage) else 0
+    rf = font(B, 34)
+    role_txt = f"‘{item.role}’ 역" if item.role else ""
+    role_h = line_h(rf) + 6 if role_txt else 0
+    text_h = meta_h + block_h(tf, tl) + role_h + (16 + block_h(df, dl) if dl else 0)
     y0 = H - 150 - text_h  # 글자 블록 시작
     img_h = y0 + 40
 
@@ -313,7 +326,7 @@ def render_item(post: Post, item: Item, idx: int, total: int, config: dict) -> I
     if item.credit:
         d.text((W - M, 64), item.credit, font=font(R, 22), fill=(255, 255, 255, 200), anchor="ra",
                stroke_width=2, stroke_fill=(0, 0, 0, 120))
-    d.text((M - 4, y0 - 190), f"{idx:02d}", font=font(EB, 150), fill=accent)
+    d.text((M - 4, y0 - 190), item.year or f"{idx:02d}", font=font(EB, 150), fill=accent)
 
     if item.bubble:
         b = bubble_layer(item.bubble, size=36, angle=2.5)
@@ -321,13 +334,23 @@ def render_item(post: Post, item: Item, idx: int, total: int, config: dict) -> I
         d = ImageDraw.Draw(canvas)
 
     y, x = y0, M
-    if item.ott:
+    if item.stage:
+        box = pill(d, x, y, item.stage, font(EB, 26), accent, (15, 15, 15))
+        x = box[2] + 18
+        meta = " · ".join(t for t in (item.ott, item.genre) if t)
+        if meta:
+            d.text((x, y + 12), meta, font=font(B, 28), fill=theme["sub"])
+    elif item.ott:
         box = pill(d, x, y, item.ott, font(EB, 26), accent, (15, 15, 15))
         x = box[2] + 18
-    if item.genre:
+    if item.genre and not item.stage:
         d.text((x, y + 12), item.genre, font=font(B, 28), fill=theme["sub"])
     y += meta_h
-    y = draw_lines(d, tl, tf, M, y, theme["fg"]) + 16
+    y = draw_lines(d, tl, tf, M, y, theme["fg"])
+    if role_txt:
+        d.text((M, y + 2), role_txt, font=rf, fill=accent)
+        y += role_h
+    y += 16
     draw_lines(d, dl, df, M, y, theme["sub"])
 
     footer(canvas, theme, brand, f"{idx + 1} / {total}")
@@ -360,10 +383,118 @@ def render_outro(post: Post, config: dict) -> Image.Image:
     if o.get("save"):
         d.text((W / 2, y), o["save"], font=font(B, 34), fill=theme["sub"], anchor="ma")
         y += 60
-    if o.get("question"):
-        d.text((W / 2, y), o["question"], font=font(B, 34), fill=theme["sub"], anchor="ma")
+    question = post.outro_question or o.get("question")
+    if question:
+        d.text((W / 2, y), question, font=font(B, 34), fill=theme["sub"], anchor="ma")
 
     footer(canvas, theme, brand)
+    return canvas.convert("RGB")
+
+
+# ---------------------------------------------------------------- 인생 이야기 카드
+
+def _story_bg(post: Post, theme, accent, idx: int, blur: float = 28, dark: int = 200) -> Image.Image:
+    """배우 사진을 흐리게 깐 어두운 배경 (사진이 없으면 그라데이션)."""
+    im = open_img(post.asset(post.actor_image)) if post.actor_image else None
+    if im:
+        bg = cover_crop(im, (W, H), (0.5, 0.25)).filter(ImageFilter.GaussianBlur(blur)).convert("RGBA")
+        bg.alpha_composite(Image.new("RGBA", (W, H), (10, 10, 12, dark)))
+        glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(glow).ellipse((-W * 0.3, -H * 0.2, W * 0.7, H * 0.45), fill=accent + (60,))
+        bg.alpha_composite(glow.filter(ImageFilter.GaussianBlur(120)))
+        return bg
+    return placeholder_bg((W, H), accent, THEMES["dark"], idx)
+
+
+def render_story(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
+    """연도 + 헤드라인 + 본문으로 읽히는 이야기 카드. item.type == "quote" 면 인용 카드."""
+    theme = THEMES["dark"]
+    accent = hex2rgb(config.get("labels", {}).get(post.label, "#FF4D4D"))
+    brand = config.get("brand", "SCREEN DAILY")
+    if post.reveal:
+        # 넘길수록 점점 선명해짐 (정답 공개 직전까지 알아보기 어렵게)
+        n = max(1, len(post.items))
+        t = (idx - 1) / max(1, n - 1)
+        canvas = _story_bg(post, theme, accent, idx, blur=70 - 45 * t, dark=int(215 - 40 * t))
+    else:
+        canvas = _story_bg(post, theme, accent, idx)
+    d = ImageDraw.Draw(canvas)
+    d.text((M, 60), brand, font=font(EB, 28), fill=(255, 255, 255, 230))
+    if post.reveal:
+        d.text((W - M, 64), "이 배우는 누구?", font=font(B, 26), fill=accent, anchor="ra")
+    elif post.actor_name or post.actor:
+        d.text((W - M, 64), post.actor_name or post.actor, font=font(B, 26), fill=(255, 255, 255, 190), anchor="ra")
+
+    top, bottom = 150, H - 150  # 글을 놓을 수 있는 영역
+    if item.type == "quote":
+        mark_h = 150
+        qf, ql = fit(item.title, EB, W - M * 2, 5, 76, 50)
+        df = font(R, 40)
+        dl = fit(item.desc, R, W - M * 2, 6, 40, 40)[1] if item.desc else []
+        src = " · ".join(t for t in (item.year, item.stage) if t)
+        h = mark_h + block_h(qf, ql) + (40 + block_h(df, dl) if dl else 0) + (70 if src else 0)
+        y = max(top, top + (bottom - top - h) // 2)
+        d.text((M - 6, y - 60), "\u201c", font=font(EB, 240), fill=accent)
+        y = draw_lines(d, ql, qf, M, y + mark_h, theme["fg"])
+        if dl:
+            y = draw_lines(d, dl, df, M, y + 40, theme["sub"])
+        if src:
+            d.text((M, y + 40), "— " + src, font=font(B, 32), fill=accent)
+    else:
+        yf, sf_ = font(EB, 170), font(EB, 28)
+        hf, hl = fit(item.title, EB, W - M * 2, 3, 80, 56)
+        df = font(R, 42)
+        room = bottom - top - (210 if item.year else 0) - (80 if item.stage else 0) - block_h(hf, hl) - 36
+        dl = fit(item.desc, R, W - M * 2, max(2, room // line_h(df)), 42, 42)[1] if item.desc else []
+        h = (210 if item.year else 0) + (80 if item.stage else 0) + block_h(hf, hl) + (36 + block_h(df, dl) if dl else 0)
+        y = max(top, top + (bottom - top - h) // 2)
+        if item.year:
+            d.text((M - 4, y - 20), item.year, font=yf, fill=accent)
+            y += 210
+        if item.stage:
+            box = pill(d, M, y, item.stage, sf_, accent, (15, 15, 15))
+            y = box[3] + 30
+        y = draw_lines(d, hl, hf, M, y, theme["fg"])
+        if dl:
+            draw_lines(d, dl, df, M, y + 36, theme["sub"])
+
+    if item.bubble:
+        b = bubble_layer(item.bubble, size=34, angle=2.5)
+        paste_center(canvas, b, W - M - b.width // 2 + 10, H - 210)
+    footer(canvas, theme, brand, f"{idx + 1} / {total}")
+    return canvas.convert("RGB")
+
+
+def render_reveal(post: Post, idx: int, total: int, config: dict) -> Image.Image:
+    """정답 공개 카드: 선명한 배우 사진 + 이름."""
+    theme = THEMES["dark"]
+    accent = hex2rgb(config.get("labels", {}).get(post.label, "#FF4D4D"))
+    brand = config.get("brand", "SCREEN DAILY")
+    canvas = Image.new("RGBA", (W, H), theme["bg"] + (255,))
+    im = open_img(post.asset(post.actor_image)) if post.actor_image else None
+    if im:
+        canvas.paste(cover_crop(im, (W, H), (0.5, 0.2)), (0, 0))
+        canvas.alpha_composite(vgrad((W, H), (0, 0, 0), 0, 220, 110, 0))
+        canvas.alpha_composite(vgrad((W, H), theme["bg"], H * 0.5, H * 0.8, 0, 245))
+    else:
+        canvas = placeholder_bg((W, H), accent, theme, idx)
+    d = ImageDraw.Draw(canvas)
+    d.text((M, 60), brand, font=font(EB, 28), fill=(255, 255, 255, 230))
+    if im:
+        d.text((W - M, 64), "사진 © TMDB", font=font(R, 22), fill=(255, 255, 255, 200), anchor="ra",
+               stroke_width=2, stroke_fill=(0, 0, 0, 120))
+    name = post.actor_name or post.actor
+    nf, nl = fit(name, EB, W - M * 2, 1, 150, 90)
+    sub_f = font(B, 38)
+    sub = wrap(post.reveal_text, sub_f, W - M * 2) if post.reveal_text else []
+    y = H - 150 - block_h(sub_f, sub) - (24 if sub else 0) - block_h(nf, nl)
+    pill(d, M, y - 80, "정답은", font(EB, 30), accent, (15, 15, 15))
+    y = draw_lines(d, nl, nf, M, y, theme["fg"])
+    for i, ln in enumerate(sub):
+        d.text((M, y + 24 + i * line_h(sub_f)), ln, font=sub_f, fill=accent)
+    b = bubble_layer("맞히셨나요?", size=38, angle=-3)
+    paste_center(canvas, b, W - M - b.width // 2 + 10, y - 200)
+    footer(canvas, theme, brand, f"{idx + 1} / {total}")
     return canvas.convert("RGB")
 
 
@@ -378,10 +509,15 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
                 im = cover_crop(im, (W, H), (0.5, 0.5))
             out.append(im)
         return out
-    total = 1 + len(post.items) + (1 if post.outro else 0)
+    total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0)
     slides = [render_cover(post, config)]
     for i, it in enumerate(post.items, 1):
-        slides.append(render_item(post, it, i, total, config))
+        if it.type in ("story", "quote"):
+            slides.append(render_story(post, it, i, total, config))
+        else:
+            slides.append(render_item(post, it, i, total, config))
+    if post.reveal:
+        slides.append(render_reveal(post, len(post.items) + 1, total, config))
     if post.outro:
         slides.append(render_outro(post, config))
     return slides

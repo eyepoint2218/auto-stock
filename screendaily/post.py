@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -12,7 +13,7 @@ import yaml
 
 from . import ROOT
 
-GENERATOR_VERSION = "6"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
+GENERATOR_VERSION = "10"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
 
 
 def load_config() -> dict:
@@ -33,6 +34,10 @@ class Item:
     credit: str = ""  # 카드에 작게 표시할 이미지 출처 (자동)
     poster: str = ""  # 표지 콜라주용 세로 포스터 (자동)
     layout: str = ""  # cover = 사진을 꽉 채움 (자동)
+    role: str = ""    # 배우 소개: 배역 이름 (비우면 TMDB 출연 기록에서 자동)
+    year: str = ""    # 배우 스토리: 큰 숫자 대신 연도 표시 (예: 1997)
+    stage: str = ""   # 배우 스토리: 단계 표시 (예: 데뷔, 첫 주연, 전환점)
+    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음)
 
 
 @dataclass
@@ -54,6 +59,13 @@ class Post:
     credits: str = ""
     draft: bool = False
     bgm: str = ""
+    actor: str = ""            # 배우 소개 게시물: 배우 이름
+    actor_tmdb: str = ""       # 동명이인일 때 person/ID
+    actor_image: str = ""      # (자동) 배우 프로필 사진
+    actor_name: str = ""       # (자동) TMDB 의 배우 이름
+    outro_question: str = ""   # 마지막 장 질문 문구 (비우면 config 기본값)
+    reveal: bool = False       # 배우 맞히기: 이름을 숨기고 마지막에 정답 공개
+    reveal_text: str = ""      # 정답 카드의 한 줄 소개
 
     @property
     def name(self) -> str:
@@ -138,6 +150,9 @@ def load_post(slot_dir: Path, config: dict) -> Post:
             raise ValueError(f"[{slot_dir.name}] items {i}번에 title 이 없습니다")
         item = Item(**{k: str(v) for k, v in it.items() if k in Item.__dataclass_fields__ and v is not None})
         auto = by_title.get(item.title)
+        # TMDB 배역은 영어인 경우가 많아, 한글이 들어 있을 때만 자동으로 쓴다 (아니면 role: 로 직접)
+        if auto and not item.role and re.search(r"[가-힣]", auto.get("role") or ""):
+            item.role = auto["role"]
         if not item.image and auto and (slot_dir / auto["image"]).is_file():
             item.image = auto["image"]
             item.poster = auto.get("poster", "")
@@ -164,12 +179,22 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         credits=str(raw.get("credits", "") or ""),
         draft=bool(raw.get("draft", False)),
         bgm=str(raw.get("bgm", "") or ""),
+        actor=str(raw.get("actor", "") or ""),
+        actor_tmdb=str(raw.get("actor_tmdb", "") or ""),
+        outro_question=str(raw.get("outro_question", "") or ""),
+        reveal=bool(raw.get("reveal", False)),
+        reveal_text=str(raw.get("reveal_text", "") or ""),
     )
+
+    act = sources.get("actor", {})
+    if post.actor and act.get("image") and (slot_dir / act["image"]).is_file():
+        post.actor_image = act["image"]
+        post.actor_name = act.get("name", "")
 
     if not post.images:
         if not post.title:
             raise ValueError(f"[{slot_dir.name}] title 이 없습니다")
-        slides = 1 + len(items) + (1 if post.outro else 0)
+        slides = 1 + len(items) + (1 if post.outro else 0) + (1 if post.reveal else 0)
         if slides > 10:
             raise ValueError(f"[{slot_dir.name}] 표지+작품+마지막장이 {slides}장입니다. 최대 10장(작품 최대 8개)")
         if post.format == "carousel" and slides < 2:

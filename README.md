@@ -96,6 +96,18 @@ git add queue && git commit -m "다음 주 예약" && git push
 - 카드 오른쪽 위에 `이미지 © OTT · via TMDB` 가 표시됩니다.
 - This product uses the TMDB API but is not endorsed or certified by TMDB.
 
+## 배우 소개 게시물
+`post.yml` 에 `actor: 배우이름` 과 `label: ACTOR` 를 적으면
+- 표지에 TMDB 배우 프로필 사진이 들어가고 (`사진 © TMDB` 표시)
+- 작품은 **그 배우의 출연작 안에서** 찾아서 동명 작품과 헷갈리지 않습니다.
+- 작품 카드에 **배역 이름**(예: ‘영숙’ 역)이 들어갑니다. TMDB 배역은 영어인 경우가 많아 `role: 영숙` 처럼 한국어로 적는 것을 권장합니다 (한글 배역만 자동 표시).
+- 동명이인이면 `actor_tmdb: person/ID`, 마지막 장 질문은 `outro_question:` 으로 바꿀 수 있습니다.
+- 예시: `examples/actor_jeonjongseo/` (대표작 소개), `examples/actor_story_ohjungse/` (데뷔부터 지금까지 타임라인)
+- 배우 스토리 형식: 작품마다 `year: "1997"`(큰 숫자 대신 연도) 와 `stage: 데뷔`(단계 라벨) 를 적습니다.
+- **배우 맞히기**: `reveal: true` 면 표지는 흐린 실루엣과 물음표, 이야기 카드는 이름 없이 넘길수록 배경이 선명해지고, 마지막에 정답 카드(사진과 이름, `reveal_text`)가 나옵니다.
+- **인생 이야기 카드**: `type: story` 는 작품 사진 없이 연도·헤드라인·본문으로 읽히는 카드 (배경은 배우 사진을 흐리게), `type: quote` 는 수상 소감·인터뷰 한마디를 크게 보여주는 인용 카드입니다.
+- 출연 기록에 없는 작품은 동명 작품이 잡히지 않도록 사진 없이 진행합니다. `tmdb: none` 으로 직접 끌 수도 있습니다.
+
 ## 3. 릴스(영상)
 - `format: reel` 이면 같은 카드들을 **9:16 영상**으로 만듭니다: 흐린 배경 + 천천히 확대 + 장면 전환.
 - 장당 시간·전환 속도는 `config.yml` 의 `reel:` 에서 조절.
