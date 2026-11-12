@@ -1,26 +1,19 @@
 {
-  "img/kingdom_south_korean_tv_series.png": {
-    "page": "Kingdom (South Korean TV series)",
-    "page_url": "https://en.wikipedia.org/wiki/Kingdom_%28South_Korean_TV_series%29",
-    "file": "Title_screen_for_the_Netflix_series,_Kingdom.png",
-    "src": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Title_screen_for_the_Netflix_series%2C_Kingdom.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
-    "width": 424,
-    "height": 235
-  },
-  "img/all_of_us_are_dead.jpeg": {
-    "page": "All of Us Are Dead",
-    "page_url": "https://en.wikipedia.org/wiki/All_of_Us_Are_Dead",
-    "file": "All_of_Us_Are_Dead.jpeg",
-    "src": "https://upload.wikimedia.org/wikipedia/en/2/24/All_of_Us_Are_Dead.jpeg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
-    "width": 253,
-    "height": 375
-  },
-  "img/hellbound_tv_series.png": {
-    "page": "Hellbound (TV series)",
-    "page_url": "https://en.wikipedia.org/wiki/Hellbound_%28TV_series%29",
-    "file": "Hellbound_(TV_series)_title_card.png",
-    "src": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Hellbound_%28TV_series%29_title_card.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
-    "width": 1382,
-    "height": 578
+  "by_title": {
+    "킹덤": {
+      "source": "wikipedia",
+      "image": "img/kingdom_south_korean_tv_series.png",
+      "page_url": "https://en.wikipedia.org/wiki/Kingdom_%28South_Korean_TV_series%29"
+    },
+    "지금 우리 학교는": {
+      "source": "wikipedia",
+      "image": "img/all_of_us_are_dead.jpeg",
+      "page_url": "https://en.wikipedia.org/wiki/All_of_Us_Are_Dead"
+    },
+    "지옥": {
+      "source": "wikipedia",
+      "image": "img/hellbound_tv_series.png",
+      "page_url": "https://en.wikipedia.org/wiki/Hellbound_%28TV_series%29"
+    }
   }
 }

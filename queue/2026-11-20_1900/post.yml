@@ -8,7 +8,6 @@ bubble: "주말 순삭 보장"
 items:
   - title: D.P.
     wiki: D.P. (TV series)
-    image: img/d_p_tv_series.png
     ott: 넷플릭스
     genre: 드라마
     desc: 탈영병을 잡는 군무 이탈 체포조의 이야기. 시즌1이 6부작이라 하루면 충분해요.
@@ -25,7 +24,6 @@ items:
     desc: 사소한 난폭운전 시비가 두 사람의 인생을 집어삼키는 이야기. 회당 30분대라 술술 넘어가요.
   - title: 퀸스 갬빗
     wiki: "The Queen's Gambit (miniseries)"
-    image: img/the_queen_s_gambit_miniseries.png
     ott: 넷플릭스
     genre: 드라마
     desc: 체스 천재 소녀의 성장기. 체스를 몰라도 빠져드는 7부작 미니시리즈.
