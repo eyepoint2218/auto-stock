@@ -9,37 +9,45 @@ body{background:#000;font-family:'Noto Sans KR',sans-serif;color:var(--ink)}
 .h{font-family:'Black Han Sans',sans-serif;font-weight:400;letter-spacing:-1px;line-height:1.12}
 .tag{display:inline-block;align-self:flex-start;font-weight:700;font-size:28px;padding:10px 22px;border-radius:999px;background:var(--coral);color:#140806}
 .tag.o{background:transparent;border:2px solid var(--line);color:var(--mute)}
-.pg{position:absolute;right:88px;bottom:64px;font-size:24px;color:var(--mute);font-weight:700;letter-spacing:2px}
-.brand{position:absolute;left:88px;bottom:64px;font-size:24px;color:var(--mute);font-weight:700}
-.mute{color:var(--mute)}
-.coral{color:var(--coral)} .sun{color:var(--sun)} .mint{color:var(--mint)}
+.pg{position:absolute;right:88px;bottom:56px;font-size:24px;color:var(--mute);font-weight:700;letter-spacing:2px}
+.brand{position:absolute;left:88px;bottom:56px;font-size:24px;color:var(--mute);font-weight:700}
+.mute{color:var(--mute)} .coral{color:var(--coral)} .sun{color:var(--sun)} .mint{color:var(--mint)}
 p.b{font-size:34px;line-height:1.6;font-weight:400}
 .glow{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
+.poster{border-radius:22px;object-fit:cover;box-shadow:0 30px 60px rgba(0,0,0,.6),0 0 0 2px rgba(255,255,255,.08)}
 /* cover */
-.cover .big{font-size:150px;margin-top:40px}
-.cover .sub{font-size:44px;font-weight:700;margin-top:36px;line-height:1.45}
-.screen{position:absolute;right:-60px;bottom:180px;width:560px;height:360px;border-radius:28px;border:6px solid #2D3040;background:linear-gradient(135deg,#232637,#151722);transform:rotate(-8deg)}
-.screen:after{content:'';position:absolute;left:50%;bottom:-70px;width:160px;height:64px;margin-left:-80px;background:#2D3040;border-radius:8px}
-.play{position:absolute;left:50%;top:50%;width:0;height:0;margin:-50px 0 0 -30px;border-left:90px solid var(--coral);border-top:52px solid transparent;border-bottom:52px solid transparent}
-/* rank cards */
-.rank{font-family:'Black Han Sans';font-size:300px;line-height:.8;color:var(--coral);position:absolute;right:70px;top:80px;opacity:.95}
-.title{font-size:104px;margin-top:230px}
-.orig{font-size:30px;color:var(--mute);margin-top:14px;font-weight:700}
-.stat{display:flex;gap:24px;margin-top:64px}
-.stat div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:28px;padding:30px 30px}
-.stat b{display:block;font-family:'Black Han Sans';font-size:68px;font-weight:400;color:var(--sun)}
-.stat span{font-size:26px;color:var(--mute);font-weight:700}
-.why{margin-top:56px;background:var(--card);border-left:8px solid var(--coral);border-radius:20px;padding:36px 40px}
-.why .b{font-size:37px}.why h4{font-size:30px;color:var(--coral);margin-bottom:12px}
+.cover .big{font-size:150px;margin-top:40px;position:relative;z-index:2}
+.cover .sub{font-size:44px;font-weight:700;margin-top:36px;line-height:1.45;position:relative;z-index:2}
+.fan{position:absolute;left:0;right:0;bottom:-60px;height:560px}
+.fan img{position:absolute;width:300px;height:450px;bottom:0}
+/* title slides: poster right, text left */
+.hero{display:flex;gap:40px;margin-top:40px}
+.hero .txt{flex:1;display:flex;flex-direction:column;min-width:0}
+.hero .pw{position:relative;width:340px;flex:none}
+.hero .pw img{width:340px;height:510px;display:block}
+.rk{position:absolute;left:-34px;top:-34px;width:108px;height:108px;border-radius:50%;background:var(--coral);color:#140806;font-family:'Black Han Sans';font-size:68px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.title{font-size:96px;margin-top:50px}
+.orig{font-size:28px;color:var(--mute);margin-top:18px;font-weight:700;line-height:1.5}
+.hook{font-size:28px;color:var(--ink);margin-top:auto;font-weight:700;line-height:1.5;background:var(--card);border-radius:18px;padding:20px 24px}
+.stat{display:flex;gap:24px;margin-top:36px}
+.stat div{flex:1;background:var(--card);border:2px solid var(--line);border-radius:26px;padding:24px 30px}
+.stat b{display:block;font-family:'Black Han Sans';font-size:60px;font-weight:400;color:var(--sun)}
+.stat span{font-size:25px;color:var(--mute);font-weight:700}
+.why{margin-top:28px;background:var(--card);border-left:8px solid var(--coral);border-radius:20px;padding:28px 36px}
+.why .b{font-size:32px;line-height:1.55}
+.why h4{font-size:26px;color:var(--coral);margin-bottom:8px}
 /* bars */
-.bars{margin-top:70px;display:flex;flex-direction:column;gap:46px}
-.bar .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:34px;font-weight:700;margin-bottom:14px}
-.bar .lab small{font-size:24px;color:var(--mute);font-weight:700;margin-left:12px}
+.bars{margin-top:56px;display:flex;flex-direction:column;gap:30px}
+.bar{display:flex;gap:26px;align-items:center}
+.bar img{width:96px;height:144px;border-radius:12px;object-fit:cover;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+.bar .ph{width:96px;height:144px;border-radius:12px;flex:none;border:2px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:26px;font-weight:700}
+.bar .col{flex:1;min-width:0}
+.bar .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:32px;font-weight:700;margin-bottom:14px}
+.bar .lab small{display:block;font-size:22px;color:var(--mute);font-weight:700;margin-top:4px}
 .bar .lab em{font-style:normal;font-family:'Black Han Sans';font-size:48px;color:var(--sun)}
-.track{height:44px;background:var(--card);border-radius:14px;overflow:hidden}
-.fill{height:100%;border-radius:14px;background:var(--coral)}
-.bar.ref .fill{background:#4A4D5E}
-.bar.ref .lab em{color:var(--mute)}
+.track{height:36px;background:var(--card);border-radius:12px;overflow:hidden}
+.fill{height:100%;border-radius:12px;background:var(--coral)}
+.bar.ref .fill{background:#4A4D5E} .bar.ref .lab em{color:var(--mute)}
 /* insights */
 .ins{margin-top:56px;display:flex;flex-direction:column;gap:30px}
 .ins div{background:var(--card);border:2px solid var(--line);border-radius:28px;padding:36px 40px;display:flex;gap:30px}
@@ -47,12 +55,13 @@ p.b{font-size:34px;line-height:1.6;font-weight:400}
 .ins h3{font-size:40px;font-weight:900;margin-bottom:10px}
 .ins p{font-size:29px;line-height:1.55;color:#D8D4CC}
 /* timetable */
-.tt{margin-top:56px;display:flex;flex-direction:column;gap:24px}
-.tt div{display:grid;grid-template-columns:210px 1fr;align-items:center;background:var(--card);border-radius:26px;padding:30px 36px;border:2px solid var(--line)}
-.tt .when{font-family:'Black Han Sans';font-size:40px;color:var(--sun);line-height:1.15}
+.tt{margin-top:48px;display:flex;flex-direction:column;gap:22px}
+.tt div{display:grid;grid-template-columns:200px 1fr 92px;gap:20px;align-items:center;background:var(--card);border-radius:26px;padding:20px 24px 20px 34px;border:2px solid var(--line)}
+.tt img{width:92px;height:138px;border-radius:12px;object-fit:cover}
+.tt .when{font-family:'Black Han Sans';font-size:38px;color:var(--sun);line-height:1.15}
 .tt .when small{display:block;font-family:'Noto Sans KR';font-size:22px;color:var(--mute);font-weight:700;margin-top:6px}
-.tt h3{font-size:38px;font-weight:900}
-.tt p{font-size:26px;color:var(--mute);margin-top:6px;font-weight:700}
+.tt h3{font-size:34px;font-weight:900;line-height:1.3}
+.tt p{font-size:25px;color:var(--mute);margin-top:6px;font-weight:700}
 .chips{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
 .chips span{font-size:28px;font-weight:700;padding:12px 24px;border-radius:999px;border:2px solid var(--line);color:#D8D4CC}
 </style></head><body>
@@ -64,59 +73,75 @@ p.b{font-size:34px;line-height:1.6;font-weight:400}
   <span class="tag">11/14–11/15 주말 방콕 가이드</span>
   <h1 class="h big">이번 주말,<br>뭐 보지?</h1>
   <p class="sub">지난주 넷플릭스에서<br><span class="sun">가장 많이 본 TOP 3</span>로<br>골라봤어요 🍿</p>
-  <div class="screen"><div class="play"></div></div>
-  <span class="brand">넘겨서 확인 →</span>
-  <span class="pg">01 / 09</span>
+  <div class="fan">
+    <img class="poster" src="posters/devils-plan-s3.jpg" style="left:40px;transform:rotate(-14deg);bottom:-30px">
+    <img class="poster" src="posters/taken-natalee-holloway.jpg" style="left:280px;transform:rotate(-5deg);bottom:10px">
+    <img class="poster" src="posters/ggulalba.jpg" style="left:520px;transform:rotate(5deg);bottom:10px">
+    <img class="poster" src="posters/collision-course.jpg" style="left:760px;transform:rotate(14deg);bottom:-30px">
+  </div>
+  <span class="pg" style="z-index:3">01 / 09</span>
 </section>
 
 <!-- 2 TOP3 CHART -->
 <section class="s" id="s2">
   <span class="tag o">넷플릭스 공식 주간 TOP 10 · 11/2–11/8</span>
-  <h2 class="h" style="font-size:96px;margin-top:40px">지난주 <span class="coral">TOP 3</span><br>한눈에 보기</h2>
-  <p class="b mute" style="font-size:28px;margin-top:20px">글로벌 4개 차트(영어·비영어 × 영화·시리즈) 전체를 조회수로 비교</p>
+  <h2 class="h" style="font-size:92px;margin-top:36px">지난주 <span class="coral">TOP 3</span> 한눈에</h2>
+  <p class="b mute" style="font-size:27px;margin-top:16px">글로벌 4개 차트(영어·비영어 × 영화·시리즈) 전체를 조회수로 비교</p>
   <div class="bars">
-    <div class="bar"><div class="lab"><span>① 콜리전 코스<small>스페인 영화</small></span><em>1,720만</em></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
-    <div class="bar"><div class="lab"><span>② 테이큰: 나탈리 할러웨이<small>실화 다큐</small></span><em>1,290만</em></div><div class="track"><div class="fill" style="width:75%"></div></div></div>
-    <div class="bar"><div class="lab"><span>③ 꿀알바<small>K-호러 시리즈</small></span><em>870만</em></div><div class="track"><div class="fill" style="width:50.6%"></div></div></div>
-    <div class="bar ref"><div class="lab"><span>4위 · 강아지의 완벽한 크리스마스<small>영어 영화 1위</small></span><em>860만</em></div><div class="track"><div class="fill" style="width:50%"></div></div></div>
+    <div class="bar"><img src="posters/collision-course.jpg"><div class="col"><div class="lab"><span>① 컬리전 코스<small>스페인 영화</small></span><em>1,720만</em></div><div class="track"><div class="fill" style="width:100%"></div></div></div></div>
+    <div class="bar"><img src="posters/taken-natalee-holloway.jpg"><div class="col"><div class="lab"><span>② 테이큰: 나탈리 할로웨이<small>실화 다큐 시리즈</small></span><em>1,290만</em></div><div class="track"><div class="fill" style="width:75%"></div></div></div></div>
+    <div class="bar"><img src="posters/ggulalba.jpg"><div class="col"><div class="lab"><span>③ 꿀알바<small>K-호러 시리즈</small></span><em>870만</em></div><div class="track"><div class="fill" style="width:50.6%"></div></div></div></div>
+    <div class="bar ref"><div class="ph">4위</div><div class="col"><div class="lab"><span>A Dog's Perfect Christmas<small>영어 영화 1위</small></span><em>860만</em></div><div class="track"><div class="fill" style="width:50%"></div></div></div></div>
   </div>
-  <p class="mute" style="font-size:24px;margin-top:auto;margin-bottom:40px">*조회수 = 시청 시간 ÷ 작품 러닝타임 (넷플릭스 기준)</p>
+  <p class="mute" style="font-size:23px;margin-top:auto;margin-bottom:30px">*조회수 = 시청 시간 ÷ 작품 러닝타임 (넷플릭스 기준)</p>
   <span class="pg">02 / 09</span>
 </section>
 
 <!-- 3 #1 -->
 <section class="s" id="s3">
-  <div class="rank">1</div>
   <span class="tag">비영어 영화 1위 · 전체 1위</span>
-  <h2 class="h title">콜리전 코스</h2>
-  <p class="orig">Collision Course · 원제 Colisión · 스페인</p>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title">컬리전<br>코스</h2>
+      <p class="orig">Collision Course<br>원제 Colisión · 스페인 영화</p>
+      <p class="hook">👉 한 편으로 끝나는 영화라<br>금요일 밤에 딱</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/collision-course.jpg"><div class="rk">1</div></div>
+  </div>
   <div class="stat"><div><b>1,720만</b><span>주간 조회수</span></div><div><b>122분</b><span>러닝타임</span></div></div>
-  <div class="why"><h4>어떤 작품?</h4><p class="b">마드리드 은행털이가 꼬이면서<br>팀원들의 <b class="sun">숨겨진 속셈</b>이 하나씩 드러나는<br>하이스트 액션 스릴러.</p></div>
-  <p class="b mute" style="font-size:28px;margin-top:36px">👉 한 편으로 끝나는 영화라 금요일 밤에 딱</p>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">2013년 경제 위기의 마드리드, 은행털이 후<br>도주 차량 충돌로 <b class="sun">강도들의 숨은 속셈</b>이<br>드러나는 하이스트 액션 스릴러.</p></div>
   <span class="pg">03 / 09</span>
 </section>
 
 <!-- 4 #2 -->
 <section class="s" id="s4">
-  <div class="rank">2</div>
   <span class="tag">영어 시리즈 1위로 첫 진입</span>
-  <h2 class="h title" style="font-size:92px;margin-top:160px">테이큰:<br>나탈리 할러웨이</h2>
-  <p class="orig">Taken: Natalee Holloway · 실화 범죄 다큐 시리즈</p>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:64px;margin-top:40px">테이큰:<br>나탈리<br>할로웨이<br>실종 사건</h2>
+      <p class="orig">Taken: Natalee Holloway<br>실화 범죄 다큐 시리즈</p>
+      <p class="hook">👉 '그알' 좋아한다면 필수</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/taken-natalee-holloway.jpg"><div class="rk">2</div></div>
+  </div>
   <div class="stat"><div><b>1,290만</b><span>공개 첫 주 조회수</span></div><div><b>NEW</b><span>신작 바로 1위</span></div></div>
-  <div class="why"><h4>어떤 작품?</h4><p class="b">2005년 아루바 여행 중 사라진<br>미국 고교생 실종 사건을 다룬<br><b class="sun">트루 크라임 다큐</b>.</p></div>
-  <p class="b mute" style="font-size:28px;margin-top:36px">👉 '그알' 좋아하는 분이라면 무조건</p>
+  <div class="why"><h4>어떤 작품?</h4><p class="b">2005년 아루바에서 흔적 없이 사라진 나탈리.<br>20년간 사건을 추적해 온 <b class="sun">엄마 베스가 직접<br>들려주는</b> 실종 사건의 전말.</p></div>
   <span class="pg">04 / 09</span>
 </section>
 
 <!-- 5 #3 -->
 <section class="s" id="s5">
-  <div class="rank">3</div>
   <span class="tag">비영어 시리즈 1위 · 🇰🇷</span>
-  <h2 class="h title">꿀알바</h2>
-  <p class="orig">Dead-End Job · 8부작 · 이재욱 · 고민시 · 이희준</p>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:120px">꿀알바</h2>
+      <p class="orig">Dead-End Job · 8부작<br>이재욱 · 고민시 · 이희준</p>
+      <p class="hook">👉 해외에선 '오징어 게임<br>+ 초자연 호러'라는 평도</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/ggulalba.jpg"><div class="rk">3</div></div>
+  </div>
   <div class="stat"><div><b>870만</b><span>주간 조회수</span></div><div><b>8부작</b><span>주말 정주행 각</span></div></div>
   <div class="why"><h4>어떤 작품?</h4><p class="b">빚더미에 앉은 30대가 수상한 에이전시의<br><b class="sun">고액 알바</b>를 받으면서 시작되는 악몽.<br>오컬트 × 생존 판타지 호러.</p></div>
-  <p class="b mute" style="font-size:28px;margin-top:36px">👉 '오징어 게임 + 초자연 호러'라는 해외 평도</p>
   <span class="pg">05 / 09</span>
 </section>
 
@@ -136,22 +161,27 @@ p.b{font-size:34px;line-height:1.6;font-weight:400}
 <section class="s" id="s7">
   <div class="glow" style="width:560px;height:560px;background:var(--mint);right:-220px;top:-180px;opacity:.3"></div>
   <span class="tag" style="background:var(--mint)">이번 주 신작 PICK</span>
-  <h2 class="h" style="font-size:110px;margin-top:150px">데블스 플랜<br><span class="mint">: 데드 어게인</span></h2>
-  <p class="orig">시즌 3 · 두뇌 서바이벌 예능 · 11/10 공개</p>
+  <div class="hero">
+    <div class="txt">
+      <h2 class="h title" style="font-size:88px">데블스<br>플랜<br><span class="mint" style="font-size:70px">데드 어게인</span></h2>
+      <p class="orig">시즌 3 · 두뇌 서바이벌 예능<br>11/10 공개</p>
+    </div>
+    <div class="pw"><img class="poster" src="posters/devils-plan-s3.jpg"><div class="rk" style="background:var(--mint);font-size:34px">NEW</div></div>
+  </div>
   <div class="stat"><div><b style="color:var(--mint)">16인</b><span>역대급 라인업</span></div><div><b style="color:var(--mint)">5화</b><span>1차 공개 분량</span></div></div>
-  <div class="why" style="border-color:var(--mint)"><h4 style="color:var(--mint)">왜 이번 주말?</h4><p class="b">총 14화를 3주에 걸쳐 공개.<br>지금 1~5화를 따라잡아 두면<br><b class="sun">다음 공개분을 실시간으로</b> 즐길 수 있어요.</p></div>
+  <div class="why" style="border-color:var(--mint)"><h4 style="color:var(--mint)">왜 이번 주말?</h4><p class="b">총 14화를 3주에 걸쳐 공개. 지금 1~5화를<br>따라잡아 두면 <b class="sun">다음 공개분을 실시간으로</b><br>즐길 수 있어요.</p></div>
   <span class="pg">07 / 09</span>
 </section>
 
 <!-- 8 TIMETABLE -->
 <section class="s" id="s8">
   <span class="tag">저장 필수 📌</span>
-  <h2 class="h" style="font-size:96px;margin-top:40px">방콕러 주말<br>타임테이블</h2>
+  <h2 class="h" style="font-size:88px;margin-top:36px">방콕러 주말 타임테이블</h2>
   <div class="tt">
-    <div><span class="when">금요일 밤<small>맥주 한 캔 🍺</small></span><section><h3>콜리전 코스</h3><p>2시간 순삭 하이스트 액션</p></section></div>
-    <div><span class="when">토요일<small>이불 속 정주행 🛋</small></span><section><h3>꿀알바</h3><p>8부작 몰아보기 · K-호러</p></section></div>
-    <div><span class="when">일요일 오후<small>머리 쓰는 시간 🧠</small></span><section><h3>데블스 플랜: 데드 어게인</h3><p>신작 1~5화 따라잡기</p></section></div>
-    <div><span class="when">일요일 밤<small>잠들기 전 🔍</small></span><section><h3>테이큰: 나탈리 할러웨이</h3><p>실화 미스터리 다큐</p></section></div>
+    <div><span class="when">금요일 밤<small>맥주 한 캔 🍺</small></span><section><h3>컬리전 코스</h3><p>2시간 순삭 하이스트 액션</p></section><img src="posters/collision-course.jpg"></div>
+    <div><span class="when">토요일<small>이불 속 정주행 🛋</small></span><section><h3>꿀알바</h3><p>8부작 몰아보기 · K-호러</p></section><img src="posters/ggulalba.jpg"></div>
+    <div><span class="when">일요일 오후<small>머리 쓰는 시간 🧠</small></span><section><h3>데블스 플랜:<br>데드 어게인</h3><p>신작 1~5화 따라잡기</p></section><img src="posters/devils-plan-s3.jpg"></div>
+    <div><span class="when">일요일 밤<small>잠들기 전 🔍</small></span><section><h3>테이큰: 나탈리<br>할로웨이 실종 사건</h3><p>실화 미스터리 다큐</p></section><img src="posters/taken-natalee-holloway.jpg"></div>
   </div>
   <span class="pg">08 / 09</span>
 </section>
@@ -162,7 +192,7 @@ p.b{font-size:34px;line-height:1.6;font-weight:400}
   <h2 class="h" style="font-size:112px;margin-top:180px;text-align:center">주말 방콕,<br>준비 끝 🍿</h2>
   <p class="b" style="text-align:center;margin-top:40px;font-size:38px;font-weight:700">여러분의 이번 주말 PICK은?<br><span class="sun">댓글로 추천해 주세요 👇</span></p>
   <div class="chips" style="justify-content:center;margin-top:60px"><span>💾 저장하고 주말에 꺼내보기</span><span>📤 같이 볼 친구에게 공유</span></div>
-  <p class="mute" style="font-size:22px;text-align:center;margin-top:auto;margin-bottom:60px;line-height:1.6">출처: 넷플릭스 공식 주간 TOP 10(2026.11.2–11.8, 글로벌) 및 관련 보도<br>작품 제목은 국내 공개명과 다를 수 있어요</p>
+  <p class="mute" style="font-size:22px;text-align:center;margin-top:auto;margin-bottom:60px;line-height:1.6">출처: 넷플릭스 공식 주간 TOP 10(2026.11.2–11.8, 글로벌) 및 관련 보도<br>포스터 이미지 © Netflix</p>
   <span class="pg">09 / 09</span>
 </section>
 </body></html>
