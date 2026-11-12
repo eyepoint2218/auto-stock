@@ -1,19 +1,40 @@
 {
   "by_title": {
     "인간수업": {
-      "source": "wikipedia",
-      "image": "img/extracurricular_tv_series.jpg",
-      "page_url": "https://en.wikipedia.org/wiki/Extracurricular_%28TV_series%29"
+      "source": "tmdb",
+      "tmdb": "tv/90814",
+      "tmdb_name": "인간수업",
+      "page_url": "https://www.themoviedb.org/tv/90814",
+      "image": "img/970333_still.jpg",
+      "layout": "cover",
+      "poster": "img/970333_poster.jpg"
     },
     "살인자ㅇ난감": {
-      "source": "wikipedia",
-      "image": "img/a_killer_paradox.jpg",
-      "page_url": "https://en.wikipedia.org/wiki/A_Killer_Paradox"
+      "source": "tmdb",
+      "tmdb": "tv/202783",
+      "tmdb_name": "살인자ㅇ난감",
+      "page_url": "https://www.themoviedb.org/tv/202783",
+      "image": "img/8a02a1_still.jpg",
+      "layout": "cover",
+      "poster": "img/8a02a1_poster.jpg"
     },
     "마스크걸": {
-      "source": "wikipedia",
-      "image": "img/mask_girl.jpg",
-      "page_url": "https://en.wikipedia.org/wiki/Mask_Girl"
+      "source": "tmdb",
+      "tmdb": "tv/156888",
+      "tmdb_name": "마스크걸",
+      "page_url": "https://www.themoviedb.org/tv/156888",
+      "image": "img/cebe80_still.jpg",
+      "layout": "cover",
+      "poster": "img/cebe80_poster.jpg"
+    },
+    "비질란테": {
+      "source": "tmdb",
+      "tmdb": "tv/205082",
+      "tmdb_name": "비질란테",
+      "page_url": "https://www.themoviedb.org/tv/205082",
+      "image": "img/fe44e7_still.jpg",
+      "layout": "cover",
+      "poster": "img/fe44e7_poster.jpg"
     }
   }
 }

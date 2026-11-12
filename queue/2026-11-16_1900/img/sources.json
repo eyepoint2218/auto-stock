@@ -1,14 +1,40 @@
 {
   "by_title": {
     "솔로지옥": {
-      "source": "wikipedia",
-      "image": "img/single_s_inferno.png",
-      "page_url": "https://en.wikipedia.org/wiki/Single%27s_Inferno"
+      "source": "tmdb",
+      "tmdb": "tv/139798",
+      "tmdb_name": "솔로지옥",
+      "page_url": "https://www.themoviedb.org/tv/139798",
+      "image": "img/948826_still.jpg",
+      "layout": "cover",
+      "poster": "img/948826_poster.jpg"
     },
     "피지컬: 100": {
-      "source": "wikipedia",
-      "image": "img/physical_100.png",
-      "page_url": "https://en.wikipedia.org/wiki/Physical%3A_100"
+      "source": "tmdb",
+      "tmdb": "tv/210905",
+      "tmdb_name": "피지컬: 100",
+      "page_url": "https://www.themoviedb.org/tv/210905",
+      "image": "img/100_697245_still.jpg",
+      "layout": "cover",
+      "poster": "img/100_697245_poster.jpg"
+    },
+    "좀비버스": {
+      "source": "tmdb",
+      "tmdb": "tv/217945",
+      "tmdb_name": "좀비버스",
+      "page_url": "https://www.themoviedb.org/tv/217945",
+      "image": "img/93b8f7_still.jpg",
+      "layout": "cover",
+      "poster": "img/93b8f7_poster.jpg"
+    },
+    "SNL 코리아": {
+      "source": "tmdb",
+      "tmdb": "tv/73048",
+      "tmdb_name": "SNL 코리아",
+      "page_url": "https://www.themoviedb.org/tv/73048",
+      "image": "img/snl_3da723_still.jpg",
+      "layout": "cover",
+      "poster": "img/snl_3da723_poster.jpg"
     }
   }
 }

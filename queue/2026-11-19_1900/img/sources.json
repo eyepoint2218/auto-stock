@@ -1,19 +1,40 @@
 {
   "by_title": {
     "킹덤": {
-      "source": "wikipedia",
-      "image": "img/kingdom_south_korean_tv_series.png",
-      "page_url": "https://en.wikipedia.org/wiki/Kingdom_%28South_Korean_TV_series%29"
+      "source": "tmdb",
+      "tmdb": "tv/70593",
+      "tmdb_name": "킹덤",
+      "page_url": "https://www.themoviedb.org/tv/70593",
+      "image": "img/db96d6_still.jpg",
+      "layout": "cover",
+      "poster": "img/db96d6_poster.jpg"
     },
     "지금 우리 학교는": {
-      "source": "wikipedia",
-      "image": "img/all_of_us_are_dead.jpeg",
-      "page_url": "https://en.wikipedia.org/wiki/All_of_Us_Are_Dead"
+      "source": "tmdb",
+      "tmdb": "tv/99966",
+      "tmdb_name": "지금 우리 학교는",
+      "page_url": "https://www.themoviedb.org/tv/99966",
+      "image": "img/987f88_still.jpg",
+      "layout": "cover",
+      "poster": "img/987f88_poster.jpg"
     },
     "지옥": {
-      "source": "wikipedia",
-      "image": "img/hellbound_tv_series.png",
-      "page_url": "https://en.wikipedia.org/wiki/Hellbound_%28TV_series%29"
+      "source": "tmdb",
+      "tmdb": "tv/106651",
+      "tmdb_name": "지옥",
+      "page_url": "https://www.themoviedb.org/tv/106651",
+      "image": "img/22a483_still.jpg",
+      "layout": "cover",
+      "poster": "img/22a483_poster.jpg"
+    },
+    "스위트홈": {
+      "source": "tmdb",
+      "tmdb": "tv/96648",
+      "tmdb_name": "스위트홈",
+      "page_url": "https://www.themoviedb.org/tv/96648",
+      "image": "img/f23eb1_still.jpg",
+      "layout": "cover",
+      "poster": "img/f23eb1_poster.jpg"
     }
   }
 }
