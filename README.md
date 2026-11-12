@@ -102,7 +102,9 @@ git add queue && git commit -m "다음 주 예약" && git push
 - 작품은 **그 배우의 출연작 안에서** 찾아서 동명 작품과 헷갈리지 않습니다.
 - 작품 카드에 **배역 이름**(예: ‘영숙’ 역)이 들어갑니다. TMDB 배역은 영어인 경우가 많아 `role: 영숙` 처럼 한국어로 적는 것을 권장합니다 (한글 배역만 자동 표시).
 - 동명이인이면 `actor_tmdb: person/ID`, 마지막 장 질문은 `outro_question:` 으로 바꿀 수 있습니다.
-- 예시: `queue/sample_actor/post.yml` (draft 라 업로드되지 않음)
+- 예시: `examples/actor_jeonjongseo/` (대표작 소개), `examples/actor_story_ohjungse/` (데뷔부터 지금까지 타임라인)
+- 배우 스토리 형식: 작품마다 `year: "1997"`(큰 숫자 대신 연도) 와 `stage: 데뷔`(단계 라벨) 를 적습니다.
+- 출연 기록에 없는 작품은 동명 작품이 잡히지 않도록 사진 없이 진행합니다. `tmdb: none` 으로 직접 끌 수도 있습니다.
 
 ## 3. 릴스(영상)
 - `format: reel` 이면 같은 카드들을 **9:16 영상**으로 만듭니다: 흐린 배경 + 천천히 확대 + 장면 전환.
