@@ -1,6 +1,6 @@
 # 스크린데일리 자동 업로드 설정
 brand: SCREEN DAILY
-handle: "@screendaily"        # ← 실제 인스타 아이디로 바꿔 주세요
+handle: "@screendaily.mag"
 timezone: Asia/Seoul          # post.yml 의 publish_at 은 이 시간대 기준
 
 # 모든 게시물 캡션 끝에 붙는 기본 해시태그 (5~8개 권장, 인스타 최대 30개)
