@@ -228,14 +228,16 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
     # 1) TMDB
     for it in items:
         title = str(it["title"])
-        if it.get("image") or not tmdb:
+        if it.get("image") or not tmdb or str(it.get("tmdb") or "").lower() == "none":
             continue
         cur = by_title.get(title, {})
         override = str(it.get("tmdb") or "")
         if not override and credit_titles:
             override = credit_titles.get(_norm(title), "")
             if not override:
-                print(f"  ⚠ {actor} 출연작에서 찾지 못함: {title} (제목 확인 또는 tmdb: \"movie/ID\" 지정)")
+                # 배우 게시물에서 출연 기록에 없는 작품은 엉뚱한 동명 작품이 잡히지 않도록 건너뜀
+                print(f"  ⚠ {actor} 출연작에서 찾지 못함: {title} (사진 없이 진행. 필요하면 tmdb: \"movie/ID\" 지정)")
+                continue
         if cur.get("source") == "tmdb" and not refresh and (not override or "/" not in override
                                                             or cur.get("tmdb") == override):
             if roles:

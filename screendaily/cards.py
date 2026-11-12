@@ -274,7 +274,7 @@ def render_item(post: Post, item: Item, idx: int, total: int, config: dict) -> I
     tf, tl = fit(item.title, EB, W - M * 2, 2, 80, 52)
     df = font(R, 38)
     dl = fit(item.desc, R, W - M * 2, 4, 38, 38)[1] if item.desc else []
-    meta_h = 80 if (item.ott or item.genre) else 0
+    meta_h = 80 if (item.ott or item.genre or item.stage) else 0
     rf = font(B, 34)
     role_txt = f"‘{item.role}’ 역" if item.role else ""
     role_h = line_h(rf) + 6 if role_txt else 0
@@ -320,7 +320,7 @@ def render_item(post: Post, item: Item, idx: int, total: int, config: dict) -> I
     if item.credit:
         d.text((W - M, 64), item.credit, font=font(R, 22), fill=(255, 255, 255, 200), anchor="ra",
                stroke_width=2, stroke_fill=(0, 0, 0, 120))
-    d.text((M - 4, y0 - 190), f"{idx:02d}", font=font(EB, 150), fill=accent)
+    d.text((M - 4, y0 - 190), item.year or f"{idx:02d}", font=font(EB, 150), fill=accent)
 
     if item.bubble:
         b = bubble_layer(item.bubble, size=36, angle=2.5)
@@ -328,10 +328,16 @@ def render_item(post: Post, item: Item, idx: int, total: int, config: dict) -> I
         d = ImageDraw.Draw(canvas)
 
     y, x = y0, M
-    if item.ott:
+    if item.stage:
+        box = pill(d, x, y, item.stage, font(EB, 26), accent, (15, 15, 15))
+        x = box[2] + 18
+        meta = " · ".join(t for t in (item.ott, item.genre) if t)
+        if meta:
+            d.text((x, y + 12), meta, font=font(B, 28), fill=theme["sub"])
+    elif item.ott:
         box = pill(d, x, y, item.ott, font(EB, 26), accent, (15, 15, 15))
         x = box[2] + 18
-    if item.genre:
+    if item.genre and not item.stage:
         d.text((x, y + 12), item.genre, font=font(B, 28), fill=theme["sub"])
     y += meta_h
     y = draw_lines(d, tl, tf, M, y, theme["fg"])
