@@ -5,30 +5,30 @@
       "tmdb": "movie/575604",
       "tmdb_name": "콜",
       "page_url": "https://www.themoviedb.org/movie/575604",
-      "image": "img/80b271_still.jpg",
-      "layout": "cover",
+      "image": "img/80b271_profile.jpg",
       "poster": "img/80b271_poster.jpg",
-      "role": "Oh Young-sook"
+      "role": "Oh Young-sook",
+      "actor_photo": "/vjJTcdoRIumEWUN2w8rJ5V0Mdp4.jpg"
     },
     "종이의 집: 공동경제구역": {
       "source": "tmdb",
       "tmdb": "tv/112836",
       "tmdb_name": "종이의 집: 공동경제구역",
       "page_url": "https://www.themoviedb.org/tv/112836",
-      "image": "img/75be42_still.jpg",
-      "layout": "cover",
+      "image": "img/75be42_profile.jpg",
       "poster": "img/75be42_poster.jpg",
-      "role": "Tokyo"
+      "role": "Tokyo",
+      "actor_photo": "/z9gaeLiEL9ZQoYylElZG8DAkXOm.jpg"
     },
     "발레리나": {
       "source": "tmdb",
       "tmdb": "movie/961268",
       "tmdb_name": "발레리나",
       "page_url": "https://www.themoviedb.org/movie/961268",
-      "image": "img/245901_still.jpg",
-      "layout": "cover",
+      "image": "img/245901_profile.jpg",
       "poster": "img/245901_poster.jpg",
-      "role": "Jang Ok-joo"
+      "role": "Jang Ok-joo",
+      "actor_photo": "/mLrGeyHV93hioM4EvGyxmWoKMVD.jpg"
     }
   },
   "actor": {
