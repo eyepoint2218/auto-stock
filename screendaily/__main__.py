@@ -217,7 +217,7 @@ def cmd_publish_due(a, config):
             if a.dry_run:
                 print(f"  (테스트) {len(files)}개 파일, 캡션 {len(caption)}자 — 실제 업로드 안 함")
                 continue
-            existing = ig.find_published(caption) if fails else None
+            existing = ig.find_published(caption)  # 이전 시도·수동 게시로 이미 올라갔으면 중복 게시 안 함
             if existing:
                 print("  이전 시도에서 이미 게시된 것을 확인했습니다 (중복 게시 안 함)")
                 media_id = existing["id"]

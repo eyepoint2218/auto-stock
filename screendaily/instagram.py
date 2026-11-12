@@ -95,16 +95,17 @@ class Instagram:
         try:
             return self._call("POST", f"{self.user_id}/media_publish", creation_id=container_id)["id"]
         except InstagramError:
-            # 인스타가 오류를 돌려주면서도 실제로는 게시하는 경우가 있다 → 확인 후 판단
-            time.sleep(15)
-            try:
-                st = self._call("GET", container_id, fields="status_code")
-            except InstagramError:
-                st = {}
-            if st.get("status_code") == "PUBLISHED":
-                recent = self.recent_media(1)
-                if recent:
-                    return recent[0]["id"]
+            # 인스타가 오류를 돌려주면서도 실제로는 몇 초~몇 분 뒤 게시하는 경우가 있다 → 최대 2분 확인
+            for _ in range(8):
+                time.sleep(15)
+                try:
+                    st = self._call("GET", container_id, fields="status_code")
+                except InstagramError:
+                    st = {}
+                if st.get("status_code") == "PUBLISHED":
+                    recent = self.recent_media(1)
+                    if recent:
+                        return recent[0]["id"]
             raise
 
     def recent_media(self, limit: int = 10) -> list[dict]:
