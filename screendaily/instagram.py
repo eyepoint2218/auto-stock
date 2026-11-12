@@ -92,7 +92,35 @@ class Instagram:
 
     def publish(self, container_id: str) -> str:
         self.wait_ready(container_id)
-        return self._call("POST", f"{self.user_id}/media_publish", creation_id=container_id)["id"]
+        try:
+            return self._call("POST", f"{self.user_id}/media_publish", creation_id=container_id)["id"]
+        except InstagramError:
+            # 인스타가 오류를 돌려주면서도 실제로는 게시하는 경우가 있다 → 확인 후 판단
+            time.sleep(15)
+            try:
+                st = self._call("GET", container_id, fields="status_code")
+            except InstagramError:
+                st = {}
+            if st.get("status_code") == "PUBLISHED":
+                recent = self.recent_media(1)
+                if recent:
+                    return recent[0]["id"]
+            raise
+
+    def recent_media(self, limit: int = 10) -> list[dict]:
+        try:
+            return self._call("GET", f"{self.user_id}/media", fields="id,caption,timestamp,permalink",
+                              limit=str(limit)).get("data", [])
+        except InstagramError:
+            return []
+
+    def find_published(self, caption: str, limit: int = 10) -> dict | None:
+        """같은 캡션으로 이미 올라간 게시물이 있으면 반환 (중복 게시 방지)."""
+        key = caption.strip()[:80]
+        for m in self.recent_media(limit):
+            if key and (m.get("caption") or "").strip()[:80] == key:
+                return m
+        return None
 
     def permalink(self, media_id: str) -> str:
         try:

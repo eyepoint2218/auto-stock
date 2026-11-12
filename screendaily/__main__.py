@@ -217,7 +217,11 @@ def cmd_publish_due(a, config):
             if a.dry_run:
                 print(f"  (테스트) {len(files)}개 파일, 캡션 {len(caption)}자 — 실제 업로드 안 함")
                 continue
-            if post.format == "carousel":
+            existing = ig.find_published(caption) if fails else None
+            if existing:
+                print("  이전 시도에서 이미 게시된 것을 확인했습니다 (중복 게시 안 함)")
+                media_id = existing["id"]
+            elif post.format == "carousel":
                 sha = git_commit_push(f"chore: {post.name} 업로드 준비") if a.git else git("rev-parse", "HEAD")
                 urls = [raw_url(sha, f) for f in files]
                 wait_urls(urls)
