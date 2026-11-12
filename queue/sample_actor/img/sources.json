@@ -22,12 +22,13 @@
     },
     "발레리나": {
       "source": "tmdb",
-      "tmdb": "movie/541671",
+      "tmdb": "movie/961268",
       "tmdb_name": "발레리나",
-      "page_url": "https://www.themoviedb.org/movie/541671",
+      "page_url": "https://www.themoviedb.org/movie/961268",
       "image": "img/245901_still.jpg",
       "layout": "cover",
-      "poster": "img/245901_poster.jpg"
+      "poster": "img/245901_poster.jpg",
+      "role": "Jang Ok-joo"
     }
   },
   "actor": {
