@@ -7,19 +7,25 @@ subtitle: "머리 비우고 웃기 좋은 예능 4편"
 bubble: "월요일 밤 생존템ㅠ"
 items:
   - title: 솔로지옥
+    wiki: "Single's Inferno"
+    image: img/single_s_inferno.png
     ott: 넷플릭스
     genre: 연애 리얼리티
     desc: 무인도에 모인 솔로들의 연애 서바이벌. 보다 보면 나도 모르게 과몰입 중.
     bubble: "과몰입 주의"
   - title: "피지컬: 100"
+    wiki: "Physical: 100"
+    image: img/physical_100.png
     ott: 넷플릭스
     genre: 서바이벌 예능
     desc: 최고의 몸을 가리는 서바이벌. 아무 생각 없이 보다가 손에 땀이 나는 예능.
   - title: 좀비버스
+    wiki: Zombieverse
     ott: 넷플릭스
     genre: 좀비 · 버라이어티
     desc: 좀비 사태가 터진 세상에서 살아남아야 하는 예능인들. 무서운데 웃긴 이상한 조합.
   - title: SNL 코리아
+    wiki: Saturday Night Live Korea
     ott: 쿠팡플레이
     genre: 코미디 · 쇼
     desc: 짧은 코너 위주라 아무 데서나 틀어도 OK. 퇴근길에 한 편씩 보기 좋아요.
@@ -30,4 +36,4 @@ caption: |
   여기서 본 거 몇 개인가요? 댓글로 알려주세요 👇
   저장해두고 월요병 올 때 꺼내 보기 🔖
 hashtags: [예능추천, 월요병, 솔로지옥, 피지컬100]
-credits: "이미지 출처: 넷플릭스, 쿠팡플레이"
+credits: "이미지 출처: 넷플릭스, 쿠팡플레이 공식 포스터·스틸 (via Wikipedia). 모든 이미지의 저작권은 각 제작사에 있습니다."

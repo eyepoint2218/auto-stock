@@ -24,5 +24,6 @@ jobs:
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_API_HOST: ${{ vars.IG_API_HOST }}
           GH_TOKEN: ${{ secrets.SECRETS_PAT }}   # 선택: 새 토큰을 Secret 에 자동 저장
         run: python -m screendaily refresh-token

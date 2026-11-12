@@ -1,6 +1,9 @@
-"""Instagram API (Instagram 로그인 방식, graph.instagram.com) 업로드 클라이언트.
+"""Instagram 콘텐츠 게시 API 클라이언트.
 
-필요 권한: instagram_business_basic, instagram_business_content_publish
+두 가지 토큰을 모두 지원한다 (IG_API_HOST 로 선택):
+- graph.instagram.com (기본): Instagram 로그인 토큰. 권한 instagram_business_basic, instagram_business_content_publish
+- graph.facebook.com: 통합 로그인/비즈니스용 Facebook 로그인, 시스템 사용자 토큰(만료 없음).
+  권한 instagram_basic, instagram_content_publish. IG_USER_ID(인스타 비즈니스 계정 ID) 필수.
 """
 from __future__ import annotations
 
@@ -18,13 +21,24 @@ class InstagramError(RuntimeError):
 
 
 class Instagram:
-    def __init__(self, token: str, user_id: str | None = None, version: str | None = None):
+    def __init__(self, token: str, user_id: str | None = None, version: str | None = None,
+                 host: str | None = None):
         if not token:
             raise InstagramError("IG_ACCESS_TOKEN 이 설정되지 않았습니다 (GitHub Secrets 확인)")
         self.token = token
         self.version = version or os.environ.get("IG_API_VERSION") or DEFAULT_VERSION
-        self.base = f"https://graph.instagram.com/{self.version}"
-        self.user_id = user_id or self.me()["user_id"]
+        self.host = (host or os.environ.get("IG_API_HOST") or "graph.instagram.com").strip()
+        self.base = f"https://{self.host}/{self.version}"
+        if self.facebook:
+            if not user_id:
+                raise InstagramError("graph.facebook.com 방식은 IG_USER_ID(인스타 비즈니스 계정 ID)가 필요합니다")
+            self.user_id = user_id
+        else:
+            self.user_id = user_id or self.me()["user_id"]
+
+    @property
+    def facebook(self) -> bool:
+        return self.host == "graph.facebook.com"
 
     @classmethod
     def from_env(cls) -> "Instagram":
@@ -57,6 +71,9 @@ class Instagram:
         raise InstagramError("API 호출 실패")
 
     def me(self) -> dict:
+        if self.facebook:
+            info = self._call("GET", self.user_id, fields="id,username")
+            return {"user_id": info.get("id"), "username": info.get("username")}
         return self._call("GET", "me", fields="user_id,username")
 
     # ------------------------------------------------------------ 컨테이너
@@ -125,7 +142,9 @@ class Instagram:
 
     # ------------------------------------------------------------ 토큰
     def refresh_token(self) -> dict:
-        """장기 토큰(60일) 연장. 발급 후 24시간이 지나야 가능."""
+        """장기 토큰(60일) 연장. 발급 후 24시간이 지나야 가능. 시스템 사용자 토큰은 만료가 없어 불필요."""
+        if self.facebook:
+            return {"access_token": self.token, "expires_in": 0, "never_expires": True}
         r = requests.get("https://graph.instagram.com/refresh_access_token",
                          params={"grant_type": "ig_refresh_token", "access_token": self.token}, timeout=60)
         data = r.json()

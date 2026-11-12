@@ -1,0 +1,18 @@
+{
+  "img/single_s_inferno.png": {
+    "page": "Single's Inferno",
+    "page_url": "https://en.wikipedia.org/wiki/Single%27s_Inferno",
+    "file": "Single's_Inferno_logo.png",
+    "src": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Single%27s_Inferno_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "width": 801,
+    "height": 267
+  },
+  "img/physical_100.png": {
+    "page": "Physical: 100",
+    "page_url": "https://en.wikipedia.org/wiki/Physical%3A_100",
+    "file": "Physical_100_logo.png",
+    "src": "https://upload.wikimedia.org/wikipedia/en/0/00/Physical_100_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+    "width": 421,
+    "height": 237
+  }
+}

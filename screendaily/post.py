@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -11,7 +12,7 @@ import yaml
 
 from . import ROOT
 
-GENERATOR_VERSION = "2"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
+GENERATOR_VERSION = "5"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
 
 
 def load_config() -> dict:
@@ -27,6 +28,8 @@ class Item:
     desc: str = ""
     image: str = ""
     bubble: str = ""
+    wiki: str = ""    # 영문 위키백과 문서 제목 → 이미지 자동 가져오기
+    credit: str = ""  # 카드에 작게 표시할 이미지 출처 (자동)
 
 
 @dataclass
@@ -119,13 +122,19 @@ def load_post(slot_dir: Path, config: dict) -> Post:
     if fmt not in ("carousel", "reel"):
         raise ValueError(f"[{slot_dir.name}] format 은 carousel 또는 reel 이어야 합니다")
 
+    sources_file = slot_dir / "img" / "sources.json"
+    sources = json.loads(sources_file.read_text(encoding="utf-8")) if sources_file.exists() else {}
+
     items = []
     for i, it in enumerate(raw.get("items") or [], 1):
         if isinstance(it, str):
             it = {"title": it}
         if not it.get("title"):
             raise ValueError(f"[{slot_dir.name}] items {i}번에 title 이 없습니다")
-        items.append(Item(**{k: str(v) for k, v in it.items() if k in Item.__dataclass_fields__ and v is not None}))
+        item = Item(**{k: str(v) for k, v in it.items() if k in Item.__dataclass_fields__ and v is not None})
+        if not item.credit and item.image in sources:
+            item.credit = f"이미지 © {item.ott or '제작사'} · via Wikipedia"
+        items.append(item)
 
     post = Post(
         dir=slot_dir,
