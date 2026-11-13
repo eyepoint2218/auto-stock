@@ -51,7 +51,7 @@ class Item:
     role: str = ""    # 배우 소개: 배역 이름 (비우면 TMDB 출연 기록에서 자동)
     year: str = ""    # 배우 스토리: 큰 숫자 대신 연도 표시 (예: 1997)
     stage: str = ""   # 배우 스토리: 단계 표시 (예: 데뷔, 첫 주연, 전환점)
-    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음), deal = 사진 + 두 줄 할인 카드
+    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음), deal = 사진 + 두 줄 할인 카드, coupon = 쿠폰 티켓 정보 카드
     brand: str = ""   # 이야기 카드 색을 config.yml brands: 의 브랜드 색으로 (예: SKT, KT, LGU)
 
 
@@ -82,7 +82,10 @@ class Post:
     outro_title: str = ""      # 마지막 장 큰 문구 (비우면 config 기본값 "매일 한 편, 오늘 뭐 볼지 고민 끝")
     outro_cta: str = ""        # 마지막 장 버튼 문구
     outro_save: str = ""       # 마지막 장 저장 유도 문구
-    cover_style: str = ""      # deal = 표지도 할인 카드처럼 (사진 + 마지막 줄 노란 글씨)
+    cover_style: str = ""      # deal = 사진 + 두 줄, alarm = 잠금화면 알림 표지 (혜택알람)
+    label_text: str = ""       # (자동) label 원래 글자 (대소문자 그대로)
+    alarm: str = ""            # alarm 표지 위쪽 큰 글씨 (예: 11.18, D-1)
+    alarm_sub: str = ""        # alarm 표지 큰 글씨 위 작은 줄 (예: 11월 18일 수요일)
     channel: str = ""          # 운영 채널 (config.yml channels: 의 이름). 비우면 기본 채널(스크린데일리)
     brand: str = ""            # 캐러셀 전체 색 (config.yml brands: 의 splash). 표지·마지막 장·brand 없는 이야기 카드에 적용
     reveal: bool = False       # 배우 맞히기: 이름을 숨기고 마지막에 정답 공개
@@ -243,6 +246,9 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         brand=str(raw.get("brand", "") or ""),
         channel=str(raw.get("channel", "") or ""),
         cover_style=str(raw.get("cover_style", "") or ""),
+        alarm=str(raw.get("alarm", "") or ""),
+        label_text=str(raw.get("label", "") or ""),
+        alarm_sub=str(raw.get("alarm_sub", "") or ""),
         reveal=bool(raw.get("reveal", False)),
         reveal_text=str(raw.get("reveal_text", "") or ""),
         recommend=recommend,

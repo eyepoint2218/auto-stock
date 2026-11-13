@@ -754,8 +754,16 @@ def _deal_text(canvas: Image.Image, lines: list[tuple[str, tuple]], chip: str, c
     for (text, color), f in zip(lines, fonts):
         d.text((M, y), text, font=f, fill=color, stroke_width=2, stroke_fill=(0, 0, 0, 90))
         y += line_h(f)
-    # 워터마크 (점선 + 계정)
-    _dotted_mark(canvas, config.get("handle", ""), H - 72, page)
+    # 워터마크 (가는 선 + 계정)
+    hy = H - 72
+    handle = config.get("handle", "")
+    hf = font(R, 24)
+    hw = _tw(hf, handle)
+    d.line((W / 2 - hw / 2 - 140, hy, W / 2 - hw / 2 - 20, hy), fill=(255, 255, 255, 140), width=2)
+    d.line((W / 2 + hw / 2 + 20, hy, W / 2 + hw / 2 + 140, hy), fill=(255, 255, 255, 140), width=2)
+    d.text((W / 2, hy), handle, font=hf, fill=(255, 255, 255, 190), anchor="mm")
+    if page:
+        d.text((W - M, hy), page, font=font(R, 24), fill=(255, 255, 255, 170), anchor="rm")
 
 
 def _chip_color(bcfg: dict | None) -> tuple[int, int, int]:
@@ -804,178 +812,202 @@ def render_deal_cover(post: Post, config: dict) -> Image.Image:
     return canvas.convert("RGB")
 
 
-# ---------------------------------------------------------------- 단일 혜택: 메모 카드 + 팔로우 마지막 장
+# ---------------------------------------------------------------- 혜택알람: 알림 표지 · 쿠폰 · 알람 켜기
 
-def _blur_bg(post: Post, img_path: str, dark: int = 150, blur: float = 14) -> Image.Image:
-    im = open_img(post.asset(img_path)) if img_path else None
-    if not im:
-        return Image.new("RGBA", (W, H), (30, 30, 34, 255))
-    bg = cover_crop(im, (W, H), (0.5, 0.45)).filter(ImageFilter.GaussianBlur(blur)).convert("RGBA")
-    bg.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, dark)))
-    return bg
+ALARM_DEFAULT = {"base": "#3818C9", "hot": "#FF3E4A", "soft": "#B3A6F2"}
 
 
 def _post_photo(post: Post) -> str:
     return post.cover_image or next((it.image for it in post.items if it.image), "")
 
 
-def _icon(d: ImageDraw.ImageDraw, kind: str, cx: float, cy: float, r: float = 20):
-    """폰트에 없는 기호를 직접 그림: clock(기간) check(조건) warn(주의) plus(추가) go(방법)."""
-    ink = (30, 30, 30)
-    if kind == "clock":
-        d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(230, 60, 60))
-        d.ellipse((cx - r * .72, cy - r * .72, cx + r * .72, cy + r * .72), fill=(255, 255, 255))
-        d.line((cx, cy, cx, cy - r * .5), fill=ink, width=3)
-        d.line((cx, cy, cx + r * .4, cy + r * .1), fill=ink, width=3)
-        d.line((cx - r * .9, cy - r * .9, cx - r * .45, cy - r * 1.1), fill=(230, 60, 60), width=5)
-        d.line((cx + r * .9, cy - r * .9, cx + r * .45, cy - r * 1.1), fill=(230, 60, 60), width=5)
-    elif kind == "check":
-        d.line((cx - r * .8, cy, cx - r * .2, cy + r * .7, cx + r, cy - r * .8), fill=(40, 90, 110), width=8, joint="curve")
-    elif kind == "warn":
-        d.polygon((cx, cy - r, cx + r * 1.1, cy + r * .85, cx - r * 1.1, cy + r * .85), fill=(255, 196, 0), outline=ink)
-        d.line((cx, cy - r * .35, cx, cy + r * .3), fill=ink, width=4)
-        d.ellipse((cx - 3, cy + r * .48, cx + 3, cy + r * .62), fill=ink)
-    elif kind == "plus":
-        d.rectangle((cx - r * .25, cy - r * .9, cx + r * .25, cy + r * .9), fill=(90, 90, 96))
-        d.rectangle((cx - r * .9, cy - r * .25, cx + r * .9, cy + r * .25), fill=(90, 90, 96))
-    elif kind == "go":
-        d.rounded_rectangle((cx - r, cy - r * .8, cx + r, cy + r * .8), radius=8, fill=(230, 60, 60))
-        d.line((cx - r * .45, cy, cx + r * .45, cy), fill=(255, 255, 255), width=4)
-        d.line((cx + r * .1, cy - r * .4, cx + r * .5, cy, cx + r * .1, cy + r * .4), fill=(255, 255, 255), width=4)
+def _post_credit(post: Post) -> str:
+    img = _post_photo(post)
+    return next((it.credit for it in post.items if it.image == img and it.credit), "") if not post.cover_image else ""
 
 
-def _tape(canvas: Image.Image, cx: int, top: int, w: int = 300, h: int = 96):
-    """분홍 물방울 마스킹 테이프 (가장자리 지그재그)."""
-    layer = Image.new("RGBA", (w + 20, h + 20), (0, 0, 0, 0))
-    d = ImageDraw.Draw(layer)
-    pts = [(10, 10)]
-    for i in range(1, 9):  # 오른쪽 지그재그
-        pts.append((w + 10 + (6 if i % 2 else -2), 10 + h * i / 8))
-    pts.append((10, h + 10))
-    for i in range(7, 0, -1):  # 왼쪽 지그재그
-        pts.append((10 + (-6 if i % 2 else 2), 10 + h * i / 8))
-    d.polygon(pts, fill=(214, 112, 122, 245), outline=(40, 30, 30), width=3)
-    for row in range(2):
-        for col in range(5):
-            x = 10 + w * (col + .5 + (.5 if row else 0)) / 5.4
-            y = 10 + h * (.3 + .42 * row)
-            d.ellipse((x - 9, y - 9, x + 9, y + 9), fill=(255, 255, 255, 235))
-    layer = layer.rotate(-1.5, resample=Image.BICUBIC, expand=True)
-    canvas.alpha_composite(layer, (int(cx - layer.width / 2), int(top - layer.height / 2)))
+def _alarm_colors(post: Post, config: dict) -> tuple[dict, tuple[int, int, int]]:
+    """(splash 배경 설정, 강조색). 게시물 brand → 채널 alarm_color 순."""
+    b = post_splash(post, config)
+    sp = (b or {}).get("splash") or (config.get("alarm") or {}).get("splash") or ALARM_DEFAULT
+    acc = hex2rgb((b or {}).get("accent") or (config.get("alarm") or {}).get("accent") or sp["base"])
+    return sp, acc
 
 
-NOTE_MARKS = {"!": "warn", "+": "plus", ">": "go", "-": "check"}
+def _bell(d: ImageDraw.ImageDraw, cx: float, cy: float, r: float, color):
+    """종 아이콘 (폰트에 없어서 직접 그림)."""
+    d.pieslice((cx - r * .7, cy - r * .85, cx + r * .7, cy + r * .55), 180, 360, fill=color)
+    d.rectangle((cx - r * .7, cy - r * .16, cx + r * .7, cy + r * .45), fill=color)
+    d.polygon((cx - r * .7, cy + r * .3, cx - r * .95, cy + r * .62, cx + r * .95, cy + r * .62, cx + r * .7, cy + r * .3), fill=color)
+    d.ellipse((cx - r * .2, cy + r * .6, cx + r * .2, cy + r * .95), fill=color)
+    d.ellipse((cx - r * .12, cy - r * 1.0, cx + r * .12, cy - r * .76), fill=color)
 
 
-def render_note(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
-    """메모지 카드: year = 기간(시계), title = 형광펜 핵심 혜택, desc 줄마다 앞글자로 아이콘
-    (! 주의, + 추가 혜택, > 받는 방법(빨간 글씨), - 조건 체크, 그 외 = 일반 줄)."""
-    canvas = _blur_bg(post, item.image or _post_photo(post))
-    rows: list[tuple[str, str]] = []
-    if item.year:
-        rows.append(("clock", item.year))
-    rows.append(("hl", item.title))
-    for ln in (item.desc or "").split("\n"):
-        ln = ln.strip()
-        if not ln:
-            continue
-        mark = NOTE_MARKS.get(ln[0])
-        rows.append((mark, ln[1:].strip()) if mark else ("", ln))
+def _app_icon(size: int, color) -> Image.Image:
+    ic = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    d = ImageDraw.Draw(ic)
+    d.rounded_rectangle((0, 0, size - 1, size - 1), radius=int(size * .26), fill=color)
+    _bell(d, size / 2, size / 2, size * .32, (255, 255, 255))
+    return ic
 
-    cw = W - 2 * 56
-    inner = cw - 2 * 40
-    f, fh = font(B, 46), font(EB, 54)
-    lay = []
-    for kind, text in rows:
-        ff = fh if kind == "hl" else f
-        avail = inner - (64 if kind not in ("", "hl") else 0)
-        lines = wrap(text, ff, avail)
-        lay.append((kind, lines, ff))
-    body_h = sum(len(ls) * int(ff.size * 1.5) for _, ls, ff in lay)
-    ch = body_h + 150
-    x0, y0 = 56, max(200, (H - ch) // 2 + 10)
+
+def render_alarm_cover(post: Post, config: dict) -> Image.Image:
+    """잠금화면 알림 표지: 위에 큰 날짜(alarm), 사진 위에 혜택알람 푸시 알림 카드.
+    title 첫 줄 = 브랜드(굵게), 둘째 줄 = 혜택(강조색 크게), subtitle = 알림 본문."""
+    sp, acc = _alarm_colors(post, config)
+    im = open_img(post.asset(_post_photo(post))) if _post_photo(post) else None
+    canvas = cover_crop(im, (W, H), (0.5, 0.5)).convert("RGBA") if im else splash_bg(sp, 0)
+    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), 0, 560, 175, 0))
+    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.55, H, 0, 150))
     d = ImageDraw.Draw(canvas)
-    d.rectangle((x0 - 12, y0 - 12, x0 + cw + 12, y0 + ch + 12), fill=(255, 255, 255))
-    d.rectangle((x0, y0, x0 + cw, y0 + ch), fill=(247, 243, 234), outline=(25, 25, 25), width=5)
-    _tape(canvas, W // 2, y0 - 6)
+    if post.alarm_sub:
+        d.text((W / 2, 110), post.alarm_sub, font=font(B, 40), fill=(255, 255, 255, 235), anchor="ma")
+    if post.alarm:
+        bf = font(EB, 230)
+        while _tw(bf, post.alarm) > W - 80 and bf.size > 120:
+            bf = font(EB, bf.size - 10)
+        d.text((W / 2, 170), post.alarm, font=bf, fill=(255, 255, 255), anchor="ma")
+
+    # 알림 카드 (뒤에 한 장 더 겹쳐 보이게)
+    lines = [t for t in post.title.split("\n") if t.strip()]
+    head, rest = (lines[0], lines[1:]) if lines else ("", [])
+    cx0, cx1 = 48, W - 48
+    pad = 40
+    hf, rf_, sf = font(EB, 56), font(EB, 92), font(R, 36)
+    rest_f = []
+    for t in rest:
+        f = rf_
+        while _tw(f, t) > cx1 - cx0 - 2 * pad and f.size > 50:
+            f = font(EB, f.size - 4)
+        rest_f.append(f)
+    body = wrap(post.subtitle, sf, cx1 - cx0 - 2 * pad) if post.subtitle else []
+    ch = pad + 64 + 26 + line_h(hf) + sum(line_h(f) for f in rest_f) + (12 + block_h(sf, body) if body else 0) + pad
+    cy0 = min(H - 170 - ch, 700)
+    card = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    cd = ImageDraw.Draw(card)
+    cd.rounded_rectangle((cx0 + 34, cy0 + 40, cx1 - 34, cy0 + ch + 30), radius=44, fill=(255, 255, 255, 120))
+    cd.rounded_rectangle((cx0, cy0, cx1, cy0 + ch), radius=44, fill=(255, 255, 255, 240))
+    canvas.alpha_composite(card)
+    canvas.alpha_composite(_app_icon(64, acc), (cx0 + pad, cy0 + pad))
     d = ImageDraw.Draw(canvas)
-    y = y0 + 95
-    for kind, lines, ff in lay:
-        lh = int(ff.size * 1.5)
-        for i, ln in enumerate(lines):
-            tw = _tw(ff, ln) + (64 if kind not in ("", "hl") else 0)
-            x = (W - tw) / 2
-            if kind not in ("", "hl") and i == 0:
-                _icon(d, kind, x + 22, y + ff.size * .55)
-            tx = x + (64 if kind not in ("", "hl") else 0)
-            if kind == "hl":  # 노란 형광펜
-                d.rectangle((tx - 6, y + ff.size * .45, tx + _tw(ff, ln) + 6, y + ff.size * 1.12), fill=(255, 236, 60))
-            color = (205, 40, 40) if kind == "go" else (25, 25, 25)
-            d.text((tx, y), ln, font=ff, fill=color)
-            y += lh
-    _dotted_mark(canvas, config.get("handle", ""), H - 110, f"{idx + 1} / {total}")
+    d.text((cx0 + pad + 84, cy0 + pad + 32), f"{config.get('brand', '')} · {post.label_text}" if post.label_text else config.get("brand", ""),
+           font=font(B, 30), fill=(90, 90, 100), anchor="lm")
+    d.text((cx1 - pad, cy0 + pad + 32), "지금", font=font(R, 28), fill=(140, 140, 150), anchor="rm")
+    y = cy0 + pad + 64 + 26
+    d.text((cx0 + pad, y), head, font=hf, fill=(20, 20, 26))
+    y += line_h(hf)
+    for t, f in zip(rest, rest_f):
+        d.text((cx0 + pad, y - 6), t, font=f, fill=acc)
+        y += line_h(f)
+    if body:
+        draw_lines(d, body, sf, cx0 + pad, y + 12, (80, 80, 90))
+    if post.bubble:
+        b = bubble_layer(post.bubble, size=38, angle=-3)
+        paste_center(canvas, b, cx1 - b.width // 2, cy0 - 10)
+    d = ImageDraw.Draw(canvas)
+    credit = _post_credit(post)
+    if credit:
+        d.text((W - M, H - 112), credit, font=font(R, 20), fill=(255, 255, 255, 190), anchor="ra",
+               stroke_width=2, stroke_fill=(0, 0, 0, 120))
+    d.text((W / 2, H - 70), config.get("handle", ""), font=font(B, 28), fill=(255, 255, 255, 220), anchor="mm")
     return canvas.convert("RGB")
 
 
-def _dotted_mark(canvas: Image.Image, text: str, y: int, page: str = "", color=(255, 255, 255, 200), f=None):
-    """가운데 글자 + 양옆 점선 (참고 계정 워터마크 모양)."""
+def render_coupon(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
+    """쿠폰 티켓: 위(stage 라벨 · year 큰 숫자 · title) / 절취선 / 아래 desc 의 "항목 | 내용" 표."""
+    sp, acc = _alarm_colors(post, config)
+    canvas = splash_bg(sp, idx)
     d = ImageDraw.Draw(canvas)
-    f = f or font(R, 26)
-    tw = _tw(f, text)
-    for side in (-1, 1):
-        x_start = W / 2 + side * (tw / 2 + 24)
-        for k in range(28):
-            x = x_start + side * k * 7
-            d.ellipse((x - 1.6, y - 1.6, x + 1.6, y + 1.6), fill=color)
-    d.text((W / 2, y), text, font=f, fill=color, anchor="mm")
-    if page:
-        d.text((W - M, y), page, font=font(R, 24), fill=(255, 255, 255, 170), anchor="rm")
+    d.text((M, 62), config.get("brand", ""), font=font(EB, 30), fill=(255, 255, 255, 235))
+    d.text((W - M, 64), f"{idx + 1} / {total}", font=font(R, 26), fill=(255, 255, 255, 190), anchor="ra")
+
+    tx0, tx1 = 64, W - 64
+    pad = 48
+    rows = []
+    for ln in (item.desc or "").split("\n"):
+        if "|" in ln:
+            k, v = ln.split("|", 1)
+            rows.append((k.strip(), v.strip()))
+        elif ln.strip():
+            rows.append(("", ln.strip()))
+    kf, vf = font(EB, 30), font(B, 38)
+    kw = max([_tw(kf, k) for k, _ in rows if k] + [60]) + 40
+    vlines = [wrap(v, vf, tx1 - tx0 - 2 * pad - (kw + 24 if k else 0)) for k, v in rows]
+    rows_h = sum(max(52, block_h(vf, vl)) + 30 for vl in vlines)
+    big = font(EB, 170)
+    tf, tl = fit(item.title, EB, tx1 - tx0 - 2 * pad, 2, 50, 38)
+    top_h = pad + (66 if item.stage else 0) + (210 if item.year else 0) + block_h(tf, tl) + pad
+    bot_h = 40 + rows_h + 10
+    th = top_h + bot_h
+    ty0 = max(140, (H - th) // 2 + 10)
+
+    ticket = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    td = ImageDraw.Draw(ticket)
+    td.rounded_rectangle((tx0, ty0, tx1, ty0 + th), radius=36, fill=(255, 255, 255, 255))
+    cut = ty0 + top_h
+    td.ellipse((tx0 - 30, cut - 30, tx0 + 30, cut + 30), fill=(0, 0, 0, 0))  # 양옆 반달 홈
+    td.ellipse((tx1 - 30, cut - 30, tx1 + 30, cut + 30), fill=(0, 0, 0, 0))
+    for x in range(tx0 + 46, tx1 - 46, 26):  # 절취선
+        td.line((x, cut, x + 13, cut), fill=(200, 200, 210), width=4)
+    shadow = ticket.split()[3].point(lambda a: a * 0.35).filter(ImageFilter.GaussianBlur(18))
+    canvas.paste((0, 0, 0), (0, 14), shadow)
+    canvas.alpha_composite(ticket)
+    d = ImageDraw.Draw(canvas)
+
+    y = ty0 + pad
+    if item.stage:
+        pill(d, tx0 + pad, y, item.stage, font(EB, 30), acc, (255, 255, 255), pad=(22, 12))
+        y += 60 + 6
+    if item.year:
+        bf = big
+        while _tw(bf, item.year) > tx1 - tx0 - 2 * pad and bf.size > 90:
+            bf = font(EB, bf.size - 10)
+        d.text((tx0 + pad - 6, y + 4), item.year, font=bf, fill=acc)
+        y += 210
+    draw_lines(d, tl, tf, tx0 + pad, y, (20, 20, 26))
+
+    y = cut + 40
+    for i, ((k, v), vl) in enumerate(zip(rows, vlines)):
+        x = tx0 + pad
+        if k:
+            d.rounded_rectangle((x, y + 2, x + kw, y + 50), radius=24, outline=acc, width=3)
+            d.text((x + kw / 2, y + 26), k, font=kf, fill=acc, anchor="mm")
+            x += kw + 24
+        draw_lines(d, vl, vf, x, y + 4, (30, 30, 36))
+        y += max(52, block_h(vf, vl)) + 30
+    d.text((W / 2, H - 70), config.get("handle", ""), font=font(B, 28), fill=(255, 255, 255, 220), anchor="mm")
+    return canvas.convert("RGB")
 
 
-def render_follow_outro(post: Post, config: dict) -> Image.Image:
-    """팔로우 유도 마지막 장: 흐린 사진 + 큰 문구 + 프로필 알약(로고·아이디·팔로우 버튼)."""
+def render_toggle_outro(post: Post, config: dict) -> Image.Image:
+    """알람 켜기 마지막 장: 큰 문구 + '혜택 알람' 토글이 켜진 카드 + 아이디."""
     o = config.get("outro", {})
-    brand, handle = config.get("brand", ""), config.get("handle", "")
-    canvas = _blur_bg(post, _post_photo(post), dark=140, blur=4)
+    sp, acc = _alarm_colors(post, config)
+    canvas = splash_bg(sp, 1)
     d = ImageDraw.Draw(canvas)
-    d.text((W / 2, 70), handle.lstrip("@"), font=font(EB, 30), fill=(255, 255, 255, 235), anchor="ma")
-    t1 = post.outro_title or o.get("title", "새로운 혜택")
-    t2 = o.get("follow_line", f"‘{brand}’ 팔로우하고 빠르게 받아보세요!")
-    y = 430
-    for i, t in enumerate(t1.split("\n") + [t2]):
-        ff = font(EB, 64 if i < len(t1.split("\n")) else 52)
-        while _tw(ff, t) > W - 80 and ff.size > 36:
-            ff = font(EB, ff.size - 2)
-        d.text((W / 2, y), t, font=ff, fill=(255, 255, 255), anchor="ma", stroke_width=2, stroke_fill=(0, 0, 0, 120))
-        y += int(ff.size * 1.55)
-    # 프로필 알약
-    lf, hf, bf = font(EB, 30), font(EB, 40), font(EB, 30)
-    lw = 116
-    hw = _tw(hf, handle.lstrip("@"))
-    bw = _tw(bf, "팔로우") + 44
-    pw = 30 + lw + 24 + hw + 24 + bw + 40
-    px, py = (W - pw) / 2, y + 60
-    d.rounded_rectangle((px, py, px + pw, py + 156), radius=78, fill=(255, 255, 255))
-    lc = hex2rgb(o.get("logo_bg", "#3818C9"))
-    cx, cy = px + 30 + lw / 2, py + 78
-    d.ellipse((cx - lw / 2, cy - lw / 2, cx + lw / 2, cy + lw / 2), fill=lc)
-    lt = o.get("logo_text", brand)
-    lff = lf
-    while _tw(lff, lt) > lw - 14 and lff.size > 18:
-        lff = font(EB, lff.size - 2)
-    d.text((cx, cy), lt, font=lff, fill=hex2rgb(o.get("logo_fg", "#FFFFFF")), anchor="mm")
-    hx = px + 30 + lw + 24
-    d.text((hx, cy), handle.lstrip("@"), font=hf, fill=(20, 20, 24), anchor="lm")
-    bx = hx + hw + 24
-    d.rounded_rectangle((bx, cy - 26, bx + bw, cy + 26), radius=12, fill=(64, 110, 245))
-    d.text((bx + bw / 2, cy), "팔로우", font=bf, fill=(255, 255, 255), anchor="mm")
-    # 마우스 커서
-    mx, my = bx + bw - 26, cy + 4
-    cur = [(mx, my), (mx, my + 44), (mx + 11, my + 33), (mx + 20, my + 52), (mx + 28, my + 48), (mx + 19, my + 30), (mx + 34, my + 30)]
-    d.polygon(cur, fill=(255, 255, 255), outline=(20, 20, 24), width=3)
-    sub = o.get("follow_sub", "실시간 혜택 알람 받기")
-    d.text((W / 2, py + 156 + 80), sub, font=font(B, 40), fill=(255, 255, 255, 235), anchor="ma")
-    _dotted_mark(canvas, brand, H - 130, color=(255, 214, 0, 255), f=font(EB, 44))
+    title = post.outro_title or o.get("title", "놓치면 끝나는 혜택\n알람 켜듯 팔로우하세요")
+    y = 330
+    for t in title.split("\n"):
+        f = font(EB, 70)
+        while _tw(f, t) > W - 100 and f.size > 40:
+            f = font(EB, f.size - 2)
+        d.text((W / 2, y), t, font=f, fill=(255, 255, 255), anchor="ma")
+        y += int(f.size * 1.4)
+    # 토글 카드
+    cx0, cx1, cy0 = 80, W - 80, y + 70
+    d.rounded_rectangle((cx0, cy0, cx1, cy0 + 190), radius=44, fill=(255, 255, 255))
+    canvas.alpha_composite(_app_icon(104, acc), (cx0 + 40, cy0 + 43))
+    d = ImageDraw.Draw(canvas)
+    d.text((cx0 + 172, cy0 + 70), o.get("toggle_label", "혜택 알람"), font=font(EB, 46), fill=(20, 20, 26), anchor="lm")
+    d.text((cx0 + 172, cy0 + 126), config.get("handle", ""), font=font(R, 32), fill=(110, 110, 120), anchor="lm")
+    sx1, sy = cx1 - 40, cy0 + 95
+    d.rounded_rectangle((sx1 - 150, sy - 42, sx1, sy + 42), radius=42, fill=acc)
+    d.ellipse((sx1 - 78, sy - 34, sx1 - 10, sy + 34), fill=(255, 255, 255))
+    d.text((W / 2, cy0 + 190 + 70), o.get("follow_sub", "혜택 날짜, 먼저 알려드려요"), font=font(B, 40),
+           fill=(255, 255, 255, 235), anchor="ma")
+    if o.get("save"):
+        d.text((W / 2, cy0 + 190 + 140), o["save"], font=font(R, 32), fill=(255, 255, 255, 190), anchor="ma")
+    d.text((W / 2, H - 90), config.get("brand", ""), font=font(EB, 40), fill=(255, 255, 255), anchor="mm")
     return canvas.convert("RGB")
 
 
@@ -991,12 +1023,13 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             out.append(im)
         return out
     total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)
-    slides = [render_deal_cover(post, config) if post.cover_style == "deal" else render_cover(post, config)]
+    covers = {"deal": render_deal_cover, "alarm": render_alarm_cover}
+    slides = [covers.get(post.cover_style, render_cover)(post, config)]
     for i, it in enumerate(post.items, 1):
         if it.type == "deal":
             slides.append(render_deal(post, it, i, total, config))
-        elif it.type == "note":
-            slides.append(render_note(post, it, i, total, config))
+        elif it.type == "coupon":
+            slides.append(render_coupon(post, it, i, total, config))
         elif it.type == "photo":  # 직접 넣은 이미지를 그대로 한 장 (공식 이벤트 이미지 등)
             slides.append(cover_crop(open_img(post.asset(it.image)), (W, H), (0.5, 0.5)).convert("RGB"))
         elif it.type in ("story", "quote"):
@@ -1008,6 +1041,6 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.recommend:
         slides.append(render_recommend(post, len(slides), total, config))
     if post.outro:
-        follow = (config.get("outro") or {}).get("style") == "follow"
-        slides.append(render_follow_outro(post, config) if follow else render_outro(post, config))
+        toggle = (config.get("outro") or {}).get("style") == "toggle"
+        slides.append(render_toggle_outro(post, config) if toggle else render_outro(post, config))
     return slides

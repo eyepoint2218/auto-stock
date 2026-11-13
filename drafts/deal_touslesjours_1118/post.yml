@@ -1,4 +1,4 @@
-# 혜택알람 단일 혜택 캐러셀: SKT T day 뚜레쥬르 (11/18)
+# 혜택알람 단일 혜택 캐러셀: SKT T day 뚜레쥬르 (11/18) — 알림 표지 → 쿠폰 → 알람 켜기
 # 출처: T 멤버십 앱 T day '18일 혜택' 화면 (2026-11-14 캡처)
 publish_at: "2026-11-17 19:00"
 format: carousel
@@ -6,21 +6,25 @@ channel: deals
 draft: true
 label: SKT T day
 brand: SKT
-cover_style: deal
+cover_style: alarm
+alarm: "11.18"
+alarm_sub: "11월 18일 수요일 · 딱 하루"
 theme: dark
 title: "뚜레쥬르\n30% 할인"
-subtitle: "11.18 하루만"
+subtitle: "SKT 고객이면 빵값 1,000원당 300원 빠져요"
 items:
-  - type: note
-    title: 뚜레쥬르 1,000원당 300원 할인
+  - type: coupon
+    title: 뚜레쥬르 T day
+    stage: SKT T 멤버십
+    year: "30%"
     wiki: "Bread"
-    year: "11월 18일 (수) 딱 하루"
     desc: |
-      또는 1,000원당 300P 적립 중 선택
-      +클럽 프리미엄은 1,000원당 500원
-      !정가 2만 원까지 (최대 6,000원 할인)
-      !키오스크 주문은 안 돼요
-      >T 멤버십 앱 > T day 매직 바코드 제시
+      언제 | 11월 18일 (수) 하루
+      혜택 | 1,000원당 300원 할인 또는 300P 적립
+      클럽 | 클럽 프리미엄은 1,000원당 500원
+      한도 | 정가 2만 원까지 (최대 6,000원)
+      주의 | 키오스크 주문은 안 돼요
+      방법 | T 멤버십 앱 T day 매직 바코드 제시
 caption: |
   뚜레쥬르 30% 할인, 내일(18일) 딱 하루예요 🥐
 
