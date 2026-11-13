@@ -14,15 +14,18 @@ outro_question: "쓰는 통신사로 영화 몇 번 보셨어요?"
 items:
   - type: story
     stage: SKT · T멤버십
+    brand: SKT
     title: "VIP는 CGV\n무료 연 3회"
     desc: VIP는 월 1회 CGV 무료 또는 1+1 예매를 골라요 (무료 연 3회, 1+1 연 9회). 등급 상관없이 CGV·메가박스 상시 할인도 하루 1회. 롯데시네마 제휴는 2026년 2월에 끝났어요.
   - type: story
     stage: KT 멤버십
+    brand: KT
     title: "VIP 무료 예매는\n롯데시네마만"
     desc: VIP 초이스 무료 예매는 롯데시네마에서만 돼요. VIP는 연 최대 6회, VVIP는 올해 프로모션으로 연 최대 12회. CGV·메가박스는 전 고객 상시 할인으로, 극장별 하루 1회예요.
     bubble: "극장 확인 필수"
   - type: story
     stage: LG U+ 멤버십
+    brand: LGU
     title: "VIP콕에서\n영화를 고르면"
     desc: VIP콕 혜택으로 영화 예매를 고르면 무료 연 3회 또는 1+1 연 9회. 그달 VIP콕의 다른 혜택과는 같이 못 써요. 적용 극장은 바뀐 적이 있으니 U+one 앱에서 확인하세요.
   - type: story

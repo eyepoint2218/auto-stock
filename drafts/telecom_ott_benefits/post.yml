@@ -14,14 +14,17 @@ outro_question: "쓰는 통신사 혜택, 챙기고 계셨나요?"
 items:
   - type: story
     stage: SKT
+    brand: SKT
     title: "T우주\n‘우주패스’"
     desc: 넷플릭스, 유튜브 프리미엄 같은 구독을 T우주에서 묶어서 결제해요. 기본 상품을 고르고 혜택을 하나 더 얹는 구조라, 따로 두 개 구독할 때보다 부담이 줄어요.
   - type: story
     stage: KT
+    brand: KT
     title: "요금제에 OTT를\n넣는 ‘5G 초이스’"
     desc: 요금제에 가입할 때 넷플릭스, 유튜브 프리미엄, 디즈니+, 티빙 중 하나를 골라 포함할 수 있어요. 오래 쓴 고객은 ‘장기고객 감사드림’에서 티빙 할인 쿠폰도 챙기세요.
   - type: story
     stage: LG U+
+    brand: LGU
     title: "구독을 모아 보는\n‘유독’"
     desc: 넷플릭스와 유튜브 프리미엄을 한 상품으로 묶은 구독이 있어요. 티빙·디즈니+ 할인이 붙는 기간 한정 행사도 자주 열리니 가입 전에 이벤트 탭부터 보세요.
   - type: story

@@ -38,6 +38,7 @@ class Item:
     year: str = ""    # 배우 스토리: 큰 숫자 대신 연도 표시 (예: 1997)
     stage: str = ""   # 배우 스토리: 단계 표시 (예: 데뷔, 첫 주연, 전환점)
     type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음)
+    brand: str = ""   # 이야기 카드 색을 config.yml brands: 의 브랜드 색으로 (예: SKT, KT, LGU)
 
 
 @dataclass

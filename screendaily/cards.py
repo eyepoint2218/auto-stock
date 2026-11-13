@@ -406,12 +406,35 @@ def _story_bg(post: Post, theme, accent, idx: int, blur: float = 28, dark: int =
     return placeholder_bg((W, H), accent, THEMES["dark"], idx)
 
 
+def _brand_bg(glows: list[tuple[int, int, int]]) -> Image.Image:
+    """브랜드 색 빛이 위쪽에서 번지는 어두운 배경 (색이 2개면 좌우로 섞임)."""
+    bg = Image.new("RGBA", (W, H), (12, 12, 14, 255))
+    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    spots = [(-0.15, 0.55)] if len(glows) == 1 else [(-0.25, 0.45), (0.45, 1.2)]
+    for (x0, x1), c in zip(spots, glows):
+        gd.ellipse((W * x0, -H * 0.45, W * x1, H * 0.55), fill=c + (190,))
+    bg.alpha_composite(glow.filter(ImageFilter.GaussianBlur(170)))
+    return bg
+
+
+def _ink(rgb) -> tuple[int, int, int]:
+    """배경색 위에 읽히는 글자색 (밝으면 검정, 어두우면 흰색)."""
+    r, g, b = rgb
+    return (15, 15, 15) if (0.299 * r + 0.587 * g + 0.114 * b) > 160 else (255, 255, 255)
+
+
 def render_story(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
     """연도 + 헤드라인 + 본문으로 읽히는 이야기 카드. item.type == "quote" 면 인용 카드."""
     theme = THEMES["dark"]
     accent = hex2rgb(config.get("labels", {}).get(post.label, "#FF4D4D"))
     brand = config.get("brand", "SCREEN DAILY")
-    if post.reveal:
+    bcfg = (config.get("brands") or {}).get(item.brand.upper()) if item.brand else None
+    if bcfg:
+        accent = hex2rgb(bcfg.get("accent", "#FF4D4D"))
+        glows = [hex2rgb(c) for c in (bcfg.get("glow") or [bcfg.get("accent", "#FF4D4D")])][:2]
+        canvas = _brand_bg(glows)
+    elif post.reveal:
         # 넘길수록 점점 선명해짐 (정답 공개 직전까지 알아보기 어렵게)
         n = max(1, len(post.items))
         t = (idx - 1) / max(1, n - 1)
@@ -420,7 +443,9 @@ def render_story(post: Post, item: Item, idx: int, total: int, config: dict) -> 
         canvas = _story_bg(post, theme, accent, idx)
     d = ImageDraw.Draw(canvas)
     d.text((M, 60), brand, font=font(EB, 28), fill=(255, 255, 255, 230))
-    if post.reveal:
+    if bcfg:
+        d.text((W - M, 64), bcfg.get("name", item.brand), font=font(EB, 28), fill=(255, 255, 255, 235), anchor="ra")
+    elif post.reveal:
         d.text((W - M, 64), "이 배우는 누구?", font=font(B, 26), fill=accent, anchor="ra")
     elif post.actor_name or post.actor:
         d.text((W - M, 64), post.actor_name or post.actor, font=font(B, 26), fill=(255, 255, 255, 190), anchor="ra")
@@ -449,10 +474,10 @@ def render_story(post: Post, item: Item, idx: int, total: int, config: dict) -> 
         h = (210 if item.year else 0) + (80 if item.stage else 0) + block_h(hf, hl) + (36 + block_h(df, dl) if dl else 0)
         y = max(top, top + (bottom - top - h) // 2)
         if item.year:
-            d.text((M - 4, y - 20), item.year, font=yf, fill=accent)
+            d.text((M - 4, y - 20), item.year, font=yf, fill=(255, 255, 255) if bcfg else accent)
             y += 210
         if item.stage:
-            box = pill(d, M, y, item.stage, sf_, accent, (15, 15, 15))
+            box = pill(d, M, y, item.stage, sf_, accent, _ink(accent) if bcfg else (15, 15, 15))
             y = box[3] + 30
         y = draw_lines(d, hl, hf, M, y, theme["fg"])
         if dl:

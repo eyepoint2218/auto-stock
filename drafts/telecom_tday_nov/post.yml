@@ -15,27 +15,32 @@ items:
   - type: story
     year: "16~20"
     stage: U+ 유플투쁠 PLUS WEEK
+    brand: LGU
     title: "선착순 대신\n닷새 동안 쿠폰"
     desc: U+one 앱에서 스타벅스·파리바게뜨·다이소 등 제휴사 쿠폰을 닷새 동안 받을 수 있어요. 제휴사별 1인 1회, 재고가 떨어지면 일찍 끝날 수 있어요.
   - type: story
     year: "18·25"
     stage: SKT T day
+    brand: SKT
     title: "수요일 T day\n두 번 남았어요"
     desc: 18일엔 뚜레쥬르 등 식음료 제휴 혜택이 열리고, 25일에도 T day가 있어요. 두 날 모두 오전 9시부터 밤 11시 59분까지 T 멤버십 앱에서 응모해요.
   - type: story
     year: "20"
     stage: U+ 유쓰
+    brand: LGU
     title: "CGV 팝콘 세트\n무료"
     desc: ‘유쓰’ 혜택 대상이면 이날 CGV 유플투쁠세트(팝콘 M + 음료 M)를 무료로 받을 수 있어요. 영화 보러 갈 계획이면 이날 쿠폰부터 챙기세요.
     bubble: "팝콘 공짜"
   - type: story
     year: "25"
     stage: U+ VVIP
+    brand: LGU
     title: "‘듄: 파트 3’\nIMAX 초청 응모 마감"
     desc: 10년 이상 쓴 VVIP 고객 4,000명을 초청해요. 관람은 12월 21~22일, 용산·왕십리·영등포·전주효자·부산 센텀시티 CGV IMAX관. 응모는 U+one에서 25일까지.
   - type: story
     year: "~30"
     stage: KT 달달혜택
+    brand: KT
     title: "맥도날드\n3,500원 할인"
     desc: 30일까지 맥도날드 인기 메뉴 2종 중 1종 3,500원 할인. 파파존스 방문포장 50%와 아웃백 3만 원 할인 중 하나도 고를 수 있어요. 2006~2008년생은 19일부터 수험생 쿠폰도.
 caption: |
