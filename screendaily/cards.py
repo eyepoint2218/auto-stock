@@ -424,12 +424,101 @@ def _ink(rgb) -> tuple[int, int, int]:
     return (15, 15, 15) if (0.299 * r + 0.587 * g + 0.114 * b) > 160 else (255, 255, 255)
 
 
+def render_panel_story(post: Post, item: Item, idx: int, total: int, config: dict, bcfg: dict) -> Image.Image:
+    """밝은 하늘색 배경 + 진한 남보라 큰 글씨 + 흰 둥근 패널 (멤버십 앱 이벤트 페이지 느낌).
+    desc 에서 "18 수 | 뚜레쥬르 · CGV" 처럼 | 가 있는 줄은 달력 줄(왼쪽 날짜, 오른쪽 내용)로 그린다."""
+    ink = hex2rgb(bcfg.get("accent", "#3B1FD6"))
+    top, bot = hex2rgb(bcfg.get("bg", "#A8DCF6")), hex2rgb(bcfg.get("bg2", "#E4F4FC"))
+    dark, sub = (24, 24, 40), (70, 72, 92)
+    grad = Image.linear_gradient("L").resize((W, H))
+    canvas = Image.composite(Image.new("RGBA", (W, H), bot + (255,)), Image.new("RGBA", (W, H), top + (255,)), grad)
+    hd = ImageDraw.Draw(canvas)
+    brand = config.get("brand", "SCREEN DAILY")
+    hd.text((M, 60), brand, font=font(EB, 28), fill=ink)
+    hd.text((W - M, 64), bcfg.get("name", item.brand), font=font(EB, 28), fill=ink, anchor="ra")
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))  # 내용은 따로 그린 뒤 세로 가운데로 옮김
+    d = ImageDraw.Draw(layer)
+
+    y = 150
+    if item.year:
+        yf = font(EB, 200)
+        while _tw(yf, item.year) > W - M * 2 and yf.size > 120:
+            yf = font(EB, yf.size - 10)
+        d.text((M - 6, y - 30), item.year, font=yf, fill=ink)
+        y += int(yf.size * 1.0)
+    if item.stage:  # 테두리만 있는 알약 라벨
+        sf_ = font(EB, 32)
+        tw = _tw(sf_, item.stage)
+        box = (M, y, int(M + tw + 52), y + 32 + 28)
+        d.rounded_rectangle(box, radius=30, fill=(255, 255, 255), outline=ink, width=4)
+        d.text((M + 26, y + 15), item.stage, font=sf_, fill=ink)
+        y = box[3] + 34
+    hf, hl = fit(item.title, EB, W - M * 2, 3, 76, 56)
+    y = draw_lines(d, hl, hf, M, y, dark) + 36
+
+    rows, notes = [], []
+    for ln in (item.desc or "").split("\n"):
+        if "|" in ln:
+            a, b = ln.split("|", 1)
+            rows.append((a.strip(), b.strip()))
+        elif ln.strip():
+            notes.append(ln.strip())
+    # 패널 안 내용 높이를 먼저 계산해서 패널을 내용에 맞춘다
+    px0, px1 = M - 16, W - M + 16
+    px, pw = px0 + 40, px1 - px0 - 80
+    head_h = 64 if bcfg.get("panel_title") else 0
+    df_, rf, nf = font(EB, 64), font(B, 38), font(R, 38)
+    col = (max(_tw(df_, a.split()[0]) for a, _ in rows) + 70) if rows else 0
+    row_ls = [wrap(b, rf, pw - col) for _, b in rows]
+    rows_h = sum(max(line_h(df_), 8 + block_h(rf, bl)) + 44 for bl in row_ls)
+    max_bottom = H - 150
+    room = max_bottom - y - head_h - 36 - rows_h - 36
+    if notes:
+        nf, nl = fit("\n".join(notes), R, pw, max(1, room // line_h(nf)), 38, 30)
+    else:
+        nl = []
+    panel_h = head_h + 36 + rows_h + (block_h(nf, nl) + 10 if nl else 0) + 26
+    panel = (px0, y, px1, min(max_bottom, y + panel_h))
+    d.rounded_rectangle(panel, radius=40, fill=(255, 255, 255))
+    py = panel[1]
+    if head_h:  # 달력 머리줄 + 남보라 굵은 선
+        d.text((px, py + 18), bcfg["panel_title"], font=font(EB, 30), fill=ink)
+        py += head_h
+        d.line((panel[0], py, panel[2], py), fill=ink, width=5)
+    py += 36
+    for i, ((a, _), bl) in enumerate(zip(rows, row_ls)):
+        if i:
+            d.line((px, py - 22, px + pw, py - 22), fill=(220, 222, 236), width=2)
+        num, *rest = a.split()
+        d.text((px, py), num, font=df_, fill=ink)
+        if rest:
+            d.text((px + _tw(df_, num) + 8, py + 30), " ".join(rest), font=font(B, 28), fill=ink)
+        yy = draw_lines(d, bl, rf, px + col, py + 8, dark)
+        py = max(py + line_h(df_), yy) + 44
+    if nl:
+        draw_lines(d, nl, nf, px, py, sub)
+    shift = max(0, (H - 150 - panel[3]) // 2)
+    canvas.alpha_composite(layer, (0, shift))
+    panel = (panel[0], panel[1] + shift, panel[2], panel[3] + shift)
+    d = hd
+
+    if item.bubble:
+        b = bubble_layer(item.bubble, size=34, angle=2.5)
+        paste_center(canvas, b, W - M - b.width // 2 + 10, panel[1] - 10)
+    d.line((M, H - 96, W - M, H - 96), fill=ink + (110,), width=2)
+    d.text((W / 2, H - 70), brand, font=font(B, 26), fill=ink, anchor="ma")
+    d.text((W - M, H - 70), f"{idx + 1} / {total}", font=font(R, 26), fill=ink, anchor="ra")
+    return canvas.convert("RGB")
+
+
 def render_story(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
     """연도 + 헤드라인 + 본문으로 읽히는 이야기 카드. item.type == "quote" 면 인용 카드."""
     theme = THEMES["dark"]
     accent = hex2rgb(config.get("labels", {}).get(post.label, "#FF4D4D"))
     brand = config.get("brand", "SCREEN DAILY")
     bcfg = (config.get("brands") or {}).get(item.brand.upper()) if item.brand else None
+    if bcfg and bcfg.get("style") == "panel" and item.type != "quote":
+        return render_panel_story(post, item, idx, total, config, bcfg)
     if bcfg:
         accent = hex2rgb(bcfg.get("accent", "#FF4D4D"))
         glows = [hex2rgb(c) for c in (bcfg.get("glow") or [bcfg.get("accent", "#FF4D4D")])][:2]
