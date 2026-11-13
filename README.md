@@ -133,7 +133,8 @@ git add queue && git commit -m "다음 주 예약" && git push
 - 쿠폰 티켓: `type: coupon` — `stage` = 라벨, `year` = 큰 숫자(예: 30%), `title` = 쿠폰 이름,
   `desc` 줄마다 `항목 | 내용` (예: `언제 | 11월 18일 (수) 하루`)
 - 공식 이벤트 이미지를 그대로 한 장 넣으려면 `type: photo` + `image:` (저작권 주의)
-- 사진: 쿠폰 카드의 `wiki:` 또는 `image:` → 표지 배경으로 씀. 색은 게시물 `brand:` (없으면 남보라)
+- 사진: 쿠폰 카드의 `wiki:` 또는 `image:` → 표지 배경으로 씀
+- 색: 항상 혜택알람 고유 색(`config.yml` 채널의 `alarm:`). 통신사 혜택이면 `brand: SKT` 처럼 적어 쿠폰 라벨만 그 통신사 색
 - 마지막 장: 채널 설정 `outro.style: toggle` → '혜택 알람' 스위치가 켜진 장
 - 예시: `drafts/deal_touslesjours_1118/`
 

@@ -5,7 +5,7 @@ format: carousel
 channel: deals
 draft: true
 label: SKT T day
-brand: SKT
+brand: SKT            # 통신사 혜택: 쿠폰 라벨만 SKT 색 (배경은 혜택알람 색)
 cover_style: alarm
 alarm: "11.18"
 alarm_sub: "11월 18일 수요일 · 딱 하루"

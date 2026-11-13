@@ -827,11 +827,16 @@ def _post_credit(post: Post) -> str:
 
 
 def _alarm_colors(post: Post, config: dict) -> tuple[dict, tuple[int, int, int]]:
-    """(splash 배경 설정, 강조색). 게시물 brand → 채널 alarm_color 순."""
-    b = post_splash(post, config)
-    sp = (b or {}).get("splash") or (config.get("alarm") or {}).get("splash") or ALARM_DEFAULT
-    acc = hex2rgb((b or {}).get("accent") or (config.get("alarm") or {}).get("accent") or sp["base"])
-    return sp, acc
+    """(배경 splash, 강조색): 항상 채널 고유 색 (config 채널의 alarm:). 통신사 brand 는 라벨에만 씀."""
+    a = config.get("alarm") or {}
+    sp = a.get("splash") or ALARM_DEFAULT
+    return sp, hex2rgb(a.get("accent") or sp["base"])
+
+
+def _label_color(post: Post, config: dict, default) -> tuple[int, int, int]:
+    """게시물 brand(SKT/KT/LGU)가 있으면 그 통신사 색, 없으면 채널 강조색."""
+    b = (config.get("brands") or {}).get(post.brand.upper()) if post.brand else None
+    return hex2rgb(b["accent"]) if b and b.get("accent") else default
 
 
 def _bell(d: ImageDraw.ImageDraw, cx: float, cy: float, r: float, color):
@@ -955,8 +960,8 @@ def render_coupon(post: Post, item: Item, idx: int, total: int, config: dict) ->
     d = ImageDraw.Draw(canvas)
 
     y = ty0 + pad
-    if item.stage:
-        pill(d, tx0 + pad, y, item.stage, font(EB, 30), acc, (255, 255, 255), pad=(22, 12))
+    if item.stage:  # 통신사 혜택이면 그 통신사 색 라벨
+        pill(d, tx0 + pad, y, item.stage, font(EB, 30), _label_color(post, config, acc), (255, 255, 255), pad=(22, 12))
         y += 60 + 6
     if item.year:
         bf = big
