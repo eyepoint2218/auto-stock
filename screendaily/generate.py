@@ -6,6 +6,7 @@ from pathlib import Path
 
 from . import ROOT
 from .cards import render_all
+from .letterbox import render_letterbox
 from .post import Post
 from .reel import build_reel, reel_frame
 
@@ -31,7 +32,8 @@ def generate(post: Post, config: dict, force: bool = False) -> list[Path]:
         shutil.rmtree(out)
     out.mkdir(parents=True)
 
-    slides = render_all(post, config)
+    letterbox = post.layout == "letterbox"
+    slides = render_letterbox(post, config) if letterbox else render_all(post, config)
     for i, im in enumerate(slides, 1):
         im.save(out / f"{i:02d}.jpg", "JPEG", quality=92, optimize=True, progressive=True)
 
@@ -41,7 +43,8 @@ def generate(post: Post, config: dict, force: bool = False) -> list[Path]:
         frames = []
         for i, im in enumerate(slides, 1):
             p = fdir / f"{i:02d}.jpg"
-            reel_frame(im, config.get("brand", "SCREEN DAILY")).save(p, "JPEG", quality=92)
+            # letterbox 는 이미 9:16 프레임
+            (im if letterbox else reel_frame(im, config.get("brand", "SCREEN DAILY"))).save(p, "JPEG", quality=92)
             frames.append(p)
         rc = config.get("reel", {})
         bgm_rel = post.bgm or rc.get("bgm") or ""
@@ -52,7 +55,8 @@ def generate(post: Post, config: dict, force: bool = False) -> list[Path]:
             if bgm is None:
                 raise FileNotFoundError(f"[{post.name}] 배경음악 파일이 없습니다: {bgm_rel}")
         build_reel(frames, out / "reel.mp4", float(rc.get("seconds_per_slide", 3.0)),
-                   float(rc.get("transition", 0.4)), bgm, float(rc.get("bgm_volume", 0.8)))
+                   float(rc.get("transition", 0.4)), bgm, float(rc.get("bgm_volume", 0.8)),
+                   zoom=0.0 if letterbox else 0.05)  # letterbox: 후킹 문구가 흔들리지 않게 확대 없음
 
     (out / "caption.txt").write_text(post.full_caption(config), encoding="utf-8")
     (out / ".hash").write_text(post.source_hash())

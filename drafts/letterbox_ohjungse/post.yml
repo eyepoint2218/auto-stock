@@ -1,0 +1,34 @@
+# 위쪽 검은 칸 릴스 (layout: letterbox). 11/14(토) 17:00 수동 업로드용. draft: true 라 자동 업로드되지 않습니다.
+# 내용 출처: examples/actor_story_ohjungse (tvN 〈유 퀴즈 온 더 블럭〉 2023, 인터뷰·기사)
+publish_at: "2026-11-14 17:00"   # 토요일 오후 5시, 수동 업로드 (draft: true 라 자동 업로드 안 됨)
+format: reel
+layout: letterbox
+draft: true
+label: ACTOR
+actor: 오정세
+title: "오정세, 오디션만\n1,000번 넘게 봤다"
+items:
+  - title: "데뷔작 〈아버지〉"
+    year: "1997"
+    image: img/actor_28fef1.jpg
+    tmdb: none
+    desc: "첫 배역 이름은 ‘손님2’"
+  - title: "무명 시절"
+    image: img/actor_28fef1.jpg
+    tmdb: none
+    desc: "붙는 날보다 떨어지는 날이 훨씬 많았다"
+  - title: 조작된 도시
+    year: "2017"
+    desc: "‘저 배우 누구지?’ 소리를 듣기 시작"
+  - title: 동백꽃 필 무렵
+    year: "2019"
+    desc: "노규태로 다음 해 백상 조연상까지"
+outro_question: "다음엔 누구 이야기가 궁금하세요?"
+cover_image: img/actor_28fef1.jpg
+caption: |
+  이름도 없는 ‘손님2’로 시작해 오디션만 1,000번 넘게 본 배우 🎬
+  〈동백꽃 필 무렵〉 노규태로 백상 조연상을 받기까지, 버틴 시간은 헛되지 않았어요.
+
+  다음엔 누구 이야기가 궁금한지 댓글로 알려주세요 👇
+hashtags: [오정세, 배우스토리, 동백꽃필무렵, 조작된도시]
+credits: "사진 출처: TMDB. 이야기 출처: tvN 〈유 퀴즈 온 더 블럭〉(2023), 텐아시아·헤럴드경제·GQ Korea·OSEN·더팩트 등 인터뷰와 기사."

@@ -3,7 +3,9 @@ brand: SCREEN DAILY
 handle: "@screendaily.mag"
 timezone: Asia/Seoul          # post.yml 의 publish_at 은 이 시간대 기준
 
-# 모든 게시물 캡션 끝에 붙는 기본 해시태그 (5~8개 권장, 인스타 최대 30개)
+# 해시태그 개수 제한 (인스타 최대 5개). 게시물 hashtags 를 먼저 붙이고, 남는 자리에 아래 기본 해시태그를 순서대로 채움
+hashtag_limit: 5
+# 기본 해시태그 (중요한 것부터)
 default_hashtags:
   - 영화추천
   - 드라마추천

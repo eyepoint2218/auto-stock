@@ -24,13 +24,14 @@ def reel_frame(card: Image.Image, brand: str) -> Image.Image:
 
 
 def build_reel(frames: list[Path], out: Path, seconds: float = 3.0, transition: float = 0.4,
-               bgm: Path | None = None, bgm_volume: float = 0.8) -> float:
+               bgm: Path | None = None, bgm_volume: float = 0.8, zoom: float = 0.05) -> float:
     """프레임 이미지들을 천천히 확대 + 페이드 전환하는 영상으로 만든다. 길이(초)를 반환."""
     if not shutil.which("ffmpeg"):
         raise RuntimeError("ffmpeg 가 설치되어 있지 않습니다")
     n = len(frames)
     durs = [seconds] * n
-    durs[0] = max(2.0, seconds - 0.5)  # 표지는 조금 짧게
+    if zoom:
+        durs[0] = max(2.0, seconds - 0.5)  # 표지는 조금 짧게
     total = sum(durs) - transition * (n - 1)
 
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error"]
@@ -47,7 +48,7 @@ def build_reel(frames: list[Path], out: Path, seconds: float = 3.0, transition: 
         # 2배로 키운 뒤 zoompan 하면 확대가 덜 떨린다
         parts.append(
             f"[{i}:v]scale={RW * 2}:{RH * 2},"
-            f"zoompan=z='1+0.05*on/{nf}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={nf}:s={RW}x{RH}:fps={FPS},"
+            f"zoompan=z='1+{zoom}*on/{nf}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={nf}:s={RW}x{RH}:fps={FPS},"
             f"setsar=1,format=yuv420p[v{i}]"
         )
     last = "v0"
