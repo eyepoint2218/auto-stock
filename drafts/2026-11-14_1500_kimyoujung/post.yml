@@ -1,0 +1,38 @@
+# 요즘 뜨는 작품 배우 스토리: 〈100일의 거짓말〉 김유정
+# 11/14(토) 15:00 수동 업로드용. draft: true 라 자동 업로드되지 않습니다.
+# 출처: Wikipedia(Kim You-jung, 100 Days of Deception), 엑스포츠뉴스·텐아시아·인사이트 기사
+publish_at: "2026-11-14 15:00"
+format: reel
+layout: letterbox
+draft: true
+label: ACTOR
+actor: 김유정
+title: "김유정, 데뷔 23년인데\n아직 만 27살"
+items:
+  - title: 제과 광고로 데뷔
+    year: "2003"
+    image: img/actor.png
+    tmdb: none
+    desc: "네다섯 살 꼬마 광고 모델"
+  - title: 아역 시절
+    image: img/actor.png
+    tmdb: none
+    desc: "초등 5학년까지 드라마 13편, 영화 15편"
+  - title: 해를 품은 달
+    year: "2012"
+    image: img/actor.png
+    tmdb: none
+    desc: "어린 연우로 이름을 알리다"
+  - title: 구르미 그린 달빛
+    year: "2016"
+    image: img/moonlight.jpg
+    desc: "첫 성인 주연, KBS 연기대상 우수상"
+cover_image: img/deception.jpeg
+outro_question: "〈100일의 거짓말〉 보고 계신가요?"
+caption: |
+  2003년 제과 광고로 데뷔한 꼬마가 지금은 〈100일의 거짓말〉의 주인공 🎬
+  아역 시절부터 23년, 김유정의 필모그래피를 15초로 정리했어요.
+
+  〈100일의 거짓말〉 보고 계신 분? 댓글로 알려주세요 👇
+hashtags: [김유정, 100일의거짓말, 구르미그린달빛, 배우스토리]
+credits: "사진 출처: Wikimedia Commons, 각 작품 공식 포스터(via Wikipedia). 이야기 출처: 엑스포츠뉴스·텐아시아·인사이트 기사, Wikipedia."
