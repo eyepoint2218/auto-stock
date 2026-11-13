@@ -754,16 +754,8 @@ def _deal_text(canvas: Image.Image, lines: list[tuple[str, tuple]], chip: str, c
     for (text, color), f in zip(lines, fonts):
         d.text((M, y), text, font=f, fill=color, stroke_width=2, stroke_fill=(0, 0, 0, 90))
         y += line_h(f)
-    # 워터마크 (가는 선 + 계정)
-    hy = H - 72
-    handle = config.get("handle", "")
-    hf = font(R, 24)
-    hw = _tw(hf, handle)
-    d.line((W / 2 - hw / 2 - 140, hy, W / 2 - hw / 2 - 20, hy), fill=(255, 255, 255, 140), width=2)
-    d.line((W / 2 + hw / 2 + 20, hy, W / 2 + hw / 2 + 140, hy), fill=(255, 255, 255, 140), width=2)
-    d.text((W / 2, hy), handle, font=hf, fill=(255, 255, 255, 190), anchor="mm")
-    if page:
-        d.text((W - M, hy), page, font=font(R, 24), fill=(255, 255, 255, 170), anchor="rm")
+    # 워터마크 (점선 + 계정)
+    _dotted_mark(canvas, config.get("handle", ""), H - 72, page)
 
 
 def _chip_color(bcfg: dict | None) -> tuple[int, int, int]:
@@ -786,7 +778,7 @@ def render_deal(post: Post, item: Item, idx: int, total: int, config: dict) -> I
     lines = [(item.title, (255, 255, 255))] + ([(item.desc, DEAL_YELLOW)] if item.desc else [])
     _deal_text(canvas, lines, item.stage, chip_c, item.year, config, f"{idx + 1} / {total}")
     if item.image and item.credit:  # 사진 출처 (오른쪽 위, 작게)
-        ImageDraw.Draw(canvas).text((W - M, 100), item.credit, font=font(R, 20), fill=(255, 255, 255, 200),
+        ImageDraw.Draw(canvas).text((W - M, 132), item.credit, font=font(R, 20), fill=(255, 255, 255, 200),
                                     anchor="ra", stroke_width=2, stroke_fill=(0, 0, 0, 120))
     if item.bubble:
         b = bubble_layer(item.bubble, size=36, angle=-3)
@@ -802,9 +794,188 @@ def render_deal_cover(post: Post, config: dict) -> Image.Image:
     tl = [t for t in post.title.split("\n") if t.strip()]
     lines = [(t, (255, 255, 255)) for t in tl[:-1]] + [(tl[-1], DEAL_YELLOW)] if tl else []
     _deal_text(canvas, lines, post.label, (255, 255, 255), post.subtitle, config)
+    credit = next((it.credit for it in post.items if it.image == img and it.credit), "")
+    if img and credit and not post.cover_image:  # 사진 출처
+        ImageDraw.Draw(canvas).text((W - M, 132), credit, font=font(R, 20), fill=(255, 255, 255, 200),
+                                    anchor="ra", stroke_width=2, stroke_fill=(0, 0, 0, 120))
     if post.bubble:
         b = bubble_layer(post.bubble)
         paste_center(canvas, b, W - M - b.width // 2, H * 0.5)
+    return canvas.convert("RGB")
+
+
+# ---------------------------------------------------------------- 단일 혜택: 메모 카드 + 팔로우 마지막 장
+
+def _blur_bg(post: Post, img_path: str, dark: int = 150, blur: float = 14) -> Image.Image:
+    im = open_img(post.asset(img_path)) if img_path else None
+    if not im:
+        return Image.new("RGBA", (W, H), (30, 30, 34, 255))
+    bg = cover_crop(im, (W, H), (0.5, 0.45)).filter(ImageFilter.GaussianBlur(blur)).convert("RGBA")
+    bg.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, dark)))
+    return bg
+
+
+def _post_photo(post: Post) -> str:
+    return post.cover_image or next((it.image for it in post.items if it.image), "")
+
+
+def _icon(d: ImageDraw.ImageDraw, kind: str, cx: float, cy: float, r: float = 20):
+    """폰트에 없는 기호를 직접 그림: clock(기간) check(조건) warn(주의) plus(추가) go(방법)."""
+    ink = (30, 30, 30)
+    if kind == "clock":
+        d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(230, 60, 60))
+        d.ellipse((cx - r * .72, cy - r * .72, cx + r * .72, cy + r * .72), fill=(255, 255, 255))
+        d.line((cx, cy, cx, cy - r * .5), fill=ink, width=3)
+        d.line((cx, cy, cx + r * .4, cy + r * .1), fill=ink, width=3)
+        d.line((cx - r * .9, cy - r * .9, cx - r * .45, cy - r * 1.1), fill=(230, 60, 60), width=5)
+        d.line((cx + r * .9, cy - r * .9, cx + r * .45, cy - r * 1.1), fill=(230, 60, 60), width=5)
+    elif kind == "check":
+        d.line((cx - r * .8, cy, cx - r * .2, cy + r * .7, cx + r, cy - r * .8), fill=(40, 90, 110), width=8, joint="curve")
+    elif kind == "warn":
+        d.polygon((cx, cy - r, cx + r * 1.1, cy + r * .85, cx - r * 1.1, cy + r * .85), fill=(255, 196, 0), outline=ink)
+        d.line((cx, cy - r * .35, cx, cy + r * .3), fill=ink, width=4)
+        d.ellipse((cx - 3, cy + r * .48, cx + 3, cy + r * .62), fill=ink)
+    elif kind == "plus":
+        d.rectangle((cx - r * .25, cy - r * .9, cx + r * .25, cy + r * .9), fill=(90, 90, 96))
+        d.rectangle((cx - r * .9, cy - r * .25, cx + r * .9, cy + r * .25), fill=(90, 90, 96))
+    elif kind == "go":
+        d.rounded_rectangle((cx - r, cy - r * .8, cx + r, cy + r * .8), radius=8, fill=(230, 60, 60))
+        d.line((cx - r * .45, cy, cx + r * .45, cy), fill=(255, 255, 255), width=4)
+        d.line((cx + r * .1, cy - r * .4, cx + r * .5, cy, cx + r * .1, cy + r * .4), fill=(255, 255, 255), width=4)
+
+
+def _tape(canvas: Image.Image, cx: int, top: int, w: int = 300, h: int = 96):
+    """분홍 물방울 마스킹 테이프 (가장자리 지그재그)."""
+    layer = Image.new("RGBA", (w + 20, h + 20), (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    pts = [(10, 10)]
+    for i in range(1, 9):  # 오른쪽 지그재그
+        pts.append((w + 10 + (6 if i % 2 else -2), 10 + h * i / 8))
+    pts.append((10, h + 10))
+    for i in range(7, 0, -1):  # 왼쪽 지그재그
+        pts.append((10 + (-6 if i % 2 else 2), 10 + h * i / 8))
+    d.polygon(pts, fill=(214, 112, 122, 245), outline=(40, 30, 30), width=3)
+    for row in range(2):
+        for col in range(5):
+            x = 10 + w * (col + .5 + (.5 if row else 0)) / 5.4
+            y = 10 + h * (.3 + .42 * row)
+            d.ellipse((x - 9, y - 9, x + 9, y + 9), fill=(255, 255, 255, 235))
+    layer = layer.rotate(-1.5, resample=Image.BICUBIC, expand=True)
+    canvas.alpha_composite(layer, (int(cx - layer.width / 2), int(top - layer.height / 2)))
+
+
+NOTE_MARKS = {"!": "warn", "+": "plus", ">": "go", "-": "check"}
+
+
+def render_note(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
+    """메모지 카드: year = 기간(시계), title = 형광펜 핵심 혜택, desc 줄마다 앞글자로 아이콘
+    (! 주의, + 추가 혜택, > 받는 방법(빨간 글씨), - 조건 체크, 그 외 = 일반 줄)."""
+    canvas = _blur_bg(post, item.image or _post_photo(post))
+    rows: list[tuple[str, str]] = []
+    if item.year:
+        rows.append(("clock", item.year))
+    rows.append(("hl", item.title))
+    for ln in (item.desc or "").split("\n"):
+        ln = ln.strip()
+        if not ln:
+            continue
+        mark = NOTE_MARKS.get(ln[0])
+        rows.append((mark, ln[1:].strip()) if mark else ("", ln))
+
+    cw = W - 2 * 56
+    inner = cw - 2 * 40
+    f, fh = font(B, 46), font(EB, 54)
+    lay = []
+    for kind, text in rows:
+        ff = fh if kind == "hl" else f
+        avail = inner - (64 if kind not in ("", "hl") else 0)
+        lines = wrap(text, ff, avail)
+        lay.append((kind, lines, ff))
+    body_h = sum(len(ls) * int(ff.size * 1.5) for _, ls, ff in lay)
+    ch = body_h + 150
+    x0, y0 = 56, max(200, (H - ch) // 2 + 10)
+    d = ImageDraw.Draw(canvas)
+    d.rectangle((x0 - 12, y0 - 12, x0 + cw + 12, y0 + ch + 12), fill=(255, 255, 255))
+    d.rectangle((x0, y0, x0 + cw, y0 + ch), fill=(247, 243, 234), outline=(25, 25, 25), width=5)
+    _tape(canvas, W // 2, y0 - 6)
+    d = ImageDraw.Draw(canvas)
+    y = y0 + 95
+    for kind, lines, ff in lay:
+        lh = int(ff.size * 1.5)
+        for i, ln in enumerate(lines):
+            tw = _tw(ff, ln) + (64 if kind not in ("", "hl") else 0)
+            x = (W - tw) / 2
+            if kind not in ("", "hl") and i == 0:
+                _icon(d, kind, x + 22, y + ff.size * .55)
+            tx = x + (64 if kind not in ("", "hl") else 0)
+            if kind == "hl":  # 노란 형광펜
+                d.rectangle((tx - 6, y + ff.size * .45, tx + _tw(ff, ln) + 6, y + ff.size * 1.12), fill=(255, 236, 60))
+            color = (205, 40, 40) if kind == "go" else (25, 25, 25)
+            d.text((tx, y), ln, font=ff, fill=color)
+            y += lh
+    _dotted_mark(canvas, config.get("handle", ""), H - 110, f"{idx + 1} / {total}")
+    return canvas.convert("RGB")
+
+
+def _dotted_mark(canvas: Image.Image, text: str, y: int, page: str = "", color=(255, 255, 255, 200), f=None):
+    """가운데 글자 + 양옆 점선 (참고 계정 워터마크 모양)."""
+    d = ImageDraw.Draw(canvas)
+    f = f or font(R, 26)
+    tw = _tw(f, text)
+    for side in (-1, 1):
+        x_start = W / 2 + side * (tw / 2 + 24)
+        for k in range(28):
+            x = x_start + side * k * 7
+            d.ellipse((x - 1.6, y - 1.6, x + 1.6, y + 1.6), fill=color)
+    d.text((W / 2, y), text, font=f, fill=color, anchor="mm")
+    if page:
+        d.text((W - M, y), page, font=font(R, 24), fill=(255, 255, 255, 170), anchor="rm")
+
+
+def render_follow_outro(post: Post, config: dict) -> Image.Image:
+    """팔로우 유도 마지막 장: 흐린 사진 + 큰 문구 + 프로필 알약(로고·아이디·팔로우 버튼)."""
+    o = config.get("outro", {})
+    brand, handle = config.get("brand", ""), config.get("handle", "")
+    canvas = _blur_bg(post, _post_photo(post), dark=140, blur=4)
+    d = ImageDraw.Draw(canvas)
+    d.text((W / 2, 70), handle.lstrip("@"), font=font(EB, 30), fill=(255, 255, 255, 235), anchor="ma")
+    t1 = post.outro_title or o.get("title", "새로운 혜택")
+    t2 = o.get("follow_line", f"‘{brand}’ 팔로우하고 빠르게 받아보세요!")
+    y = 430
+    for i, t in enumerate(t1.split("\n") + [t2]):
+        ff = font(EB, 64 if i < len(t1.split("\n")) else 52)
+        while _tw(ff, t) > W - 80 and ff.size > 36:
+            ff = font(EB, ff.size - 2)
+        d.text((W / 2, y), t, font=ff, fill=(255, 255, 255), anchor="ma", stroke_width=2, stroke_fill=(0, 0, 0, 120))
+        y += int(ff.size * 1.55)
+    # 프로필 알약
+    lf, hf, bf = font(EB, 30), font(EB, 40), font(EB, 30)
+    lw = 116
+    hw = _tw(hf, handle.lstrip("@"))
+    bw = _tw(bf, "팔로우") + 44
+    pw = 30 + lw + 24 + hw + 24 + bw + 40
+    px, py = (W - pw) / 2, y + 60
+    d.rounded_rectangle((px, py, px + pw, py + 156), radius=78, fill=(255, 255, 255))
+    lc = hex2rgb(o.get("logo_bg", "#3818C9"))
+    cx, cy = px + 30 + lw / 2, py + 78
+    d.ellipse((cx - lw / 2, cy - lw / 2, cx + lw / 2, cy + lw / 2), fill=lc)
+    lt = o.get("logo_text", brand)
+    lff = lf
+    while _tw(lff, lt) > lw - 14 and lff.size > 18:
+        lff = font(EB, lff.size - 2)
+    d.text((cx, cy), lt, font=lff, fill=hex2rgb(o.get("logo_fg", "#FFFFFF")), anchor="mm")
+    hx = px + 30 + lw + 24
+    d.text((hx, cy), handle.lstrip("@"), font=hf, fill=(20, 20, 24), anchor="lm")
+    bx = hx + hw + 24
+    d.rounded_rectangle((bx, cy - 26, bx + bw, cy + 26), radius=12, fill=(64, 110, 245))
+    d.text((bx + bw / 2, cy), "팔로우", font=bf, fill=(255, 255, 255), anchor="mm")
+    # 마우스 커서
+    mx, my = bx + bw - 26, cy + 4
+    cur = [(mx, my), (mx, my + 44), (mx + 11, my + 33), (mx + 20, my + 52), (mx + 28, my + 48), (mx + 19, my + 30), (mx + 34, my + 30)]
+    d.polygon(cur, fill=(255, 255, 255), outline=(20, 20, 24), width=3)
+    sub = o.get("follow_sub", "실시간 혜택 알람 받기")
+    d.text((W / 2, py + 156 + 80), sub, font=font(B, 40), fill=(255, 255, 255, 235), anchor="ma")
+    _dotted_mark(canvas, brand, H - 130, color=(255, 214, 0, 255), f=font(EB, 44))
     return canvas.convert("RGB")
 
 
@@ -824,6 +995,10 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
     for i, it in enumerate(post.items, 1):
         if it.type == "deal":
             slides.append(render_deal(post, it, i, total, config))
+        elif it.type == "note":
+            slides.append(render_note(post, it, i, total, config))
+        elif it.type == "photo":  # 직접 넣은 이미지를 그대로 한 장 (공식 이벤트 이미지 등)
+            slides.append(cover_crop(open_img(post.asset(it.image)), (W, H), (0.5, 0.5)).convert("RGB"))
         elif it.type in ("story", "quote"):
             slides.append(render_story(post, it, i, total, config))
         else:
@@ -833,5 +1008,6 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.recommend:
         slides.append(render_recommend(post, len(slides), total, config))
     if post.outro:
-        slides.append(render_outro(post, config))
+        follow = (config.get("outro") or {}).get("style") == "follow"
+        slides.append(render_follow_outro(post, config) if follow else render_outro(post, config))
     return slides

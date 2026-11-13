@@ -78,7 +78,13 @@ channels:
       - 쿠폰
       - 이벤트
     outro:
-      title: "오늘 혜택\n뭐 받지?\n고민 끝"
+      style: follow             # 팔로우 유도 장 (흐린 사진 + 프로필 알약)
+      title: "새로운 혜택"
+      follow_line: "‘혜택알람’ 팔로우하고 빠르게 받아보세요!"
+      follow_sub: "실시간 혜택 알람 받기"
+      logo_text: "혜택알람"      # 프로필 원 안 글자 (프로필 사진과 맞추기)
+      logo_bg: "#3818C9"
+      logo_fg: "#FFFFFF"
       cta: "팔로우하고 혜택 알람 받기"
       save: "저장해두고 날짜마다 꺼내 보기"
       question: "제일 탐나는 혜택은? 댓글로 알려주세요"

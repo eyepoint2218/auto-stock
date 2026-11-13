@@ -126,6 +126,16 @@ git add queue && git commit -m "다음 주 예약" && git push
 - 연결 확인: Actions → "인스타 연결 테스트" (DEALS 토큰이 있으면 같이 확인), 또는 `python -m screendaily check --channel deals`
 - 같은 시간에 두 채널을 예약하면 폴더 이름이 겹치니 `queue/2026-11-15_1900_deals/` 처럼 뒤에 붙이세요 (예약 시간은 post.yml 의 `publish_at` 기준).
 
+## 단일 혜택 캐러셀 (혜택알람)
+혜택 하나를 3장 안팎으로: 표지(사진 + 두 줄) → 메모 카드 → (공식 이미지) → 팔로우 유도
+- 표지: 게시물에 `cover_style: deal`, `title` 두 줄(마지막 줄 노란색), `label` = 왼쪽 위 칩, `subtitle` = 날짜 칩
+- 메모 카드: `type: note` — `year` = 기간(시계 아이콘), `title` = 형광펜 핵심 혜택, `desc` 줄마다 앞글자로 아이콘
+  `!` 주의(경고 삼각형) · `+` 추가 혜택 · `>` 받는 방법(빨간 글씨) · `-` 조건(체크) · 그 외는 일반 줄
+- 공식 이벤트 이미지를 그대로 한 장 넣으려면 `type: photo` + `image:` (저작권 주의)
+- 배경 사진: 메모 카드의 `wiki:` 또는 `image:` (표지·메모·마지막 장이 같은 사진을 씀)
+- 마지막 장은 채널 설정 `outro.style: follow` 이면 프로필 알약 모양 팔로우 유도 장
+- 예시: `drafts/deal_touslesjours_1118/`
+
 ## 3. 릴스(영상)
 - `format: reel` 이면 같은 카드들을 **9:16 영상**으로 만듭니다: 흐린 배경 + 천천히 확대 + 장면 전환.
 - 장당 시간·전환 속도는 `config.yml` 의 `reel:` 에서 조절.
