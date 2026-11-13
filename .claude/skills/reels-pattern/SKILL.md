@@ -45,6 +45,7 @@ description: 잘된 참고 릴스(대본·자막·조회수)를 여러 개 묶�
 - 마지막에 **"공식"을 5줄 이내로** 요약한다: 후킹 → 전개 → 보상 → CTA.
 
 ## 4. 원고 작성
+레포 루트 `CLAUDE.md` 의 **후킹 규칙**을 지키고, post.yml 을 만든 뒤 `python -m screendaily lint` 로 검사한다.
 공식마다 원고 3개를 쓴다. 원고 하나에 들어갈 것:
 - 0~3초 화면 글자 (15자 이내 권장) + 말풍선
 - 장면별 자막 (장면당 3초 기준, config.yml `reel.seconds_per_slide`)

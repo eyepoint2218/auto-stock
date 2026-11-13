@@ -62,6 +62,7 @@ python -m screendaily new 2026-11-17 19:00          # 캐러셀
 python -m screendaily new 2026-11-18 19:00 --reel   # 릴스
 python -m screendaily preview            # queue/*/out 에 미리보기 생성
 python -m screendaily list               # 예약 목록
+python -m screendaily lint               # 후킹 규칙 검사 (CLAUDE.md 참고, 경고만)
 git add queue && git commit -m "다음 주 예약" && git push
 ```
 
