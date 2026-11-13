@@ -18,7 +18,7 @@ def _len(s: str) -> int:
     return len(re.sub(r"\s", "", s or ""))
 
 
-def lint_post(p: Post) -> list[str]:
+def lint_post(p: Post, config: dict | None = None) -> list[str]:
     w: list[str] = []
     if p.images:  # 직접 만든 이미지는 검사하지 않음
         return w
@@ -45,6 +45,13 @@ def lint_post(p: Post) -> list[str]:
         for i, it in enumerate(p.items, 1):
             if _len(it.desc) > 30:
                 w.append(f"items[{i}].desc 자막이 {_len(it.desc)}자예요. 3초 안에 읽히게 30자 이하로 줄이세요.")
+    if config is not None:
+        _, dropped = p.hashtag_split(config)
+        own = {str(t).strip().lstrip("#") for t in p.hashtags}
+        dropped = [t for t in dropped if t in own]  # 기본 해시태그가 밀려나는 건 정상
+        if dropped:
+            w.append(f"해시태그는 최대 {config.get('hashtag_limit', 5)}개라 빠지는 태그: "
+                     + " ".join("#" + t for t in dropped) + " (중요한 태그를 hashtags 앞쪽에)")
     if p.reveal and not p.reveal_text:
         w.append("reveal: true 인데 reveal_text 가 없어요. 마지막 정답 카드로 약속을 지켜 주세요.")
     return w

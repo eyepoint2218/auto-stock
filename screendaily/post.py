@@ -86,17 +86,26 @@ class Post:
             raise FileNotFoundError(f"[{self.name}] 이미지 파일이 없습니다: {rel}")
         return p
 
-    def full_caption(self, config: dict) -> str:
+    def hashtag_split(self, config: dict) -> tuple[list[str], list[str]]:
+        """(붙일 해시태그, 개수 제한으로 빠진 해시태그).
+        게시물 hashtags 를 먼저, 그다음 config 의 default_hashtags. 본문에 직접 쓴 #태그도 개수에 포함."""
+        limit = int(config.get("hashtag_limit", 5))
+        in_body = len(re.findall(r"(?<![\w&])#[^\s#]+", self.caption or ""))
         tags: list[str] = []
         for t in list(self.hashtags) + list(config.get("default_hashtags", [])):
             t = str(t).strip().lstrip("#")
             if t and t not in tags:
                 tags.append(t)
+        n = max(0, limit - in_body)
+        return tags[:n], tags[n:]
+
+    def full_caption(self, config: dict) -> str:
+        tags, _ = self.hashtag_split(config)
         parts = [self.caption.strip()]
         if self.credits:
             parts.append(self.credits.strip())
         if tags:
-            parts.append(" ".join("#" + t for t in tags[:30]))
+            parts.append(" ".join("#" + t for t in tags))
         return "\n\n".join(p for p in parts if p)
 
     def source_hash(self) -> str:

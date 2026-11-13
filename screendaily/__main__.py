@@ -137,7 +137,7 @@ def cmd_lint(a, config):
     for p in list_posts(QUEUE_DIR, config):
         if a.slots and p.name not in a.slots:
             continue
-        for msg in lint_post(p):
+        for msg in lint_post(p, config):
             n += 1
             print(f"::warning file=queue/{p.name}/post.yml::{msg}" if gha else f"[{p.name}] {msg}")
     print(f"후킹 규칙 경고 {n}개" if n else "후킹 규칙: 모두 통과")
