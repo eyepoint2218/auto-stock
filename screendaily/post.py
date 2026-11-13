@@ -68,6 +68,7 @@ class Post:
     reveal_text: str = ""      # 정답 카드의 한 줄 소개
     recommend: list[Item] = field(default_factory=list)  # 정답 뒤 추천작 카드 (최대 4편)
     recommend_title: str = ""  # 추천작 카드 제목
+    layout: str = ""           # letterbox = 위쪽 검은 칸 릴스 (format: reel 전용)
 
     @property
     def name(self) -> str:
@@ -209,6 +210,7 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         reveal_text=str(raw.get("reveal_text", "") or ""),
         recommend=recommend,
         recommend_title=str(raw.get("recommend_title", "") or ""),
+        layout=str(raw.get("layout", "") or "").lower(),
     )
 
     act = sources.get("actor", {})
@@ -224,6 +226,12 @@ def load_post(slot_dir: Path, config: dict) -> Post:
             raise ValueError(f"[{slot_dir.name}] 표지+작품+마지막장이 {slides}장입니다. 최대 10장(작품 최대 8개)")
         if post.format == "carousel" and slides < 2:
             raise ValueError(f"[{slot_dir.name}] 캐러셀은 최소 2장이 필요합니다")
+    if post.layout not in ("", "letterbox"):
+        raise ValueError(f"[{slot_dir.name}] layout 은 letterbox 만 쓸 수 있습니다")
+    if post.layout == "letterbox" and post.format != "reel":
+        raise ValueError(f"[{slot_dir.name}] layout: letterbox 는 format: reel 에서만 쓸 수 있습니다")
+    if post.layout == "letterbox" and not post.items:
+        raise ValueError(f"[{slot_dir.name}] layout: letterbox 는 items(장면)가 필요합니다")
     if post.theme not in ("dark", "light"):
         raise ValueError(f"[{slot_dir.name}] theme 은 dark 또는 light")
     if len(post.full_caption(config)) > 2200:

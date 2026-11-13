@@ -116,6 +116,10 @@ git add queue && git commit -m "다음 주 예약" && git push
 - **배경음악**: API 로 올리는 영상에는 인스타 음악 라이브러리를 붙일 수 없습니다.
   저작권 없는 음원(예: YouTube 오디오 라이브러리)을 `assets/bgm/` 에 넣고 `bgm:` 에 경로를 적으세요.
   음악 없이 올린 뒤, 인기 음원을 쓰고 싶으면 앱에서 직접 올리는 게 낫습니다.
+- **위쪽 검은 칸 릴스** (`layout: letterbox`): 위쪽 검은 칸에 후킹 문구를 영상 내내 고정하고, 가운데 장면, 장면 아래 자막, 작품 제목 순으로 보여 줍니다.
+  - `title` = 후킹 문구 (2줄 이하), `items[].desc` = 장면 자막 (30자 이하), `items[].title` + `year` = 아래 작품 제목
+  - 배우 게시물(`actor:`)은 다른 배우 얼굴 위에 자막이 얹히지 않도록 작품 포스터를 씁니다. 마지막 장은 `cover_image` (없으면 배우 사진) + `outro_question`
+  - 예시: `drafts/letterbox_ohjungse/`
 
 ---
 
