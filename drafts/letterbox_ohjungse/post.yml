@@ -1,6 +1,6 @@
-# 위쪽 검은 칸 릴스 초안 (layout: letterbox). draft: true 라 업로드되지 않습니다.
+# 위쪽 검은 칸 릴스 (layout: letterbox). 11/14(토) 17:00 수동 업로드용. draft: true 라 자동 업로드되지 않습니다.
 # 내용 출처: examples/actor_story_ohjungse (tvN 〈유 퀴즈 온 더 블럭〉 2023, 인터뷰·기사)
-publish_at: "2026-12-31 19:00"
+publish_at: "2026-11-14 17:00"   # 토요일 오후 5시, 수동 업로드 (draft: true 라 자동 업로드 안 됨)
 format: reel
 layout: letterbox
 draft: true
