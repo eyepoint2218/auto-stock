@@ -204,7 +204,9 @@ def _shrink(path: Path, max_side: int):
 
 def commons_license(src: str) -> str:
     """위키미디어 사진의 작가·라이선스 한 줄 (예: 사진 홍길동 · CC BY-SA 3.0)."""
-    name = urllib.parse.unquote(src.split("/")[-1])
+    name = urllib.parse.unquote(urllib.parse.urlparse(src).path.split("/")[-1])
+    if "/thumb/" in src and "px-" in name:  # 썸네일 주소면 원본 파일명만
+        name = name.split("px-", 1)[1]
     try:
         r = _get(WIKI_API, params={"action": "query", "format": "json", "titles": "File:" + name,
                                    "prop": "imageinfo", "iiprop": "extmetadata"})
@@ -355,7 +357,7 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             if not meta:
                 print(f"  ⚠ 위키 이미지 없음: {it['wiki']}")
                 continue
-            if not meta["src"].lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+            if not urllib.parse.urlparse(meta["src"]).path.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
                 print(f"  ⚠ 지원하지 않는 형식: {it['wiki']}")
                 continue
             try:
