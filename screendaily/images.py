@@ -214,7 +214,10 @@ def commons_license(src: str) -> str:
         md = next(iter(r.json()["query"]["pages"].values()))["imageinfo"][0]["extmetadata"]
     except Exception:  # noqa: BLE001
         return ""
-    artist = re.sub(r"<[^>]+>", "", md.get("Artist", {}).get("value", "")).strip()
+    artist = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", md.get("Artist", {}).get("value", ""))).strip()
+    # "This photo was taken by 홍길동 (아이디) ..." 같은 긴 설명은 이름만 남김
+    artist = re.sub(r"^(this )?(photo|picture|image)( was)? (taken|made|created) by ", "", artist, flags=re.I)
+    artist = re.split(r" \(|\. |, ", artist)[0].strip()
     lic = md.get("LicenseShortName", {}).get("value", "")
     return " · ".join(x for x in (f"사진 {artist[:30]}" if artist else "", lic, "Wikimedia Commons") if x)
 
