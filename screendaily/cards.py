@@ -191,7 +191,8 @@ def placeholder_bg(size, accent, theme, seed: int = 0) -> Image.Image:
 # ---------------------------------------------------------------- 표지
 
 def render_cover(post: Post, config: dict) -> Image.Image:
-    theme = THEMES[post.theme]
+    sp = post_splash(post, config)
+    theme = THEMES["dark"] if sp else THEMES[post.theme]
     accent = hex2rgb(config.get("labels", {}).get(post.label, config.get("labels", {}).get("default", "#FF4D4D")))
     brand = config.get("brand", "SCREEN DAILY")
     canvas = Image.new("RGBA", (W, H), theme["bg"] + (255,))
@@ -232,6 +233,8 @@ def render_cover(post: Post, config: dict) -> Image.Image:
         fw = int(fh * im.width / im.height)
         canvas.alpha_composite(im.resize((fw, fh), Image.LANCZOS).convert("RGBA"), ((W - fw) // 2, 150))
         canvas.alpha_composite(vgrad((W, H), theme["bg"], H * 0.45, H * 0.62, 0, 255))
+    elif sp:
+        canvas = splash_bg(sp["splash"], 0)
     else:
         canvas = placeholder_bg((W, H), accent, theme)
 
@@ -261,10 +264,16 @@ def render_cover(post: Post, config: dict) -> Image.Image:
         paste_center(canvas, b, bx, y_label - 30 - b.height // 2)
         d = ImageDraw.Draw(canvas)
 
-    pill(d, M, y_label, post.label, font(EB, 26), accent, (15, 15, 15))
+    if sp:  # 흰 라벨 + 연보라 부제
+        pill(d, M, y_label, post.label, font(EB, 26), (255, 255, 255), hex2rgb(sp.get("accent", "#3818C9")))
+        sub_c = hex2rgb(sp["splash"].get("soft", "#B3A6F2"))
+        sub_c = tuple(min(255, int(c * 0.5 + 255 * 0.5)) for c in sub_c)
+    else:
+        pill(d, M, y_label, post.label, font(EB, 26), accent, (15, 15, 15))
+        sub_c = accent if post.theme == "dark" else theme["sub"]
     draw_lines(d, title_lines, title_f, M, y_title, theme["fg"])
     for i, ln in enumerate(sub_lines):
-        d.text((M, y_sub + i * line_h(sub_f)), ln, font=sub_f, fill=accent if post.theme == "dark" else theme["sub"])
+        d.text((M, y_sub + i * line_h(sub_f)), ln, font=sub_f, fill=sub_c)
 
     footer(canvas, theme, brand)
     return canvas.convert("RGB")
@@ -364,8 +373,15 @@ def render_outro(post: Post, config: dict) -> Image.Image:
     accent = hex2rgb(config.get("labels", {}).get(post.label, "#FF4D4D"))
     brand = config.get("brand", "SCREEN DAILY")
     o = config.get("outro", {})
-    canvas = placeholder_bg((W, H), accent, theme, 3)
-    canvas.alpha_composite(Image.new("RGBA", (W, H), theme["bg"] + (90,)))
+    sp = post_splash(post, config)
+    cta_fg = (15, 15, 15)
+    if sp:  # 흰 버튼 + 진한 글씨
+        theme = THEMES["dark"]
+        canvas = splash_bg(sp["splash"], 1)
+        cta_fg, accent = hex2rgb(sp.get("accent", "#3818C9")), (255, 255, 255)
+    else:
+        canvas = placeholder_bg((W, H), accent, theme, 3)
+        canvas.alpha_composite(Image.new("RGBA", (W, H), theme["bg"] + (90,)))
     d = ImageDraw.Draw(canvas)
 
     d.text((W / 2, 250), brand, font=font(EB, 34), fill=accent, anchor="ma")
@@ -376,7 +392,7 @@ def render_outro(post: Post, config: dict) -> Image.Image:
     cta = o.get("cta", "팔로우하고 매일 추천 받기")
     bw = _tw(cta_f, cta) + 100
     d.rounded_rectangle(((W - bw) / 2, y, (W + bw) / 2, y + 104), radius=52, fill=accent)
-    d.text((W / 2, y + 52), cta, font=cta_f, fill=(15, 15, 15), anchor="mm")
+    d.text((W / 2, y + 52), cta, font=cta_f, fill=cta_fg, anchor="mm")
     y += 140
     d.text((W / 2, y), config.get("handle", ""), font=font(B, 38), fill=theme["fg"], anchor="ma")
     y += 110
@@ -424,6 +440,31 @@ def _ink(rgb) -> tuple[int, int, int]:
     return (15, 15, 15) if (0.299 * r + 0.587 * g + 0.114 * b) > 160 else (255, 255, 255)
 
 
+def splash_bg(sp: dict, seed: int = 0) -> Image.Image:
+    """진한 바탕 + 아래쪽 강한 빛 + 모서리 옅은 빛 (앱 시작 화면 느낌). 장마다 빛 위치를 조금씩 바꿈."""
+    canvas = Image.new("RGBA", (W, H), hex2rgb(sp.get("base", "#3818C9")) + (255,))
+    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    hot, soft = hex2rgb(sp.get("hot", "#FF3E4A")), hex2rgb(sp.get("soft", "#B3A6F2"))
+    dy = ((seed * 37) % 5 - 2) * 0.05
+    if seed % 2 == 0:
+        gd.ellipse((-W * 0.75, H * (0.32 + dy), W * 0.3, H * (1.05 + dy)), fill=hot + (255,))
+        gd.ellipse((W * 0.75, -H * 0.25, W * 1.5, H * 0.2), fill=soft + (200,))
+        gd.ellipse((W * 0.55, H * 0.85, W * 1.5, H * 1.4), fill=soft + (230,))
+    else:  # 좌우 뒤집기
+        gd.ellipse((W * 0.7, H * (0.32 + dy), W * 1.75, H * (1.05 + dy)), fill=hot + (255,))
+        gd.ellipse((-W * 0.5, -H * 0.25, W * 0.25, H * 0.2), fill=soft + (200,))
+        gd.ellipse((-W * 0.5, H * 0.85, W * 0.45, H * 1.4), fill=soft + (230,))
+    canvas.alpha_composite(glow.filter(ImageFilter.GaussianBlur(150)))
+    return canvas
+
+
+def post_splash(post: Post, config: dict) -> dict | None:
+    """캐러셀 전체 색(post.brand)의 brands 설정. splash 가 있을 때만."""
+    b = (config.get("brands") or {}).get(post.brand.upper()) if post.brand else None
+    return b if b and b.get("splash") else None
+
+
 def render_panel_story(post: Post, item: Item, idx: int, total: int, config: dict, bcfg: dict) -> Image.Image:
     """밝은 하늘색 배경 + 진한 남보라 큰 글씨 + 흰 둥근 패널 (멤버십 앱 이벤트 페이지 느낌).
     desc 에서 "18 수 | 뚜레쥬르 · CGV" 처럼 | 가 있는 줄은 달력 줄(왼쪽 날짜, 오른쪽 내용)로 그린다."""
@@ -431,16 +472,7 @@ def render_panel_story(post: Post, item: Item, idx: int, total: int, config: dic
     top, bot = hex2rgb(bcfg.get("bg", "#A8DCF6")), hex2rgb(bcfg.get("bg2", "#E4F4FC"))
     dark, sub = (24, 24, 40), (70, 72, 92)
     if bcfg.get("splash"):
-        # 진한 바탕 + 왼쪽 아래 강한 빛 + 오른쪽 위·아래 옅은 빛 (앱 시작 화면 느낌). 바탕 위 글씨는 흰색
-        sp = bcfg["splash"]
-        canvas = Image.new("RGBA", (W, H), hex2rgb(sp.get("base", "#3818C9")) + (255,))
-        glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-        gd = ImageDraw.Draw(glow)
-        hot, soft = hex2rgb(sp.get("hot", "#FF3E4A")), hex2rgb(sp.get("soft", "#B3A6F2"))
-        gd.ellipse((-W * 0.75, H * 0.32, W * 0.3, H * 1.05), fill=hot + (255,))
-        gd.ellipse((W * 0.75, -H * 0.25, W * 1.5, H * 0.2), fill=soft + (200,))
-        gd.ellipse((W * 0.55, H * 0.85, W * 1.5, H * 1.4), fill=soft + (230,))
-        canvas.alpha_composite(glow.filter(ImageFilter.GaussianBlur(150)))
+        canvas = splash_bg(bcfg["splash"], idx)
         fg = dark = (255, 255, 255)
     else:
         grad = Image.linear_gradient("L").resize((W, H))
@@ -532,6 +564,8 @@ def render_story(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     accent = hex2rgb(config.get("labels", {}).get(post.label, "#FF4D4D"))
     brand = config.get("brand", "SCREEN DAILY")
     bcfg = (config.get("brands") or {}).get(item.brand.upper()) if item.brand else None
+    if not bcfg and post_splash(post, config):  # brand 없는 카드는 캐러셀 전체 색, 이름·머리줄 없이
+        bcfg = dict(post_splash(post, config), name="", panel_title="")
     if bcfg and bcfg.get("style") == "panel" and item.type != "quote":
         return render_panel_story(post, item, idx, total, config, bcfg)
     if bcfg:

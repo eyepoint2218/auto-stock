@@ -38,13 +38,23 @@ brands:
     name: SK텔레콤
     style: panel
     accent: "#3818C9"
-    panel_title: "T 멤버십 혜택"
+    panel_title: "SKT 혜택"
     # splash 를 지우면 밝은 하늘색 배경(bg → bg2)으로 돌아감
     splash: {base: "#3818C9", hot: "#FF3E4A", soft: "#B3A6F2"}
     bg: "#A8DCF6"
     bg2: "#E4F4FC"
-  KT: {name: KT, accent: "#FF2C3A", glow: ["#E60012", "#3A0A0C"]}
-  LGU: {name: LG U+, accent: "#E6007E", glow: ["#E6007E", "#7A1FA2"]}
+  KT:
+    name: KT
+    style: panel
+    accent: "#E60012"
+    panel_title: "KT 혜택"
+    splash: {base: "#17171A", hot: "#E60012", soft: "#5A5A66"}
+  LGU:
+    name: LG U+
+    style: panel
+    accent: "#C4006B"
+    panel_title: "U+ 혜택"
+    splash: {base: "#4A0F6B", hot: "#E6007E", soft: "#B07BE0"}
 
 reel:
   seconds_per_slide: 3.0      # 장당 노출 시간(초)

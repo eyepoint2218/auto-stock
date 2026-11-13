@@ -6,6 +6,7 @@ publish_at: "2026-11-15 19:00"
 format: carousel
 draft: true
 label: TIP
+brand: SKT          # 캐러셀 전체 색 (표지·마지막 장·공통 카드)
 theme: dark
 title: "11월 18일,\n20일, 25일\n알람 맞추세요"
 subtitle: "SKT · KT · U+ 이번 달 남은 할인 날짜만 모았어요"

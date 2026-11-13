@@ -6,6 +6,7 @@ publish_at: "2026-11-21 19:00"
 format: carousel
 draft: true
 label: TIP
+brand: SKT          # 캐러셀 전체 색 (표지·마지막 장·공통 카드)
 theme: dark
 title: "통신사별로\n넷플릭스 싸게\n보는 법 3가지"
 subtitle: "SKT · KT · LG U+ 구독 혜택 한 번에 정리"

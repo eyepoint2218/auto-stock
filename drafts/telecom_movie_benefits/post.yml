@@ -6,6 +6,7 @@ publish_at: "2026-11-28 19:00"
 format: carousel
 draft: true
 label: TIP
+brand: SKT          # 캐러셀 전체 색 (표지·마지막 장·공통 카드)
 theme: dark
 title: "SKT는 CGV,\nKT는 롯데시네마"
 subtitle: "통신사 VIP 영화 무료 예매, 극장이 다 달라요"

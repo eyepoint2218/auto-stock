@@ -65,6 +65,7 @@ class Post:
     actor_image: str = ""      # (자동) 배우 프로필 사진
     actor_name: str = ""       # (자동) TMDB 의 배우 이름
     outro_question: str = ""   # 마지막 장 질문 문구 (비우면 config 기본값)
+    brand: str = ""            # 캐러셀 전체 색 (config.yml brands: 의 splash). 표지·마지막 장·brand 없는 이야기 카드에 적용
     reveal: bool = False       # 배우 맞히기: 이름을 숨기고 마지막에 정답 공개
     reveal_text: str = ""      # 정답 카드의 한 줄 소개
     recommend: list[Item] = field(default_factory=list)  # 정답 뒤 추천작 카드 (최대 4편)
@@ -216,6 +217,7 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         actor=str(raw.get("actor", "") or ""),
         actor_tmdb=str(raw.get("actor_tmdb", "") or ""),
         outro_question=str(raw.get("outro_question", "") or ""),
+        brand=str(raw.get("brand", "") or ""),
         reveal=bool(raw.get("reveal", False)),
         reveal_text=str(raw.get("reveal_text", "") or ""),
         recommend=recommend,
