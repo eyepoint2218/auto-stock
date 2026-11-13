@@ -182,7 +182,8 @@ def cmd_due(a, config):
 
 def cmd_check(a, config):
     from .instagram import Instagram
-    ig = Instagram.from_env()
+    from .post import channel_config
+    ig = Instagram.from_env(channel_config(config, a.channel).get("ig_secret_suffix", "") if a.channel else "")
     info = ig.me()
     print(f"연결 확인: @{info.get('username')} (user_id {info.get('user_id')})")
 
@@ -214,10 +215,15 @@ def cmd_publish_due(a, config):
         print("지금 올릴 게시물이 없습니다.")
         return 0
 
-    ig = None
-    if not a.dry_run:
+    from .post import channel_config
+    accounts: dict = {}
+
+    def account(cfg):  # 채널마다 다른 인스타 계정
         from .instagram import Instagram
-        ig = Instagram.from_env()
+        key = cfg.get("ig_secret_suffix", "")
+        if key not in accounts:
+            accounts[key] = Instagram.from_env(key)
+        return accounts[key]
 
     errors = 0
     for post in due:
@@ -226,13 +232,15 @@ def cmd_publish_due(a, config):
         if len(fails) >= MAX_ATTEMPTS:
             print(f"[{post.name}] {MAX_ATTEMPTS}번 실패해서 건너뜁니다. failures.json 확인 후 삭제하면 다시 시도합니다.")
             continue
-        print(f"[{post.name}] 업로드 시작 ({post.format})")
+        print(f"[{post.name}] 업로드 시작 ({post.format}{', 채널 ' + post.channel if post.channel else ''})")
         try:
             files = generate(post, config)
-            caption = post.full_caption(config)
+            ccfg = channel_config(config, post)
+            caption = post.full_caption(ccfg)
             if a.dry_run:
                 print(f"  (테스트) {len(files)}개 파일, 캡션 {len(caption)}자 — 실제 업로드 안 함")
                 continue
+            ig = account(ccfg)
             existing = ig.find_published(caption)  # 이전 시도·수동 게시로 이미 올라갔으면 중복 게시 안 함
             if existing:
                 print("  이전 시도에서 이미 게시된 것을 확인했습니다 (중복 게시 안 함)")
@@ -306,7 +314,8 @@ def main(argv=None):
     s.add_argument("--no-git", dest="git", action="store_false")
 
     sub.add_parser("due", help="시간이 된 게시물 수")
-    sub.add_parser("check", help="토큰/계정 확인")
+    s = sub.add_parser("check", help="토큰/계정 확인")
+    s.add_argument("--channel", default="", help="다른 채널 계정 확인 (config.yml channels 이름)")
     sub.add_parser("refresh-token", help="토큰 연장")
 
     a = ap.parse_args(argv)

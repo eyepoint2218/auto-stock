@@ -19,6 +19,10 @@ jobs:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           IG_API_HOST: ${{ vars.IG_API_HOST }}
+          IG_ACCESS_TOKEN_DEALS: ${{ secrets.IG_ACCESS_TOKEN_DEALS }}   # 혜택 채널 (config.yml channels.deals)
+          IG_USER_ID_DEALS: ${{ secrets.IG_USER_ID_DEALS }}
+          IG_API_HOST_DEALS: ${{ vars.IG_API_HOST_DEALS }}
         run: |
           python -m screendaily check
+          if [ -n "$IG_ACCESS_TOKEN_DEALS" ]; then python -m screendaily check --channel deals; fi
           python -m screendaily list

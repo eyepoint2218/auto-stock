@@ -120,6 +120,12 @@ git add queue && git commit -m "다음 주 예약" && git push
 - 표지도 같은 모양으로: 게시물에 `cover_style: deal` (제목 마지막 줄이 노란색, `subtitle` 은 날짜 칩)
 - 예시: `drafts/telecom_deals_nov/`
 
+## 채널 여러 개 운영 (스크린데일리 외)
+- `config.yml` 의 `channels:` 에 채널을 추가하고, 게시물에 `channel: deals` 처럼 적으면 그 채널의 이름(`brand`)·아이디(`handle`)·기본 해시태그·마지막 장 문구로 만들어집니다. 안 적으면 스크린데일리.
+- 업로드 계정은 채널마다 다릅니다. GitHub **Secrets** 에 `IG_ACCESS_TOKEN_DEALS`, `IG_USER_ID_DEALS` (통합 로그인 방식이면 **Variables** 에 `IG_API_HOST_DEALS` = `graph.facebook.com`). 이름 끝은 채널의 `ig_secret_suffix`.
+- 연결 확인: Actions → "인스타 연결 테스트" (DEALS 토큰이 있으면 같이 확인), 또는 `python -m screendaily check --channel deals`
+- 같은 시간에 두 채널을 예약하면 폴더 이름이 겹치니 `queue/2026-11-15_1900_deals/` 처럼 뒤에 붙이세요 (예약 시간은 post.yml 의 `publish_at` 기준).
+
 ## 3. 릴스(영상)
 - `format: reel` 이면 같은 카드들을 **9:16 영상**으로 만듭니다: 흐린 배경 + 천천히 확대 + 장면 전환.
 - 장당 시간·전환 속도는 `config.yml` 의 `reel:` 에서 조절.

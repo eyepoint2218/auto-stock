@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 
-from .post import Post
+from .post import Post, channel_config
 
 TITLE_MAX = 20      # 표지 제목 글자 수 (공백·줄바꿈 제외)
 BUBBLE_MAX = 10     # 말풍선 글자 수 (공백 제외)
@@ -20,6 +20,8 @@ def _len(s: str) -> int:
 
 def lint_post(p: Post, config: dict | None = None) -> list[str]:
     w: list[str] = []
+    if config is not None:
+        config = channel_config(config, p)
     if p.images:  # 직접 만든 이미지는 검사하지 않음
         return w
     if _len(p.title) > TITLE_MAX:

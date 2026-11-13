@@ -7,7 +7,7 @@ from pathlib import Path
 from . import ROOT
 from .cards import render_all
 from .letterbox import render_letterbox
-from .post import Post
+from .post import Post, channel_config
 from .reel import build_reel, reel_frame
 
 
@@ -25,6 +25,7 @@ def is_fresh(post: Post) -> bool:
 
 
 def generate(post: Post, config: dict, force: bool = False) -> list[Path]:
+    config = channel_config(config, post)
     if not force and is_fresh(post):
         return outputs(post)
     out = post.out_dir

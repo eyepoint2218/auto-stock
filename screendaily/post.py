@@ -16,6 +16,20 @@ from . import ROOT
 GENERATOR_VERSION = "11"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
 
 
+def channel_config(config: dict, post: "Post | str | None") -> dict:
+    """게시물 채널에 맞춘 설정. channels.<이름> 의 값이 기본값을 덮어씀 (outro·labels 는 항목별로 합침)."""
+    name = post if isinstance(post, str) else (post.channel if post else "")
+    if not name:
+        return config
+    ch = (config.get("channels") or {}).get(name)
+    if ch is None:
+        raise ValueError(f"config.yml channels 에 '{name}' 채널이 없습니다")
+    out = dict(config)
+    for k, v in ch.items():
+        out[k] = {**config.get(k, {}), **v} if isinstance(v, dict) and isinstance(config.get(k), dict) else v
+    return out
+
+
 def load_config() -> dict:
     with open(ROOT / "config.yml", encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
@@ -69,6 +83,7 @@ class Post:
     outro_cta: str = ""        # 마지막 장 버튼 문구
     outro_save: str = ""       # 마지막 장 저장 유도 문구
     cover_style: str = ""      # deal = 표지도 할인 카드처럼 (사진 + 마지막 줄 노란 글씨)
+    channel: str = ""          # 운영 채널 (config.yml channels: 의 이름). 비우면 기본 채널(스크린데일리)
     brand: str = ""            # 캐러셀 전체 색 (config.yml brands: 의 splash). 표지·마지막 장·brand 없는 이야기 카드에 적용
     reveal: bool = False       # 배우 맞히기: 이름을 숨기고 마지막에 정답 공개
     reveal_text: str = ""      # 정답 카드의 한 줄 소개
@@ -226,6 +241,7 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         outro_cta=str(raw.get("outro_cta", "") or ""),
         outro_save=str(raw.get("outro_save", "") or ""),
         brand=str(raw.get("brand", "") or ""),
+        channel=str(raw.get("channel", "") or ""),
         cover_style=str(raw.get("cover_style", "") or ""),
         reveal=bool(raw.get("reveal", False)),
         reveal_text=str(raw.get("reveal_text", "") or ""),

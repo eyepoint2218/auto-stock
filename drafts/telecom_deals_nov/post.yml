@@ -4,6 +4,7 @@
 # 정보 출처: drafts/telecom_tday_nov/post.yml 과 같음. SKT 18일 뚜레쥬르·CGV·럭키찬스 상세는 T 멤버십 앱 T day 화면(2026-11-14 캡처) 기준
 publish_at: "2026-11-15 19:00"
 format: carousel
+channel: deals        # 스크린데일리가 아닌 혜택 채널 (config.yml channels.deals)
 draft: true
 label: 통신사 혜택
 brand: SKT
@@ -12,9 +13,6 @@ theme: dark
 title: "이번 주 통신사\n할인 8개 모음"
 subtitle: "11.16 ~ 11.30"
 bubble: "앱 켜세요"
-outro_title: "오늘 혜택\n뭐 받지?\n고민 끝"
-outro_cta: "팔로우하고 매일 혜택 받기"
-outro_save: "저장해두고 날짜마다 꺼내 보기"
 outro_question: "제일 탐나는 건 몇 번째?"
 items:
   - type: deal

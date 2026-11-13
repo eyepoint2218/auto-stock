@@ -41,8 +41,14 @@ class Instagram:
         return self.host == "graph.facebook.com"
 
     @classmethod
-    def from_env(cls) -> "Instagram":
-        return cls(os.environ.get("IG_ACCESS_TOKEN", "").strip(), os.environ.get("IG_USER_ID", "").strip() or None)
+    def from_env(cls, suffix: str = "") -> "Instagram":
+        """suffix 가 있으면 IG_ACCESS_TOKEN_<SUFFIX> / IG_USER_ID_<SUFFIX> / IG_API_HOST_<SUFFIX> (다른 채널 계정)."""
+        sfx = f"_{suffix.upper()}" if suffix else ""
+        token = os.environ.get("IG_ACCESS_TOKEN" + sfx, "").strip()
+        if suffix and not token:
+            raise InstagramError(f"IG_ACCESS_TOKEN{sfx} 이 설정되지 않았습니다 (GitHub Secrets 확인)")
+        host = os.environ.get("IG_API_HOST" + sfx, "").strip() or None
+        return cls(token, os.environ.get("IG_USER_ID" + sfx, "").strip() or None, host=host)
 
     # ------------------------------------------------------------ 공통
     def _call(self, method: str, path: str, **params) -> dict:
