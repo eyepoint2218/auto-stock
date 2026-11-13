@@ -708,6 +708,102 @@ def render_recommend(post: Post, idx: int, total: int, config: dict) -> Image.Im
     return canvas.convert("RGB")
 
 
+# ---------------------------------------------------------------- 할인 카드 (사진 + 두 줄)
+
+DEAL_YELLOW = (255, 214, 0)
+
+
+def _deal_canvas(post: Post, img_path: str, bcfg: dict | None, seed: int) -> Image.Image:
+    """사진이 있으면 꽉 채우고 아래를 어둡게, 없으면 브랜드 splash 배경."""
+    im = open_img(post.asset(img_path)) if img_path else None
+    if im:
+        canvas = cover_crop(im, (W, H), (0.5, 0.45)).convert("RGBA")
+        canvas.alpha_composite(vgrad((W, H), (0, 0, 0), 0, 260, 120, 0))
+        canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.42, H * 0.86, 0, 235))
+        return canvas
+    if bcfg and bcfg.get("splash"):
+        return splash_bg(bcfg["splash"], seed)
+    return placeholder_bg((W, H), (255, 77, 77), THEMES["dark"], seed)
+
+
+def _deal_text(canvas: Image.Image, lines: list[tuple[str, tuple]], chip: str, chip_c, date: str, config: dict,
+               page: str = ""):
+    """아래쪽에 큰 두 줄(흰색 + 노란색), 위쪽에 통신사·날짜 칩, 맨 아래 작은 워터마크."""
+    d = ImageDraw.Draw(canvas)
+    d.text((W - M, 62), config.get("brand", "SCREEN DAILY"), font=font(EB, 26), fill=(255, 255, 255, 220), anchor="ra")
+    x = M
+    if chip:
+        box = pill(d, x, 52, chip, font(EB, 32), chip_c, _ink(chip_c), pad=(24, 14))
+        x = box[2] + 14
+    if date:
+        f = font(EB, 32)
+        tw = _tw(f, date)
+        d.rounded_rectangle((x, 52, x + tw + 48, 52 + 32 + 28), radius=30, outline=(255, 255, 255), width=3)
+        d.text((x + 24, 52 + 14), date, font=f, fill=(255, 255, 255))
+
+    y = H - 150
+    fonts = []
+    for text, color in lines:
+        f = font(EB, 100)
+        while _tw(f, text) > W - M * 2 and f.size > 56:
+            f = font(EB, f.size - 4)
+        fonts.append(f)
+    total = sum(line_h(f) for f in fonts)
+    y -= total
+    for (text, color), f in zip(lines, fonts):
+        d.text((M, y), text, font=f, fill=color, stroke_width=2, stroke_fill=(0, 0, 0, 90))
+        y += line_h(f)
+    # 워터마크 (가는 선 + 계정)
+    hy = H - 72
+    handle = config.get("handle", "")
+    hf = font(R, 24)
+    hw = _tw(hf, handle)
+    d.line((W / 2 - hw / 2 - 140, hy, W / 2 - hw / 2 - 20, hy), fill=(255, 255, 255, 140), width=2)
+    d.line((W / 2 + hw / 2 + 20, hy, W / 2 + hw / 2 + 140, hy), fill=(255, 255, 255, 140), width=2)
+    d.text((W / 2, hy), handle, font=hf, fill=(255, 255, 255, 190), anchor="mm")
+    if page:
+        d.text((W - M, hy), page, font=font(R, 24), fill=(255, 255, 255, 170), anchor="rm")
+
+
+def _chip_color(bcfg: dict | None) -> tuple[int, int, int]:
+    """통신사 칩 색: 브랜드 색이 바탕색과 비슷해 묻히면 흰색."""
+    if not bcfg:
+        return (255, 255, 255)
+    acc = hex2rgb(bcfg.get("accent", "#FFFFFF"))
+    base = hex2rgb((bcfg.get("splash") or {}).get("base", "#000000"))
+    if sum(abs(a - b) for a, b in zip(acc, base)) < 120:
+        return (255, 255, 255)
+    return acc
+
+
+def render_deal(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
+    """할인 카드: title(흰색) + desc(노란색) 두 줄만 크게. stage = 통신사 칩, year = 날짜 칩."""
+    brands = config.get("brands") or {}
+    bcfg = brands.get(item.brand.upper()) if item.brand else post_splash(post, config)
+    canvas = _deal_canvas(post, item.image, bcfg, idx)
+    chip_c = _chip_color(bcfg)
+    lines = [(item.title, (255, 255, 255))] + ([(item.desc, DEAL_YELLOW)] if item.desc else [])
+    _deal_text(canvas, lines, item.stage, chip_c, item.year, config, f"{idx + 1} / {total}")
+    if item.bubble:
+        b = bubble_layer(item.bubble, size=36, angle=-3)
+        paste_center(canvas, b, W - M - b.width // 2, H * 0.52)
+    return canvas.convert("RGB")
+
+
+def render_deal_cover(post: Post, config: dict) -> Image.Image:
+    """할인 모음 표지: 사진(cover_image 또는 첫 카드 사진) + 제목 줄들, 마지막 줄만 노란색."""
+    bcfg = post_splash(post, config)
+    img = post.cover_image or next((it.image for it in post.items if it.image), "")
+    canvas = _deal_canvas(post, img, bcfg, 0)
+    tl = [t for t in post.title.split("\n") if t.strip()]
+    lines = [(t, (255, 255, 255)) for t in tl[:-1]] + [(tl[-1], DEAL_YELLOW)] if tl else []
+    _deal_text(canvas, lines, post.label, (255, 255, 255), post.subtitle, config)
+    if post.bubble:
+        b = bubble_layer(post.bubble)
+        paste_center(canvas, b, W - M - b.width // 2, H * 0.5)
+    return canvas.convert("RGB")
+
+
 def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.images:
         out = []
@@ -720,9 +816,11 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             out.append(im)
         return out
     total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)
-    slides = [render_cover(post, config)]
+    slides = [render_deal_cover(post, config) if post.cover_style == "deal" else render_cover(post, config)]
     for i, it in enumerate(post.items, 1):
-        if it.type in ("story", "quote"):
+        if it.type == "deal":
+            slides.append(render_deal(post, it, i, total, config))
+        elif it.type in ("story", "quote"):
             slides.append(render_story(post, it, i, total, config))
         else:
             slides.append(render_item(post, it, i, total, config))

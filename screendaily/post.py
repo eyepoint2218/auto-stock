@@ -37,7 +37,7 @@ class Item:
     role: str = ""    # 배우 소개: 배역 이름 (비우면 TMDB 출연 기록에서 자동)
     year: str = ""    # 배우 스토리: 큰 숫자 대신 연도 표시 (예: 1997)
     stage: str = ""   # 배우 스토리: 단계 표시 (예: 데뷔, 첫 주연, 전환점)
-    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음)
+    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음), deal = 사진 + 두 줄 할인 카드
     brand: str = ""   # 이야기 카드 색을 config.yml brands: 의 브랜드 색으로 (예: SKT, KT, LGU)
 
 
@@ -65,6 +65,7 @@ class Post:
     actor_image: str = ""      # (자동) 배우 프로필 사진
     actor_name: str = ""       # (자동) TMDB 의 배우 이름
     outro_question: str = ""   # 마지막 장 질문 문구 (비우면 config 기본값)
+    cover_style: str = ""      # deal = 표지도 할인 카드처럼 (사진 + 마지막 줄 노란 글씨)
     brand: str = ""            # 캐러셀 전체 색 (config.yml brands: 의 splash). 표지·마지막 장·brand 없는 이야기 카드에 적용
     reveal: bool = False       # 배우 맞히기: 이름을 숨기고 마지막에 정답 공개
     reveal_text: str = ""      # 정답 카드의 한 줄 소개
@@ -218,6 +219,7 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         actor_tmdb=str(raw.get("actor_tmdb", "") or ""),
         outro_question=str(raw.get("outro_question", "") or ""),
         brand=str(raw.get("brand", "") or ""),
+        cover_style=str(raw.get("cover_style", "") or ""),
         reveal=bool(raw.get("reveal", False)),
         reveal_text=str(raw.get("reveal_text", "") or ""),
         recommend=recommend,

@@ -37,6 +37,11 @@ def lint_post(p: Post, config: dict | None = None) -> list[str]:
         if val and EMOJI.search(val):
             w.append(f"{name} 에 이모지가 있어요. 카드에서 네모로 깨지니 caption 에만 쓰세요.")
 
+    for i, it in enumerate(p.items, 1):
+        if it.type == "deal":
+            for k in ("title", "desc"):
+                if _len(getattr(it, k)) > 12:
+                    w.append(f"items[{i}].{k} 가 {_len(getattr(it, k))}자예요. 할인 카드는 줄마다 12자 이하로 짧게.")
     if p.format == "reel" and len(p.items) > REEL_ITEMS_MAX:
         w.append(f"릴스 작품이 {len(p.items)}개예요. {REEL_ITEMS_MAX}개 이하면 15~18초 안에 끝나요.")
     if p.layout == "letterbox":

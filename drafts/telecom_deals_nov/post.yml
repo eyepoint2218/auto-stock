@@ -1,0 +1,77 @@
+# 11월 통신사 할인 모음 — 사진 + 두 줄 (텍스트 최소)
+# 사진: 같은 폴더에 넣고 items 의 image: 에 파일명을 적으면 사진이 꽉 찬 카드가 됨 (없으면 통신사 색 배경)
+#   직접 찍은 사진 권장. 다른 매장·브랜드 공식 사진은 저작권 주의.
+# 정보 출처: drafts/telecom_tday_nov/post.yml 과 같음 (2026-11-13 확인, T day 는 앱 캡처 기준)
+publish_at: "2026-11-15 19:00"
+format: carousel
+draft: true
+label: 통신사 혜택
+brand: SKT
+cover_style: deal
+theme: dark
+title: "이번 주 통신사\n할인 7개 모음"
+subtitle: "11.16 ~ 11.30"
+bubble: "앱 켜세요"
+outro_question: "제일 탐나는 건 몇 번째?"
+items:
+  - type: deal
+    title: 맥도날드
+    desc: 3,500원 할인
+    stage: KT
+    brand: KT
+    year: "~11.30"
+    # image: burger.jpg
+  - type: deal
+    title: 파파존스 포장
+    desc: 50% 할인
+    stage: KT
+    brand: KT
+    year: "~11.30"
+    bubble: "아웃백과 택1"
+  - type: deal
+    title: 아웃백
+    desc: 3만 원 할인
+    stage: KT
+    brand: KT
+    year: "~11.30"
+  - type: deal
+    title: CGV 팝콘 세트
+    desc: 무료
+    stage: U+ 유쓰
+    brand: LGU
+    year: "11.20"
+  - type: deal
+    title: 스타벅스·다이소
+    desc: 쿠폰 5일 내내
+    stage: U+
+    brand: LGU
+    year: "11.16~20"
+  - type: deal
+    title: 뚜레쥬르
+    desc: 딱 하루 T day
+    stage: SKT
+    brand: SKT
+    year: "11.18"
+  - type: deal
+    title: 피자헛·파스쿠찌
+    desc: 25일 T day
+    stage: SKT
+    brand: SKT
+    year: "11.25"
+    bubble: "파스쿠찌 VIP"
+caption: |
+  이번 주 통신사 앱 꼭 켜세요 📱
+  11월 남은 통신사 할인만 모았어요.
+
+  1️⃣ 맥도날드 3,500원 할인 (KT 달달혜택, ~11/30, 인기 메뉴 2종 중 1종)
+  2️⃣ 파파존스 방문포장 50% (KT, 아웃백 3만 원 할인과 둘 중 하나)
+  3️⃣ 아웃백 3만 원 할인 (KT)
+  4️⃣ CGV 팝콘M+음료M 세트 무료 (U+ 유쓰 대상, 11/20)
+  5️⃣ 스타벅스·파리바게뜨·다이소 등 쿠폰 (U+ PLUS WEEK, 11/16~20, 제휴사별 1회)
+  6️⃣ 뚜레쥬르·CGV (SKT T day, 11/18)
+  7️⃣ 파스쿠찌(VIP)·피자헛·무신사 (SKT T day, 11/25)
+
+  수량·조건은 각 통신사 앱에서 꼭 확인하세요!
+  저장해두고 날짜마다 꺼내 보기 🔖
+hashtags: [통신사혜택, Tday, 달달혜택, 유플투쁠]
+credits: "정보 출처: T 멤버십·KT 멤버십·U+one 공식 안내와 관련 보도(2026년 11월). 혜택 조건은 통신사 사정에 따라 바뀔 수 있습니다."
