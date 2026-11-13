@@ -67,11 +67,12 @@ reel:
 # 업로드 계정: GitHub Secrets 에 IG_ACCESS_TOKEN_<ig_secret_suffix>, IG_USER_ID_<ig_secret_suffix>
 #   (graph.facebook.com 방식이면 Variables 에 IG_API_HOST_<ig_secret_suffix>)
 channels:
-  deals:                        # 통신사 혜택·할인 정보 채널
-    brand: "DEAL DAILY"         # TODO: 채널 이름 정해지면 변경 (카드 위쪽·마지막 장에 찍힘)
-    handle: "@dealdaily"        # TODO: 실제 인스타 아이디로 변경 (카드 아래 워터마크·마지막 장)
+  deals:                        # 오늘혜택 (@today.hyetaek): 통신사 혜택·할인 정보 채널
+    brand: "오늘혜택"            # 카드 위쪽·마지막 장에 찍히는 이름
+    handle: "@today.hyetaek"    # 카드 아래 워터마크·마지막 장
     ig_secret_suffix: DEALS
     default_hashtags:
+      - 오늘혜택
       - 통신사혜택
       - 할인정보
       - 오늘의혜택
