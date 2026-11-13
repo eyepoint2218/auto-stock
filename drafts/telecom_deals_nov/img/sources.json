@@ -41,6 +41,12 @@
       "image": "img/kettle_corn_f0da38.jpg",
       "page_url": "https://en.wikipedia.org/wiki/Kettle_corn",
       "credit": "사진 msgohan · Public domain · Wikimedia Commons"
+    },
+    "CGV 영화": {
+      "source": "wikipedia",
+      "image": "img/movie_projector_478d6f.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/Movie_projector",
+      "credit": "사진 This photo was taken by Roman  · CC BY-SA 3.0 · Wikimedia Commons"
     }
   }
 }
