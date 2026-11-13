@@ -1,0 +1,22 @@
+{
+  "by_title": {
+    "파파존스 포장": {
+      "source": "wikipedia",
+      "image": "img/pizza_c6586b.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/Pizza",
+      "credit": "사진 igorovsyannykov · CC0 · Wikimedia Commons"
+    },
+    "아웃백": {
+      "source": "wikipedia",
+      "image": "img/steak_e6a0ec.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/Steak",
+      "credit": "사진 Jon Sullivan · Public domain · Wikimedia Commons"
+    },
+    "피자헛·파스쿠찌": {
+      "source": "wikipedia",
+      "image": "img/latte_art_a2a483.jpg",
+      "page_url": "https://en.wikipedia.org/wiki/Latte_art",
+      "credit": "사진 Maxstein5 · CC BY-SA 4.0 · Wikimedia Commons"
+    }
+  }
+}
