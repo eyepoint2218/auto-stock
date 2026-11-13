@@ -11,6 +11,9 @@ theme: dark
 title: "SKT는 CGV,\nKT는 롯데시네마"
 subtitle: "통신사 VIP 영화 무료 예매, 극장이 다 달라요"
 bubble: "몰랐잖아ㅠ"
+outro_title: "오늘 혜택\n뭐 받지?\n고민 끝"
+outro_cta: "팔로우하고 매일 혜택 받기"
+outro_save: "저장해두고 날짜마다 꺼내 보기"
 outro_question: "쓰는 통신사로 영화 몇 번 보셨어요?"
 items:
   - type: story

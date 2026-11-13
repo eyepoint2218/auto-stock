@@ -1,7 +1,7 @@
 # 11월 통신사 할인 모음 — 사진 + 두 줄 (텍스트 최소)
 # 사진: wiki: 의 위키백과 대표 사진(자유 라이선스)을 미리보기 워크플로가 자동으로 받아 꽉 채움. 카드에 작가·라이선스 표시
 #   직접 찍은 사진으로 바꾸려면 같은 폴더에 넣고 image: 파일명 (image 가 항상 우선)
-# 정보 출처: drafts/telecom_tday_nov/post.yml 과 같음 (2026-11-13 확인, T day 는 앱 캡처 기준)
+# 정보 출처: drafts/telecom_tday_nov/post.yml 과 같음. SKT 18일 뚜레쥬르·CGV·럭키찬스 상세는 T 멤버십 앱 T day 화면(2026-11-14 캡처) 기준
 publish_at: "2026-11-15 19:00"
 format: carousel
 draft: true
@@ -9,9 +9,12 @@ label: 통신사 혜택
 brand: SKT
 cover_style: deal
 theme: dark
-title: "이번 주 통신사\n할인 7개 모음"
+title: "이번 주 통신사\n할인 8개 모음"
 subtitle: "11.16 ~ 11.30"
 bubble: "앱 켜세요"
+outro_title: "오늘 혜택\n뭐 받지?\n고민 끝"
+outro_cta: "팔로우하고 매일 혜택 받기"
+outro_save: "저장해두고 날짜마다 꺼내 보기"
 outro_question: "제일 탐나는 건 몇 번째?"
 items:
   - type: deal
@@ -53,10 +56,19 @@ items:
   - type: deal
     title: 뚜레쥬르
     wiki: "Bread"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
-    desc: 딱 하루 T day
+    desc: 30% 할인
     stage: SKT
     brand: SKT
     year: "11.18"
+    bubble: "최대 6천원"
+  - type: deal
+    title: CGV 영화
+    wiki: "Movie theater"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
+    desc: 8,500원 예매
+    stage: SKT
+    brand: SKT
+    year: "11.18"
+    bubble: "22일까지 사용"
   - type: deal
     title: 피자헛·파스쿠찌
     wiki: "Latte art"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
@@ -74,8 +86,11 @@ caption: |
   3️⃣ 아웃백 3만 원 할인 (KT)
   4️⃣ CGV 팝콘M+음료M 세트 무료 (U+ 유쓰 대상, 11/20)
   5️⃣ 스타벅스·파리바게뜨·다이소 등 쿠폰 (U+ PLUS WEEK, 11/16~20, 제휴사별 1회)
-  6️⃣ 뚜레쥬르·CGV (SKT T day, 11/18)
-  7️⃣ 파스쿠찌(VIP)·피자헛·무신사 (SKT T day, 11/25)
+  6️⃣ 뚜레쥬르 1,000원당 300원 할인 또는 300P 적립 (SKT T day, 11/18, 정가 2만 원 한도·최대 6,000원, 클럽 프리미엄은 1,000원당 500원, 키오스크 불가)
+  7️⃣ CGV 영화 8,500원 예매 + 매점 할인 쿠폰 (SKT T day, 11/18 받고 11/22까지 사용, T 멤버십 앱 '무비'에서만, 1일 1회 최대 5장)
+  8️⃣ 파스쿠찌(VIP)·피자헛·무신사 (SKT T day, 11/25)
+
+  🍀 18일 럭키찬스: 다이소 지원금 추첨(1,234명), 포토이즘 2,000원 할인(50,000명)
 
   수량·조건은 각 통신사 앱에서 꼭 확인하세요!
   저장해두고 날짜마다 꺼내 보기 🔖

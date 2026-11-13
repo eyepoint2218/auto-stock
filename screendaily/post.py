@@ -65,6 +65,9 @@ class Post:
     actor_image: str = ""      # (자동) 배우 프로필 사진
     actor_name: str = ""       # (자동) TMDB 의 배우 이름
     outro_question: str = ""   # 마지막 장 질문 문구 (비우면 config 기본값)
+    outro_title: str = ""      # 마지막 장 큰 문구 (비우면 config 기본값 "매일 한 편, 오늘 뭐 볼지 고민 끝")
+    outro_cta: str = ""        # 마지막 장 버튼 문구
+    outro_save: str = ""       # 마지막 장 저장 유도 문구
     cover_style: str = ""      # deal = 표지도 할인 카드처럼 (사진 + 마지막 줄 노란 글씨)
     brand: str = ""            # 캐러셀 전체 색 (config.yml brands: 의 splash). 표지·마지막 장·brand 없는 이야기 카드에 적용
     reveal: bool = False       # 배우 맞히기: 이름을 숨기고 마지막에 정답 공개
@@ -219,6 +222,9 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         actor=str(raw.get("actor", "") or ""),
         actor_tmdb=str(raw.get("actor_tmdb", "") or ""),
         outro_question=str(raw.get("outro_question", "") or ""),
+        outro_title=str(raw.get("outro_title", "") or ""),
+        outro_cta=str(raw.get("outro_cta", "") or ""),
+        outro_save=str(raw.get("outro_save", "") or ""),
         brand=str(raw.get("brand", "") or ""),
         cover_style=str(raw.get("cover_style", "") or ""),
         reveal=bool(raw.get("reveal", False)),

@@ -385,19 +385,20 @@ def render_outro(post: Post, config: dict) -> Image.Image:
     d = ImageDraw.Draw(canvas)
 
     d.text((W / 2, 250), brand, font=font(EB, 34), fill=accent, anchor="ma")
-    tf, tl = fit(o.get("title", "매일 한 편"), EB, W - M * 2, 4, 96, 60)
+    tf, tl = fit(post.outro_title or o.get("title", "매일 한 편"), EB, W - M * 2, 4, 96, 60)
     y = draw_lines(d, tl, tf, 0, 330, theme["fg"], anchor_center=True) + 60
 
     cta_f = font(EB, 40)
-    cta = o.get("cta", "팔로우하고 매일 추천 받기")
+    cta = post.outro_cta or o.get("cta", "팔로우하고 매일 추천 받기")
     bw = _tw(cta_f, cta) + 100
     d.rounded_rectangle(((W - bw) / 2, y, (W + bw) / 2, y + 104), radius=52, fill=accent)
     d.text((W / 2, y + 52), cta, font=cta_f, fill=cta_fg, anchor="mm")
     y += 140
     d.text((W / 2, y), config.get("handle", ""), font=font(B, 38), fill=theme["fg"], anchor="ma")
     y += 110
-    if o.get("save"):
-        d.text((W / 2, y), o["save"], font=font(B, 34), fill=theme["sub"], anchor="ma")
+    save = post.outro_save or o.get("save")
+    if save:
+        d.text((W / 2, y), save, font=font(B, 34), fill=theme["sub"], anchor="ma")
         y += 60
     question = post.outro_question or o.get("question")
     if question:

@@ -30,7 +30,8 @@ def lint_post(p: Post, config: dict | None = None) -> list[str]:
         w.append(f"말풍선이 {_len(p.bubble)}자예요. {BUBBLE_MAX}자 이하, 감정 하나만 담으세요.")
 
     fields = [("title", p.title), ("subtitle", p.subtitle), ("bubble", p.bubble),
-              ("outro_question", p.outro_question), ("reveal_text", p.reveal_text)]
+              ("outro_question", p.outro_question), ("reveal_text", p.reveal_text),
+              ("outro_title", p.outro_title), ("outro_cta", p.outro_cta), ("outro_save", p.outro_save)]
     for i, it in enumerate(p.items, 1):
         fields += [(f"items[{i}].{k}", getattr(it, k)) for k in ("title", "genre", "desc", "bubble", "year", "stage")]
     for name, val in fields:

@@ -82,6 +82,7 @@ git add queue && git commit -m "다음 주 예약" && git push
 | `items[].wiki` | 영문 위키백과 문서 제목 (예: `Squid Game`). 사진을 안 넣으면 대표 이미지(보통 공식 포스터)를 자동으로 가져오고 카드에 출처를 표시 |
 | `images` | 직접 만든 이미지로 올릴 때 (이걸 쓰면 자동 디자인 생략) |
 | `outro` | `false` 면 마지막 팔로우 유도 장 생략 |
+| `outro_title` / `outro_cta` / `outro_save` / `outro_question` | 마지막 장 문구를 게시물마다 바꿀 때 (비우면 `config.yml` 기본값) |
 | `caption` / `hashtags` / `credits` | 본문, 해시태그, 출처. 해시태그는 **최대 5개**: 게시물 `hashtags` 먼저, 남는 자리에 `config.yml` 기본 해시태그 |
 | `draft` | `true` 면 올리지 않음 |
 | `bgm` | 릴스 배경음악 파일 (아래 참고) |
