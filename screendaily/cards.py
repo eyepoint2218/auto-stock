@@ -430,12 +430,26 @@ def render_panel_story(post: Post, item: Item, idx: int, total: int, config: dic
     ink = hex2rgb(bcfg.get("accent", "#3B1FD6"))
     top, bot = hex2rgb(bcfg.get("bg", "#A8DCF6")), hex2rgb(bcfg.get("bg2", "#E4F4FC"))
     dark, sub = (24, 24, 40), (70, 72, 92)
-    grad = Image.linear_gradient("L").resize((W, H))
-    canvas = Image.composite(Image.new("RGBA", (W, H), bot + (255,)), Image.new("RGBA", (W, H), top + (255,)), grad)
+    if bcfg.get("splash"):
+        # 진한 바탕 + 왼쪽 아래 강한 빛 + 오른쪽 위·아래 옅은 빛 (앱 시작 화면 느낌). 바탕 위 글씨는 흰색
+        sp = bcfg["splash"]
+        canvas = Image.new("RGBA", (W, H), hex2rgb(sp.get("base", "#3818C9")) + (255,))
+        glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        gd = ImageDraw.Draw(glow)
+        hot, soft = hex2rgb(sp.get("hot", "#FF3E4A")), hex2rgb(sp.get("soft", "#B3A6F2"))
+        gd.ellipse((-W * 0.75, H * 0.32, W * 0.3, H * 1.05), fill=hot + (255,))
+        gd.ellipse((W * 0.75, -H * 0.25, W * 1.5, H * 0.2), fill=soft + (200,))
+        gd.ellipse((W * 0.55, H * 0.85, W * 1.5, H * 1.4), fill=soft + (230,))
+        canvas.alpha_composite(glow.filter(ImageFilter.GaussianBlur(150)))
+        fg = dark = (255, 255, 255)
+    else:
+        grad = Image.linear_gradient("L").resize((W, H))
+        canvas = Image.composite(Image.new("RGBA", (W, H), bot + (255,)), Image.new("RGBA", (W, H), top + (255,)), grad)
+        fg = ink
     hd = ImageDraw.Draw(canvas)
     brand = config.get("brand", "SCREEN DAILY")
-    hd.text((M, 60), brand, font=font(EB, 28), fill=ink)
-    hd.text((W - M, 64), bcfg.get("name", item.brand), font=font(EB, 28), fill=ink, anchor="ra")
+    hd.text((M, 60), brand, font=font(EB, 28), fill=fg)
+    hd.text((W - M, 64), bcfg.get("name", item.brand), font=font(EB, 28), fill=fg, anchor="ra")
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))  # 내용은 따로 그린 뒤 세로 가운데로 옮김
     d = ImageDraw.Draw(layer)
 
@@ -444,7 +458,7 @@ def render_panel_story(post: Post, item: Item, idx: int, total: int, config: dic
         yf = font(EB, 200)
         while _tw(yf, item.year) > W - M * 2 and yf.size > 120:
             yf = font(EB, yf.size - 10)
-        d.text((M - 6, y - 30), item.year, font=yf, fill=ink)
+        d.text((M - 6, y - 30), item.year, font=yf, fill=fg)
         y += int(yf.size * 1.0)
     if item.stage:  # 테두리만 있는 알약 라벨
         sf_ = font(EB, 32)
@@ -455,6 +469,7 @@ def render_panel_story(post: Post, item: Item, idx: int, total: int, config: dic
         y = box[3] + 34
     hf, hl = fit(item.title, EB, W - M * 2, 3, 76, 56)
     y = draw_lines(d, hl, hf, M, y, dark) + 36
+    dark = (24, 24, 40)  # 여기부터는 흰 패널 안 글씨
 
     rows, notes = [], []
     for ln in (item.desc or "").split("\n"):
@@ -505,9 +520,9 @@ def render_panel_story(post: Post, item: Item, idx: int, total: int, config: dic
     if item.bubble:
         b = bubble_layer(item.bubble, size=34, angle=2.5)
         paste_center(canvas, b, W - M - b.width // 2 + 10, panel[1] - 10)
-    d.line((M, H - 96, W - M, H - 96), fill=ink + (110,), width=2)
-    d.text((W / 2, H - 70), brand, font=font(B, 26), fill=ink, anchor="ma")
-    d.text((W - M, H - 70), f"{idx + 1} / {total}", font=font(R, 26), fill=ink, anchor="ra")
+    d.line((M, H - 96, W - M, H - 96), fill=fg + (110,), width=2)
+    d.text((W / 2, H - 70), brand, font=font(B, 26), fill=fg, anchor="ma")
+    d.text((W - M, H - 70), f"{idx + 1} / {total}", font=font(R, 26), fill=fg, anchor="ra")
     return canvas.convert("RGB")
 
 
