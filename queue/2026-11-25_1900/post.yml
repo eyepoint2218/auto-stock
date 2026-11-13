@@ -2,9 +2,11 @@ publish_at: "2026-11-25 19:00"
 format: carousel
 label: MOOD
 theme: dark
-title: "잠 안 오는 밤,\n손에 땀 쥐는 영화"
+title: "새벽 2시에
+틀면 안 되는
+영화 4편"
 subtitle: "끝날 때까지 긴장 못 놓는 넷플릭스 영화 4편"
-bubble: "새벽 2시 각"
+bubble: "잠 다 깸"
 items:
   - title: 콜
     ott: 넷플릭스

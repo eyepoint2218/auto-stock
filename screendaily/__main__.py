@@ -2,6 +2,7 @@
   python -m screendaily new 2026-11-17 19:00 [--reel]   # 예약 게시물 폴더 만들기
   python -m screendaily preview [폴더명 ...]             # 미리보기 이미지/영상 생성 (queue/*/out)
   python -m screendaily list                            # 예약 목록
+  python -m screendaily lint [폴더명 ...]                # 후킹 규칙 검사 (경고만)
   python -m screendaily publish-due [--dry-run] [--no-git]  # 시간이 된 게시물 업로드
   python -m screendaily check                           # 토큰/계정 확인
   python -m screendaily refresh-token                   # 토큰 60일 연장
@@ -126,6 +127,20 @@ def cmd_list(a, config):
     for p in list_posts(QUEUE_DIR, config):
         state = "초안" if p.draft else ("업로드 대기(시간 지남)" if p.publish_at <= now else "예약됨")
         print(f"{p.publish_at:%Y-%m-%d %H:%M}  {p.format:8s}  [{state}]  {p.name}  {p.title.splitlines()[0]}")
+
+
+def cmd_lint(a, config):
+    """후킹 규칙 검사 (경고만, 업로드는 막지 않음)."""
+    from .lint import lint_post
+    gha = bool(os.environ.get("GITHUB_ACTIONS"))
+    n = 0
+    for p in list_posts(QUEUE_DIR, config):
+        if a.slots and p.name not in a.slots:
+            continue
+        for msg in lint_post(p):
+            n += 1
+            print(f"::warning file=queue/{p.name}/post.yml::{msg}" if gha else f"[{p.name}] {msg}")
+    print(f"후킹 규칙 경고 {n}개" if n else "후킹 규칙: 모두 통과")
 
 
 def cmd_fetch_images(a, config):
@@ -272,6 +287,9 @@ def main(argv=None):
 
     sub.add_parser("list", help="예약 목록")
 
+    s = sub.add_parser("lint", help="후킹 규칙 검사 (경고만)")
+    s.add_argument("slots", nargs="*")
+
     s = sub.add_parser("fetch-images", help="wiki 항목의 작품 이미지 내려받기")
     s.add_argument("slots", nargs="*")
 
@@ -292,7 +310,7 @@ def main(argv=None):
     config = load_config()
     handler = {
         "new": cmd_new, "list": cmd_list, "due": cmd_due, "preview": cmd_preview, "check": cmd_check,
-        "refresh-token": cmd_refresh, "fetch-images": cmd_fetch_images, "publish-due": cmd_publish_due,
+        "refresh-token": cmd_refresh, "fetch-images": cmd_fetch_images, "lint": cmd_lint, "publish-due": cmd_publish_due,
     }[a.cmd]
     sys.exit(handler(a, config) or 0)
 
