@@ -27,6 +27,7 @@ labels:
   HIDDEN: "#8B6CFF"
   ISSUE: "#36C5F0"
   ACTOR: "#FF6FA8"
+  TIP: "#2EC4A0"
   default: "#FF4D4D"
 
 reel:
