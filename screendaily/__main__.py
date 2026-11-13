@@ -21,7 +21,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 
-from . import PUBLISHED_DIR, QUEUE_DIR, ROOT
+from . import DRAFTS_DIR, PUBLISHED_DIR, QUEUE_DIR, ROOT
 from .generate import generate
 from .post import list_posts, load_config
 
@@ -70,8 +70,8 @@ def git(*args: str, check=True) -> str:
 
 
 def git_commit_push(message: str) -> str:
-    git("add", "-A", "queue", "published")
-    if git("status", "--porcelain", "queue", "published"):
+    git("add", "-A", "queue", "published", "drafts")
+    if git("status", "--porcelain", "queue", "published", "drafts"):
         git("commit", "-m", message)
     for attempt in range(4):
         try:
@@ -146,7 +146,8 @@ def cmd_lint(a, config):
 def cmd_fetch_images(a, config):
     from .images import fetch_for_post
     total = 0
-    for d in sorted(x for x in QUEUE_DIR.iterdir() if (x / "post.yml").exists()):
+    base = DRAFTS_DIR if getattr(a, "drafts", False) else QUEUE_DIR
+    for d in sorted(x for x in base.iterdir() if (x / "post.yml").exists()):
         if a.slots and d.name not in a.slots:
             continue
         print(f"[{d.name}]")
@@ -155,7 +156,7 @@ def cmd_fetch_images(a, config):
 
 
 def cmd_preview(a, config):
-    posts = list_posts(QUEUE_DIR, config)
+    posts = list_posts(DRAFTS_DIR if a.drafts else QUEUE_DIR, config)
     if a.slots:
         posts = [p for p in posts if p.name in a.slots]
     changed = False
@@ -292,11 +293,13 @@ def main(argv=None):
 
     s = sub.add_parser("fetch-images", help="wiki 항목의 작품 이미지 내려받기")
     s.add_argument("slots", nargs="*")
+    s.add_argument("--drafts", action="store_true", help="queue 대신 drafts 폴더")
 
     s = sub.add_parser("preview", help="미리보기 생성")
     s.add_argument("slots", nargs="*")
     s.add_argument("--force", action="store_true")
     s.add_argument("--commit", action="store_true", help="생성 결과를 커밋/푸시")
+    s.add_argument("--drafts", action="store_true", help="queue 대신 drafts 폴더")
 
     s = sub.add_parser("publish-due", help="시간이 된 게시물 업로드")
     s.add_argument("--dry-run", action="store_true")

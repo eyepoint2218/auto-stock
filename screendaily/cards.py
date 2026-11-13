@@ -784,6 +784,9 @@ def render_deal(post: Post, item: Item, idx: int, total: int, config: dict) -> I
     chip_c = _chip_color(bcfg)
     lines = [(item.title, (255, 255, 255))] + ([(item.desc, DEAL_YELLOW)] if item.desc else [])
     _deal_text(canvas, lines, item.stage, chip_c, item.year, config, f"{idx + 1} / {total}")
+    if item.image and item.credit:  # 사진 출처 (오른쪽 위, 작게)
+        ImageDraw.Draw(canvas).text((W - M, 100), item.credit, font=font(R, 20), fill=(255, 255, 255, 200),
+                                    anchor="ra", stroke_width=2, stroke_fill=(0, 0, 0, 120))
     if item.bubble:
         b = bubble_layer(item.bubble, size=36, angle=-3)
         paste_center(canvas, b, W - M - b.width // 2, H * 0.52)

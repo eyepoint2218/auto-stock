@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - "queue/**"
+      - "drafts/*/post.yml"
       - "config.yml"
       - "screendaily/**"
       - "assets/**"
@@ -45,3 +46,5 @@ jobs:
           python -m screendaily lint
           python -m screendaily fetch-images || echo "::warning::이미지 가져오기 일부 실패"
           python -m screendaily preview --commit
+          python -m screendaily fetch-images --drafts || echo "::warning::초안 이미지 가져오기 일부 실패"
+          python -m screendaily preview --drafts --commit

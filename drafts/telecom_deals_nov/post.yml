@@ -1,6 +1,6 @@
 # 11월 통신사 할인 모음 — 사진 + 두 줄 (텍스트 최소)
-# 사진: 같은 폴더에 넣고 items 의 image: 에 파일명을 적으면 사진이 꽉 찬 카드가 됨 (없으면 통신사 색 배경)
-#   직접 찍은 사진 권장. 다른 매장·브랜드 공식 사진은 저작권 주의.
+# 사진: wiki: 의 위키백과 대표 사진(자유 라이선스)을 미리보기 워크플로가 자동으로 받아 꽉 채움. 카드에 작가·라이선스 표시
+#   직접 찍은 사진으로 바꾸려면 같은 폴더에 넣고 image: 파일명 (image 가 항상 우선)
 # 정보 출처: drafts/telecom_tday_nov/post.yml 과 같음 (2026-11-13 확인, T day 는 앱 캡처 기준)
 publish_at: "2026-11-15 19:00"
 format: carousel
@@ -16,13 +16,14 @@ outro_question: "제일 탐나는 건 몇 번째?"
 items:
   - type: deal
     title: 맥도날드
+    wiki: "Hamburger"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 3,500원 할인
     stage: KT
     brand: KT
     year: "~11.30"
-    # image: burger.jpg
   - type: deal
     title: 파파존스 포장
+    wiki: "Pizza"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 50% 할인
     stage: KT
     brand: KT
@@ -30,30 +31,35 @@ items:
     bubble: "아웃백과 택1"
   - type: deal
     title: 아웃백
+    wiki: "Steak"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 3만 원 할인
     stage: KT
     brand: KT
     year: "~11.30"
   - type: deal
     title: CGV 팝콘 세트
+    wiki: "Popcorn"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 무료
     stage: U+ 유쓰
     brand: LGU
     year: "11.20"
   - type: deal
     title: 스타벅스·다이소
+    wiki: "Iced coffee"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 쿠폰 5일 내내
     stage: U+
     brand: LGU
     year: "11.16~20"
   - type: deal
     title: 뚜레쥬르
+    wiki: "Bread"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 딱 하루 T day
     stage: SKT
     brand: SKT
     year: "11.18"
   - type: deal
     title: 피자헛·파스쿠찌
+    wiki: "Latte art"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 25일 T day
     stage: SKT
     brand: SKT
@@ -74,4 +80,4 @@ caption: |
   수량·조건은 각 통신사 앱에서 꼭 확인하세요!
   저장해두고 날짜마다 꺼내 보기 🔖
 hashtags: [통신사혜택, Tday, 달달혜택, 유플투쁠]
-credits: "정보 출처: T 멤버십·KT 멤버십·U+one 공식 안내와 관련 보도(2026년 11월). 혜택 조건은 통신사 사정에 따라 바뀔 수 있습니다."
+credits: "사진: Wikimedia Commons (각 카드에 작가·라이선스 표기). 정보 출처: T 멤버십·KT 멤버십·U+one 공식 안내와 관련 보도(2026년 11월). 혜택 조건은 통신사 사정에 따라 바뀔 수 있습니다."

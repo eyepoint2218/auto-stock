@@ -192,6 +192,30 @@ def wiki_lookup(titles: list[str]) -> dict[str, dict]:
     return out
 
 
+def _shrink(path: Path, max_side: int):
+    from PIL import Image
+    with Image.open(path) as im:
+        if max(im.size) <= max_side:
+            return
+        im = im.convert("RGB")
+        im.thumbnail((max_side, max_side))
+        im.save(path, quality=88)
+
+
+def commons_license(src: str) -> str:
+    """위키미디어 사진의 작가·라이선스 한 줄 (예: 사진 홍길동 · CC BY-SA 3.0)."""
+    name = urllib.parse.unquote(src.split("/")[-1])
+    try:
+        r = _get(WIKI_API, params={"action": "query", "format": "json", "titles": "File:" + name,
+                                   "prop": "imageinfo", "iiprop": "extmetadata"})
+        md = next(iter(r.json()["query"]["pages"].values()))["imageinfo"][0]["extmetadata"]
+    except Exception:  # noqa: BLE001
+        return ""
+    artist = re.sub(r"<[^>]+>", "", md.get("Artist", {}).get("value", "")).strip()
+    lic = md.get("LicenseShortName", {}).get("value", "")
+    return " · ".join(x for x in (f"사진 {artist[:30]}" if artist else "", lic, "Wikimedia Commons") if x)
+
+
 # ------------------------------------------------------------------ 게시물 단위
 
 def load_sources(slot_dir: Path) -> dict:
@@ -249,7 +273,7 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
     for it in items:
         title = str(it["title"])
         if it.get("image") or not tmdb or str(it.get("tmdb") or "").lower() == "none" \
-                or str(it.get("type") or "") in ("story", "quote"):
+                or str(it.get("type") or "") in ("story", "quote", "deal"):
             continue
         cur = by_title.get(title, {})
         override = str(it.get("tmdb") or "")
@@ -296,7 +320,7 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             spare = [p for p in profiles[1:]]  # 첫 번째는 표지에 사용
             for it in items:
                 title = str(it["title"])
-                if it.get("image") or str(it.get("type") or "") in ("story", "quote"):
+                if it.get("image") or str(it.get("type") or "") in ("story", "quote", "deal"):
                     continue
                 e = by_title.get(title)
                 if e and e.get("tmdb") in tagged:
@@ -339,7 +363,14 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             except Exception as e:  # noqa: BLE001
                 print(f"  ⚠ 위키 이미지 다운로드 실패: {it['wiki']}: {e}")
                 continue
-            by_title[str(it["title"])] = {"source": "wikipedia", "image": rel, "page_url": meta["page_url"]}
+            entry = {"source": "wikipedia", "image": rel, "page_url": meta["page_url"]}
+            if str(it.get("type") or "") == "deal":
+                # 할인 카드용 일반 사진: 크기 줄이고, 사진 작가·라이선스를 카드에 표시
+                _shrink(slot_dir / rel, 1600)
+                lic = commons_license(meta["src"])
+                if lic:
+                    entry["credit"] = lic
+            by_title[str(it["title"])] = entry
             print(f"  ✓ 위키 {it['title']} → {rel}")
             time.sleep(1)
 

@@ -114,6 +114,8 @@ git add queue && git commit -m "다음 주 예약" && git push
 ## 할인 정보 카드 (사진 + 두 줄)
 - 작품 대신 할인 정보를 올릴 때: `items` 에 `type: deal` 을 적고 `title`(흰 글씨, 브랜드) + `desc`(노란 글씨, 혜택) 두 줄만 씁니다. 줄마다 12자 이하 권장 (lint 경고).
 - `stage` = 왼쪽 위 칩 (예: KT), `year` = 날짜 칩 (예: ~11.30), `brand` = 칩·배경 색, `image` = 꽉 채울 사진 (없으면 통신사 색 배경)
+- `wiki: Hamburger` 처럼 영문 위키백과 문서를 적으면 미리보기 워크플로가 대표 사진(자유 라이선스)을 받아 꽉 채우고, 카드에 작가·라이선스를 표시합니다. 할인 카드는 TMDB 검색을 하지 않습니다.
+- 미리보기 워크플로는 `drafts/*/post.yml` 이 바뀌어도 돌아서 초안 사진·미리보기도 자동으로 만듭니다.
 - 표지도 같은 모양으로: 게시물에 `cover_style: deal` (제목 마지막 줄이 노란색, `subtitle` 은 날짜 칩)
 - 예시: `drafts/telecom_deals_nov/`
 

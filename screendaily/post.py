@@ -194,7 +194,8 @@ def load_post(slot_dir: Path, config: dict) -> Post:
             item.poster = auto.get("poster", "")
             item.layout = auto.get("layout", "")
             if not item.credit:
-                item.credit = f"이미지 © {item.ott or '제작사'} · via {via.get(auto.get('source'), '웹')}"
+                item.credit = auto.get("credit") or \
+                    f"이미지 © {item.ott or '제작사'} · via {via.get(auto.get('source'), '웹')}"
         items.append(item)
 
     post = Post(

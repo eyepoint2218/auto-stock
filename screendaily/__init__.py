@@ -4,4 +4,5 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 QUEUE_DIR = ROOT / "queue"
 PUBLISHED_DIR = ROOT / "published"
+DRAFTS_DIR = ROOT / "drafts"
 FONT_DIR = ROOT / "assets" / "fonts"
