@@ -45,7 +45,7 @@ items:
     year: "11.20"
   - type: deal
     title: 스타벅스·다이소
-    wiki: "Iced coffee"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
+    wiki: "Coffee"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 쿠폰 5일 내내
     stage: U+
     brand: LGU

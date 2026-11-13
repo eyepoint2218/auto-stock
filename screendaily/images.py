@@ -173,7 +173,7 @@ def wiki_lookup(titles: list[str]) -> dict[str, dict]:
         return {}
     r = _get(WIKI_API, params={
         "action": "query", "format": "json", "redirects": 1, "prop": "pageimages",
-        "piprop": "original|name", "pilicense": "any", "titles": "|".join(titles),
+        "piprop": "original|thumbnail|name", "pithumbsize": 1280, "pilicense": "any", "titles": "|".join(titles),
     })
     q = r.json().get("query", {})
     redir = {x["from"]: x["to"] for x in q.get("redirects", []) + q.get("normalized", [])}
@@ -188,6 +188,7 @@ def wiki_lookup(titles: list[str]) -> dict[str, dict]:
             out[t] = {
                 "page_url": "https://en.wikipedia.org/wiki/" + urllib.parse.quote(p["title"].replace(" ", "_")),
                 "src": p["original"]["source"],
+                "thumb": (p.get("thumbnail") or {}).get("source", ""),
             }
     return out
 
@@ -360,8 +361,9 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             if not urllib.parse.urlparse(meta["src"]).path.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
                 print(f"  ⚠ 지원하지 않는 형식: {it['wiki']}")
                 continue
-            try:
-                rel = save(meta["src"], slug(str(it["wiki"])))
+            is_deal = str(it.get("type") or "") == "deal"
+            try:  # 할인 카드는 1280px 썸네일 (원본은 수 MB 라 위키미디어가 자주 거절함)
+                rel = save(meta.get("thumb") or meta["src"] if is_deal else meta["src"], slug(str(it["wiki"])))
             except Exception as e:  # noqa: BLE001
                 print(f"  ⚠ 위키 이미지 다운로드 실패: {it['wiki']}: {e}")
                 continue
