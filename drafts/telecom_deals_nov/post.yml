@@ -63,7 +63,7 @@ items:
     bubble: "최대 6천원"
   - type: deal
     title: CGV 영화
-    wiki: "Movie theater"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
+    wiki: "Movie projector"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 8,500원 예매
     stage: SKT
     brand: SKT
