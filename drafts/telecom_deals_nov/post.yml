@@ -38,7 +38,7 @@ items:
     year: "~11.30"
   - type: deal
     title: CGV 팝콘 세트
-    wiki: "Popcorn"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
+    wiki: "Kettle corn"        # 사진: 영문 위키백과 대표 사진 (브랜드 없는 일반 사진)
     desc: 무료
     stage: U+ 유쓰
     brand: LGU
