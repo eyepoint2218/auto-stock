@@ -1079,16 +1079,19 @@ def render_photo_cover(post: Post, config: dict) -> Image.Image:
     if not (config.get("alarm") or {}).get("hide_page"):
         d.text((W - M, 64), f"{1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 210), anchor="ra",
            stroke_width=2, stroke_fill=(0, 0, 0, 80))
-    lines = [t for t in post.title.split("\n") if t.strip()][:2]
-    brand_line, benefit = (lines[0], lines[1]) if len(lines) > 1 else ("", lines[0] if lines else "")
-    bf = font(EB, 150)
-    while _tw(bf, benefit) > W - 2 * M and bf.size > 70:
+    lines = [t for t in post.title.split("\n") if t.strip()][:3]
+    # 첫 줄 브랜드(흰색), 나머지 1~2줄 혜택(강조색, 가장 크게). 혜택 줄들은 같은 크기로 맞춤
+    brand_line, benefits = (lines[0], lines[1:]) if len(lines) > 1 else ("", lines or [""])
+    bf = font(EB, 150 if len(benefits) == 1 else 132)
+    while max(_tw(bf, b) for b in benefits) > W - 2 * M and bf.size > 70:
         bf = font(EB, bf.size - 4)
-    nf = font(EB, 104)
+    nf = font(EB, 104 if len(benefits) == 1 else 92)
     while _tw(nf, brand_line) > W - 2 * M and nf.size > 56:
         nf = font(EB, nf.size - 4)
-    y = H - 120 - line_h(bf)
-    _shadow_text(canvas, (M - 4, y), benefit, bf, c["hl"])
+    lh = line_h(bf) - (8 if len(benefits) > 1 else 0)
+    y = H - 120 - line_h(bf) - lh * (len(benefits) - 1)
+    for i, b in enumerate(benefits):
+        _shadow_text(canvas, (M - 4, y + lh * i), b, bf, c["hl"])
     if brand_line:
         _shadow_text(canvas, (M, y - line_h(nf) + 6), brand_line, nf, (255, 255, 255))
     credit = post.cover_credit or _post_credit(post)
