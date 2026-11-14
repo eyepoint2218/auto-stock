@@ -1095,16 +1095,16 @@ def render_photo_cover(post: Post, config: dict) -> Image.Image:
     lines = [t.strip() for t in post.title.split("\n") if t.strip()][:3]
     head, benefits = (lines[0], lines[1:]) if len(lines) > 1 else ("", lines or [""])
     maxw = W - 2 * M
-    # 핵심 혜택 105~140px (가장 크게), 첫 줄 85~110px — 넘치면 줄이되 잘리지 않게
-    bsize = 140
+    # 핵심 혜택 최대 170px (가장 크게), 첫 줄 최대 130px — 넘치면 줄이되 잘리지 않게
+    bsize = 170
     while max(_tracked_w(font(PT_BLACK, bsize), b) for b in benefits) > maxw and bsize > 72:
         bsize -= 2
-    hsize = min(110, max(85, int(bsize * 0.8)))
+    hsize = min(130, max(90, int(bsize * 0.78)))
     while head and _tracked_w(font(PT_BLACK, hsize), head) > maxw and hsize > 56:
         hsize -= 2
     bf, hf = font(PT_BLACK, bsize), font(PT_BLACK, hsize)
     bl, hl = int(bsize * 1.08), int(hsize * 1.12)   # 줄 간격
-    bottom = H - 110
+    bottom = H - 95
     y0 = bottom - bl * len(benefits) - (hl if head else 0)
     # 텍스트 뒤에만 어두운 그라데이션 (텍스트 블록 위 200px 부터 아래로 진하게)
     canvas.alpha_composite(vgrad((W, H), (0, 0, 0), max(0, y0 - 220), H, 0, 190))

@@ -26,7 +26,7 @@ CLAUDE.md 의 혜택알람 규칙을 모두 지킨다. 아래는 그 순서다.
 2. `img/cand_*` 를 직접 보고 고른다: **사람 얼굴 없음**, 혜택과 직접 관련, 다른 할인율·가격 문구가 크게 없는 사진, 가로 600px 이상.
    맞는 게 없으면 다른 기사로 `cover_url` 을 바꿔 다시. 그래도 없으면 `cover_wiki`(사람 없는 대표 사진)로.
 3. 고른 파일을 `img/cover.jpg` 로 복사하고 `cover_image: img/cover.jpg`, 필요하면 `cover_focus`, `cover_url`·`cover_candidates` 줄 삭제, 나머지 cand 파일 삭제.
-4. `python -m screendaily preview` 로 01·02 장을 직접 보고 글자 겹침·잘림, 글자가 로고·상품을 가리지 않는지(가리면 `cover_focus` 조정), 썸네일 크기 가독성을 확인.
+4. `python -m screendaily preview` 로 01·02 장을 직접 보고 글자 겹침·잘림, 썸네일 크기 가독성을 확인 (글자가 로고·상품을 일부 가리는 건 괜찮음).
 5. `draft: false` 로 바꿔 커밋·푸시 (12:30 전까지). 늦어지면 `publish_at` 을 늦춰도 된다.
 
 ## 4. 로그
