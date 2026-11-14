@@ -1,0 +1,18 @@
+{
+  "by_title": {},
+  "cover_candidates": {
+    "page_url": "https://www.kfenews.co.kr/news/articleView.html?idxno=667057",
+    "files": [
+      {
+        "image": "img/cand_01.jpg",
+        "src": "https://cdn.kfenews.co.kr/news/photo/202610/667057_140436_540.jpg"
+      }
+    ]
+  },
+  "cover": {
+    "key": "https://www.kfenews.co.kr/news/articleView.html?idxno=667057",
+    "page_url": "https://www.kfenews.co.kr/news/articleView.html?idxno=667057",
+    "image": "img/cover_web.jpg",
+    "src": "https://cdn.kfenews.co.kr/news/thumbnail/202610/667057_140436_540_v150.jpg"
+  }
+}

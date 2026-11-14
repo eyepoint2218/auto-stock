@@ -1,0 +1,18 @@
+{
+  "by_title": {},
+  "cover_candidates": {
+    "page_url": "https://www.insightkorea.co.kr/news/articleView.html?idxno=257338",
+    "files": [
+      {
+        "image": "img/cand_01.jpg",
+        "src": "https://cdn.insightkorea.co.kr/news/photo/202610/257338_269845_3941.jpg"
+      }
+    ]
+  },
+  "cover": {
+    "key": "https://www.insightkorea.co.kr/news/articleView.html?idxno=257338",
+    "page_url": "https://www.insightkorea.co.kr/news/articleView.html?idxno=257338",
+    "image": "img/cover_web.jpg",
+    "src": "https://cdn.insightkorea.co.kr/news/thumbnail/202610/257338_269845_3941_v150.jpg"
+  }
+}

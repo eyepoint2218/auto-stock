@@ -1,0 +1,34 @@
+{
+  "by_title": {},
+  "cover_candidates": {
+    "page_url": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5078092",
+    "files": [
+      {
+        "image": "img/cand_01.jpg",
+        "src": "https://cdn.shinailbo.co.kr/news/photo/202610/5078092_2075607_1656.jpg"
+      },
+      {
+        "image": "img/cand_03.png",
+        "src": "https://cdn.shinailbo.co.kr/news/photo/202611/5083116_2080619_4920.png"
+      },
+      {
+        "image": "img/cand_04.jpg",
+        "src": "https://cdn.shinailbo.co.kr/news/thumbnail/custom/20261114/5082081_2079574_3423_1794360864_120.jpg"
+      },
+      {
+        "image": "img/cand_05.jpg",
+        "src": "https://cdn.shinailbo.co.kr/news/thumbnail/custom/20261114/5081784_2079301_3836_1794289117_120.jpg"
+      },
+      {
+        "image": "img/cand_14.jpg",
+        "src": "https://cdn.shinailbo.co.kr/news/thumbnail/custom/20261114/5080991_2078477_1747_1794122267_300.jpg"
+      }
+    ]
+  },
+  "cover": {
+    "key": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5078092",
+    "page_url": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5078092",
+    "image": "img/cover_web.jpg",
+    "src": "https://cdn.shinailbo.co.kr/news/photo/202610/5078092_2075607_1656.jpg"
+  }
+}
