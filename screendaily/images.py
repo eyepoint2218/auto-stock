@@ -254,6 +254,53 @@ def page_image(url: str) -> str:
     raise RuntimeError(f"대표 이미지를 찾지 못했습니다: {url}")
 
 
+def page_images(url: str, limit: int = 15) -> list[str]:
+    """기사·페이지 본문의 이미지 주소들 (srcset 이면 가장 큰 것). 아이콘·로고 같은 작은 파일명은 제외."""
+    r = _get(url, headers={"User-Agent": "Mozilla/5.0 (compatible; screendaily-card-generator/1.0)"})
+    html, out = r.text, []
+    for tag in re.findall(r"<img\b[^>]*>", html, re.I):
+        cand = None
+        ss = re.search(r'(?:data-)?srcset=["\']([^"\']+)', tag, re.I)
+        if ss:
+            parts = [p.strip().split() for p in ss.group(1).split(",") if p.strip()]
+            parts = [(p[0], int(re.sub(r"\D", "", p[1]) or 0) if len(p) > 1 else 0) for p in parts]
+            cand = max(parts, key=lambda x: x[1])[0] if parts else None
+        if not cand:
+            m = re.search(r'(?:data-src|data-lazy-src|src)=["\']([^"\']+)', tag, re.I)
+            cand = m.group(1) if m else None
+        if not cand or cand.startswith("data:"):
+            continue
+        u = urllib.parse.urljoin(url, cand.replace("&amp;", "&"))
+        low = urllib.parse.urlparse(u).path.lower()
+        if not low.endswith((".jpg", ".jpeg", ".png", ".webp")) or re.search(r"logo|icon|banner|avatar|sprite", low):
+            continue
+        if u not in out:
+            out.append(u)
+    return out[:limit]
+
+
+def fetch_cover_candidates(slot_dir: Path, url: str, sources: dict) -> list[str]:
+    """cover_candidates: true — 페이지 안 이미지를 img/cand_NN 로 모두 받아 두고 고를 수 있게 함."""
+    if sources.get("cover_candidates", {}).get("page_url") == url:
+        return []
+    (slot_dir / "img").mkdir(exist_ok=True)
+    files = []
+    for i, src in enumerate(page_images(url), 1):
+        try:
+            r = _get(src)
+            if not r.headers.get("content-type", "").startswith("image/") or len(r.content) < 30_000:
+                continue
+            ext = Path(urllib.parse.urlparse(src).path).suffix.lower()
+            rel = f"img/cand_{i:02d}{ext if ext in ('.jpg', '.jpeg', '.png', '.webp') else '.jpg'}"
+            (slot_dir / rel).write_bytes(r.content)
+            _shrink(slot_dir / rel, 1800)
+            files.append({"image": rel, "src": src})
+        except Exception as e:  # noqa: BLE001
+            print(f"  ⚠ 후보 이미지 실패: {src[:80]} ({e})")
+    sources["cover_candidates"] = {"page_url": url, "files": files}
+    return [f["image"] for f in files]
+
+
 def fetch_cover(slot_dir: Path, raw: dict, sources: dict) -> str | None:
     """표지 이미지를 웹에서: cover_url(이미지 주소 또는 기사·페이지 주소) → cover_wiki(위키 대표 사진)."""
     if raw.get("cover_image"):
@@ -423,6 +470,13 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             print(f"  ⚠ 배우 사진 가져오기 실패: {e}")
 
     # 1-5) 표지 이미지 (cover_url / cover_wiki)
+    if raw.get("cover_candidates") and raw.get("cover_url"):
+        try:
+            got = fetch_cover_candidates(slot_dir, str(raw["cover_url"]).strip(), sources)
+            saved.extend(got)
+            print(f"  ✓ 표지 후보 이미지 {len(got)}장 → img/cand_*")
+        except Exception as e:  # noqa: BLE001
+            print(f"  ⚠ 표지 후보 가져오기 실패: {e}")
     try:
         rel = fetch_cover(slot_dir, raw, sources)
         if rel:
@@ -473,6 +527,8 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
         used.add(sources["actor"]["image"])
     if sources.get("cover", {}).get("image"):
         used.add(sources["cover"]["image"])
+    if raw.get("cover_candidates"):
+        used.update(f["image"] for f in sources.get("cover_candidates", {}).get("files", []))
     if raw.get("cover_image"):  # 직접 넣은 표지 이미지는 절대 지우지 않음
         used.add(str(raw["cover_image"]))
     for it in items:

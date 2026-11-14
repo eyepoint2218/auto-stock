@@ -6,7 +6,8 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: "https://cjnews.cj.net/?p=67529"   # CJ 뉴스룸 뚜레쥬르 기사 대표 이미지
+cover_url: "https://cjnews.cj.net/%EB%9A%9C%EB%A0%88%EC%A5%AC%EB%A5%B4-%EB%A7%88%EC%A7%80%EB%A7%89-%ED%95%9C-%EC%9E%85%EA%B9%8C%EC%A7%80-%EA%B9%8A%EC%9D%80-%ED%92%8D%EB%AF%B8-%EA%B0%80%EC%9D%84-%EC%8B%A0%EC%A0%9C/"   # CJ 뉴스룸 뚜레쥬르 가을 신제품 기사
+cover_candidates: true
 theme: dark
 title: "SKT T day\n뚜레쥬르 30%"
 items:
