@@ -1139,19 +1139,24 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     raw = (item.desc or "").split("\n")
     cut = next((i for i, ln in enumerate(raw) if ln.strip() == "---"), len(raw))
     steps = [ln.strip() for ln in raw[:cut] if ln.strip()]
+    host = next((i for i, st in enumerate(steps) if "{표}" in st), -1)   # 이 STEP 박스 안에 할인 제품 표
+    steps = [st.replace("{표}", "").strip() for st in steps]
     info = [ln.split("|", 1) for ln in raw[cut + 1:] if "|" in ln]
     notes = [ln.strip() for ln in raw[cut + 1:] if ln.strip() and "|" not in ln]
     tf, sf, nf = font(EB, 72), font(B, 44), font(B, 34)
     kf, vf = font(EB, 28), font(R, 34)
     step_l = [wrap(st, sf, W - 2 * M - 170) for st in steps]
     step_h = [max(140, block_h(sf, ls) + 56) for ls in step_l]
+    in_cell_h, in_rows = 70, (len(info) + 1) // 2
+    if host >= 0 and info:
+        step_h[host] = block_h(sf, step_l[host]) + 56 + in_rows * in_cell_h + 20
     info_l = [wrap(v.strip(), vf, W - 2 * M - 140) for _, v in info]
     note_l = [wrap(t, nf, W - 2 * M - 40) for t in notes]
     title = item.title or "혜택 받는 법"
     follow = (config.get("outro") or {}).get("inline_follow", "")  # STEP 아래 아이콘 + 팔로우 한 줄
-    grid = len(info) >= 4   # 할인 제품 목록 (제품|할인·가격) → 2열 표
+    grid = len(info) >= 4 and host < 0   # 할인 제품 목록 (제품|할인·가격) → 2열 표 (STEP 밖)
     cell_h, grid_rows = 96, (len(info) + 1) // 2
-    info_h = (40 + grid_rows * cell_h) if grid else (40 + sum(block_h(vf, vl) + 18 for vl in info_l) if info else 0)
+    info_h = (40 + grid_rows * cell_h) if grid else (40 + sum(block_h(vf, vl) + 18 for vl in info_l) if info and host < 0 else 0)
     content = line_h(tf) + 50 + sum(step_h) + 22 * max(0, len(steps) - 1) + (110 if follow else 0) \
         + info_h \
         + (50 + sum(block_h(nf, nl) + 10 for nl in note_l) if notes else 0)
@@ -1165,10 +1170,22 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
                                               outline=(255, 255, 255, 90), width=2)
         canvas.alpha_composite(box)
         d = ImageDraw.Draw(canvas)
-        cx, cy = M + 58, y + h / 2
+        cx, cy = M + 58, (y + 28 + block_h(sf, lines) / 2 if (i - 1 == host and info) else y + h / 2)
         d.text((cx, cy - 16), "STEP", font=font(EB, 20), fill=c["hl"], anchor="mm")
         d.text((cx, cy + 14), f"{i:02d}", font=font(EB, 44), fill=c["hl"], anchor="mm")
-        draw_lines(d, lines, sf, M + 140, y + (h - block_h(sf, lines)) / 2, (255, 255, 255))
+        if i - 1 == host and info:  # STEP 박스 안: 문구 + 할인 제품 표
+            draw_lines(d, lines, sf, M + 140, y + 28, (255, 255, 255))
+            gx0, gx1 = M + 140, W - M - 20
+            colw = (gx1 - gx0) / 2
+            gy = y + 28 + block_h(sf, lines) + 16
+            nfnt, pfnt = font(B, 32), font(EB, 32)
+            for j, (k, v) in enumerate(info):
+                x0 = gx0 + (j % 2) * colw
+                yy = gy + (j // 2) * in_cell_h + in_cell_h / 2
+                d.text((x0, yy), k.strip(), font=nfnt, fill=(235, 235, 235), anchor="lm")
+                d.text((x0 + colw - 24, yy), v.strip(), font=pfnt, fill=c["hl"], anchor="rm")
+        else:
+            draw_lines(d, lines, sf, M + 140, y + (h - block_h(sf, lines)) / 2, (255, 255, 255))
         y += h + 22
     if grid:
         y += 30
@@ -1186,7 +1203,7 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
             d.text((cx0 + 30, mid), k.strip(), font=nfnt, fill=(255, 255, 255), anchor="lm")
             d.text((cx0 + colw - 30, mid), v.strip(), font=pfnt, fill=c["hl"], anchor="rm")
         y += grid_rows * cell_h
-    elif info:
+    elif info and host < 0:
         y += 18
         for (k, _), vl in zip(info, info_l):
             d.text((M, y + 2), k.strip(), font=kf, fill=c["hl"])
