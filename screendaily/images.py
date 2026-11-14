@@ -193,6 +193,10 @@ def wiki_lookup(titles: list[str]) -> dict[str, dict]:
     return out
 
 
+# 작품(영화·드라마)이 아닌 카드: TMDB 검색 안 함, 위키 사진은 썸네일 + 작가·라이선스 표기
+NON_WORK = ("story", "quote", "deal", "coupon", "steps", "note", "photo")
+
+
 def _shrink(path: Path, max_side: int):
     from PIL import Image
     with Image.open(path) as im:
@@ -279,7 +283,7 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
     for it in items:
         title = str(it["title"])
         if it.get("image") or not tmdb or str(it.get("tmdb") or "").lower() == "none" \
-                or str(it.get("type") or "") in ("story", "quote", "deal"):
+                or str(it.get("type") or "") in NON_WORK:
             continue
         cur = by_title.get(title, {})
         override = str(it.get("tmdb") or "")
@@ -326,7 +330,7 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             spare = [p for p in profiles[1:]]  # 첫 번째는 표지에 사용
             for it in items:
                 title = str(it["title"])
-                if it.get("image") or str(it.get("type") or "") in ("story", "quote", "deal"):
+                if it.get("image") or str(it.get("type") or "") in NON_WORK:
                     continue
                 e = by_title.get(title)
                 if e and e.get("tmdb") in tagged:
@@ -364,14 +368,14 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             if not urllib.parse.urlparse(meta["src"]).path.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
                 print(f"  ⚠ 지원하지 않는 형식: {it['wiki']}")
                 continue
-            is_deal = str(it.get("type") or "") == "deal"
+            is_deal = str(it.get("type") or "") in NON_WORK
             try:  # 할인 카드는 1280px 썸네일 (원본은 수 MB 라 위키미디어가 자주 거절함)
                 rel = save(meta.get("thumb") or meta["src"] if is_deal else meta["src"], slug(str(it["wiki"])))
             except Exception as e:  # noqa: BLE001
                 print(f"  ⚠ 위키 이미지 다운로드 실패: {it['wiki']}: {e}")
                 continue
             entry = {"source": "wikipedia", "image": rel, "page_url": meta["page_url"]}
-            if str(it.get("type") or "") == "deal":
+            if str(it.get("type") or "") in NON_WORK:
                 # 할인 카드용 일반 사진: 크기 줄이고, 사진 작가·라이선스를 카드에 표시
                 _shrink(slot_dir / rel, 1600)
                 lic = commons_license(meta["src"])
