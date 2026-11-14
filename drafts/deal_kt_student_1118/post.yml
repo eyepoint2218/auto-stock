@@ -7,7 +7,7 @@ channel: deals
 draft: true
 label: 11월 안에 써야 하는 혜택
 cover_style: photo
-cover_image: img/cover_starbucks.jpg   # 직접 만든 스타벅스 상징 이미지 (로고 없음: 그린 배경·아이스 라테·초록 빨대·커피콩)
+cover_url: https://commons.wikimedia.org/wiki/File:Starbucks_-_Coffee_Frappuccino_(51259869202).jpg   # 스타벅스 컵 실사 사진 (위키미디어 공용, CC BY 2.0)
 theme: dark
 title: "KT 멤버십\n스타벅스 무료"
 items:
