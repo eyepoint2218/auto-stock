@@ -82,6 +82,7 @@ channels:
       cover_highlight: "#FFE14D" # 레몬: 표지 혜택 스티커·STEP 원·FOLLOW
       paper: "#FFF7EC"          # 크림: 2장 배경
       ink: "#1F1F24"            # 글자
+      hide_credit: true         # 표지에 사진 출처를 찍지 않음 (게시글에 직접 적기)
       splash: {base: "#FF6B2C", hot: "#FFB13B", soft: "#FFD9A0"}   # 3장 배경
     png: true                   # out/ 에 PNG 도 함께 저장
     outro:
