@@ -6,8 +6,8 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: "https://cjnews.cj.net/cgv%ec%97%ac%ec%9d%98%eb%8f%84-%ea%b0%9c%ea%b4%80-%ed%9b%84-%ec%b2%ab-%eb%a6%ac%eb%89%b4%ec%96%bc31%ec%9d%bc-%ec%83%88%eb%a1%ad%ea%b2%8c-%eb%ac%b8-%ec%97%b0%eb%8b%a4/"   # CJ 뉴스룸 CGV여의도 리뉴얼 기사 대표 이미지
-cover_candidates: true   # 기사 본문 원본 사진들을 img/cand_* 로 받아 고름
+cover_image: img/cover.jpg   # 출처: CJ 뉴스룸 기사 사진 (https://cjnews.cj.net/cgv%ec%97%ac%ec%9d%98%eb%8f%84-%ea%b0%9c%ea%b4%80-%ed%9b%84-%ec%b2%ab-%eb%a6%ac%eb%89%b4%ec%96%bc31%ec%9d%bc-%ec%83%88%eb%a1%ad%ea%b2%8c-%eb%ac%b8-%ec%97%b0%eb%8b%a4/)
+cover_focus: "0.3,0.5"
 theme: dark
 title: "SKT T day\nCGV 8,500원"
 items:
