@@ -7,7 +7,7 @@ channel: deals
 draft: true
 label: 11월 안에 써야 하는 혜택
 cover_style: photo
-cover_image: img/cover_official.jpg   # 스타벅스 공식 제품 사진 (블랙 글레이즈드 라떼, 사용자 제공 화면에서 추출)
+cover_image: img/cover_composite.jpg   # 스타벅스 매장 사진(흐리게) + 블랙 글레이즈드 라떼 공식 제품 사진 합성
 theme: dark
 title: "KT 멤버십\n스타벅스 무료"
 items:
