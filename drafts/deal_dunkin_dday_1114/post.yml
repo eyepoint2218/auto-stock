@@ -6,8 +6,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: "https://www.wikitree.co.kr/articles/1145362"
-cover_candidates: true
+cover_url: "https://images.pexels.com/photos/1395321/pexels-photo-1395321.jpeg?auto=compress&cs=tinysrgb&w=1600"   # Pexels 무료 도넛 사진 (기사 사진은 사람 얼굴)
 theme: dark
 title: "던킨\n오늘 하루\n최대 50%"
 items:
