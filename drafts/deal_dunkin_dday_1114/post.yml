@@ -9,7 +9,7 @@ cover_style: photo
 cover_image: img/cover.jpg   # 사용자 제공 도넛 진열대 사진
 cover_focus: "0.6,0.5"
 theme: dark
-title: "던킨\n오늘 하루\n최대 50%"
+title: "던킨 11월 14일\n오늘 하루\n최대 50%"
 items:
   - type: steps
     title: 혜택 받는 법
