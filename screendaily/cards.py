@@ -1100,7 +1100,6 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
         canvas.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, 165)))
     else:
         canvas = Image.new("RGBA", (W, H), (22, 22, 24, 255))
-    canvas.alpha_composite(_channel_icon(76, config), (M, 40))  # 채널 아이콘 (브랜드 각인)
     d = ImageDraw.Draw(canvas)
     d.text((W - M, 64), f"{idx + 1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 200), anchor="ra")
     raw = (item.desc or "").split("\n")
@@ -1115,7 +1114,8 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     info_l = [wrap(v.strip(), vf, W - 2 * M - 140) for _, v in info]
     note_l = [wrap(t, nf, W - 2 * M - 40) for t in notes]
     title = item.title or "혜택 받는 법"
-    content = line_h(tf) + 50 + sum(step_h) + 22 * max(0, len(steps) - 1) \
+    follow = (config.get("outro") or {}).get("inline_follow", "")  # STEP 아래 아이콘 + 팔로우 한 줄
+    content = line_h(tf) + 50 + sum(step_h) + 22 * max(0, len(steps) - 1) + (110 if follow else 0) \
         + (40 + sum(block_h(vf, vl) + 18 for vl in info_l) if info else 0) \
         + (50 + sum(block_h(nf, nl) + 10 for nl in note_l) if notes else 0)
     top, bottom = 130, H - 110
@@ -1142,6 +1142,13 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
         y += 28
         for nl in note_l:
             y = draw_lines(d, nl, nf, 0, y, (255, 255, 255, 220), anchor_center=True) + 10
+    if follow:  # 채널 아이콘 + "매일 혜택 알람 팔로우" (브랜드 각인)
+        ff_, isz, gap = font(EB, 38), 64, 18
+        rw = isz + gap + _tw(ff_, follow)
+        x0, yy = (W - rw) / 2, y + 40
+        canvas.alpha_composite(_channel_icon(isz, config), (int(x0), int(yy)))
+        d = ImageDraw.Draw(canvas)
+        d.text((x0 + isz + gap, yy + isz / 2), follow, font=ff_, fill=(255, 255, 255), anchor="lm")
     _watermark(canvas, config)
     return canvas.convert("RGB")
 
