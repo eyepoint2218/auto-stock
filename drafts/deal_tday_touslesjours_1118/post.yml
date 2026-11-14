@@ -6,7 +6,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_wiki: "Bread"   # 빵만 나오는 사진
+cover_url: "https://images.pexels.com/photos/2238944/pexels-photo-2238944.jpeg?auto=compress&cs=tinysrgb&w=1280"   # Pexels 무료(상업 이용 가능) 베이커리
 theme: dark
 title: "SKT T day\n뚜레쥬르 30%"
 items:
