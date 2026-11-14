@@ -8,7 +8,7 @@ channel: deals
 draft: true
 label: 11월 안에 써야 하는 수험표
 cover_style: photo
-cover_image: img/sangmu_official.jpg   # 상무초밥 공식 홈페이지 이미지 (로고·큰 문구는 그대로, 작은 소개 문구 3줄만 지움)
+cover_image: img/sangmu_official.jpg   # 상무초밥 공식 홈페이지 이미지 (로고만 남기고 사진 위 문구는 지움)
 cover_credit: "사진 © 상무초밥 공식 홈페이지"
 theme: dark
 title: "상무초밥\n수험생 반값"
