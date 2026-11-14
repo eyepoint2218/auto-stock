@@ -170,9 +170,15 @@ def cmd_preview(a, config):
     if a.slots:
         posts = [p for p in posts if p.name in a.slots]
     changed = False
+    failed = []
     for p in posts:
         before = (p.out_dir / ".hash").read_text() if (p.out_dir / ".hash").exists() else ""
-        files = generate(p, config, force=a.force)
+        try:
+            files = generate(p, config, force=a.force)
+        except Exception as e:  # noqa: BLE001  한 게시물 오류로 전체가 멈추지 않게
+            failed.append(p.name)
+            print(f"::warning::{p.name}: 미리보기 실패: {e}" if os.environ.get("GITHUB_ACTIONS") else f"{p.name}: 미리보기 실패: {e}")
+            continue
         after = (p.out_dir / ".hash").read_text()
         changed |= before != after
         print(f"{p.name}: {len(files)}개 파일 → {p.out_dir.relative_to(ROOT)}")
