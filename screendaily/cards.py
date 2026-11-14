@@ -1083,7 +1083,9 @@ def render_photo_cover(post: Post, config: dict) -> Image.Image:
     if brand_line:
         _shadow_text(canvas, (M, y - line_h(nf) + 6), brand_line, nf, (255, 255, 255))
     credit = post.cover_credit or _post_credit(post)
-    if credit:  # 사진 출처·라이선스 표기 (왼쪽 위, 작게)
+    if credit and "Wikimedia" in credit:  # 카드에는 단순하게 (작가·라이선스 원문은 img/sources.json 에 보관)
+        credit = "사진 출처 · 위키피디아"
+    if credit:  # 사진 출처 표기 (왼쪽 위, 작게)
         ImageDraw.Draw(canvas).text((M, 66), credit, font=font(R, 18), fill=(255, 255, 255, 200), anchor="lm",
                                     stroke_width=2, stroke_fill=(0, 0, 0, 90))
     _watermark(canvas, config)
