@@ -24,7 +24,18 @@ def lint_post(p: Post, config: dict | None = None) -> list[str]:
         config = channel_config(config, p)
     if p.images:  # 직접 만든 이미지는 검사하지 않음
         return w
-    if _len(p.title) > TITLE_MAX:
+    if p.channel == "deals" and p.cover_style == "photo":  # docs/cover_guide.md 표지 고정 지침
+        lines = [t for t in p.title.splitlines() if t.strip()]
+        if len(lines) > 3:
+            w.append(f"혜택알람 표지는 최대 3줄이에요 (지금 {len(lines)}줄).")
+        if _len(p.title) > 25:
+            w.append(f"혜택알람 표지가 {_len(p.title)}자예요. 공백 제외 25자 이내로.")
+        if len(lines) > 1 and _len(lines[0]) > 10:
+            w.append(f"표지 첫 줄(멤버십·브랜드)이 {_len(lines[0])}자예요. 10자 이하로.")
+        for b in lines[1:]:
+            if _len(b) > 12:
+                w.append(f"표지 혜택 줄 '{b}' 이 {_len(b)}자예요. 12자 이하로 줄이거나 줄을 나누세요.")
+    elif _len(p.title) > TITLE_MAX:
         w.append(f"표지 제목이 {_len(p.title)}자예요. {TITLE_MAX}자 이하로 줄이면 1초 안에 읽혀요.")
     if GREETING.search(p.title):
         w.append("표지 제목이 인사로 시작해요. 첫 화면은 후킹 문장으로 시작하세요.")

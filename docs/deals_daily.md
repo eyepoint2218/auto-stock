@@ -13,7 +13,7 @@ CLAUDE.md 의 혜택알람 규칙을 모두 지킨다. 아래는 그 순서다.
 ## 2. 만들기
 1. `python -m screendaily new <오늘날짜> 13:00 --deal <브랜드>` 로 `drafts/` 에 생성한 뒤 폴더를 `queue/<YYYY-MM-DD>_1300/` 으로 옮긴다.
 2. `post.yml`: `draft: true` 로 시작 (사진 고르기 전 업로드 방지). `publish_at: "<오늘> 13:00"`.
-   - `title`: 첫 줄 브랜드, 둘째 줄 혜택 핵심 짧게 (예 `"뚜레쥬르\n30% 할인"`).
+   - `title`: `docs/cover_guide.md` 고정 지침대로. 첫 줄 통신사·멤버십·브랜드(10자 이하), 다음 1~2줄 핵심 혜택(줄당 12자 이하), 최대 3줄 (예 `"LG유플러스\n스타벅스\n아메리카노 1+1"`).
    - steps 3개, 그중 하나에 기간 `MM/DD~MM/DD` 필수.
    - `caption`: 이모지 없이 제목 한 줄 → 기간·대상·혜택·방법 → "세부 조건은 ○○에서 확인하세요." → "팔로우하고 혜택알람 받아보세요". 검색될 키워드(브랜드명·혜택명·무료/할인/쿠폰)를 첫 줄에.
    - `hashtags`: 브랜드·혜택 위주 4개.
@@ -26,7 +26,7 @@ CLAUDE.md 의 혜택알람 규칙을 모두 지킨다. 아래는 그 순서다.
 2. `img/cand_*` 를 직접 보고 고른다: **사람 얼굴 없음**, 혜택과 직접 관련, 다른 할인율·가격 문구가 크게 없는 사진, 가로 600px 이상.
    맞는 게 없으면 다른 기사로 `cover_url` 을 바꿔 다시. 그래도 없으면 `cover_wiki`(사람 없는 대표 사진)로.
 3. 고른 파일을 `img/cover.jpg` 로 복사하고 `cover_image: img/cover.jpg`, 필요하면 `cover_focus`, `cover_url`·`cover_candidates` 줄 삭제, 나머지 cand 파일 삭제.
-4. `python -m screendaily preview` 로 01·02 장을 직접 보고 글자 겹침·잘림이 없는지 확인.
+4. `python -m screendaily preview` 로 01·02 장을 직접 보고 글자 겹침·잘림, 글자가 로고·상품을 가리지 않는지(가리면 `cover_focus` 조정), 썸네일 크기 가독성을 확인.
 5. `draft: false` 로 바꿔 커밋·푸시 (12:30 전까지). 늦어지면 `publish_at` 을 늦춰도 된다.
 
 ## 4. 로그

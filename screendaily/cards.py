@@ -1067,41 +1067,58 @@ def _focus(post: Post, default=(0.5, 0.4)) -> tuple[float, float]:
         return default
 
 
+PT_BLACK, PT_BOLD = "Pretendard-Black.otf", "Pretendard-Bold.otf"
+COVER_WHITE, COVER_YELLOW = (255, 255, 255), (255, 229, 0)   # #FFFFFF / #FFE500 (docs/cover_guide.md)
+COVER_TRACK = -0.03   # 자간 -3%
+
+
+def _tracked_w(f, text: str, track: float = COVER_TRACK) -> float:
+    return sum(_tw(f, ch) for ch in text) + track * f.size * max(0, len(text) - 1)
+
+
+def _draw_tracked(d: ImageDraw.ImageDraw, xy, text: str, f, fill, track: float = COVER_TRACK):
+    """자간을 줄여 한 글자씩 조판 (외곽선·그림자 없음)."""
+    x, y = xy
+    for ch in text:
+        d.text((x, y), ch, font=f, fill=fill)
+        x += _tw(f, ch) + track * f.size
+
+
 def render_photo_cover(post: Post, config: dict) -> Image.Image:
-    """01 표지 (후킹용): 사진 + 아래쪽 굵은 고딕 두 줄. 첫 줄 브랜드(흰색), 둘째 줄 혜택(강조색, 가장 크게)."""
+    """01 표지 (docs/cover_guide.md 고정 지침): 원본 사진 그대로 + 좌측 하단 Pretendard 텍스트 최대 3줄.
+    첫 줄 = 통신사·멤버십·브랜드(흰색), 나머지 = 핵심 혜택(노란색, 가장 크게). 외곽선·그림자·스티커 없음.
+    글자 뒤에만 자연스러운 어두운 그라데이션."""
     c = _light(config)
     img = _post_photo(post)
     im = open_img(post.asset(img)) if img else None
     canvas = cover_crop(im, (W, H), _focus(post)).convert("RGBA") if im else splash_bg(c["sp"], 0)
-    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.5, H, 0, 215))
+    lines = [t.strip() for t in post.title.split("\n") if t.strip()][:3]
+    head, benefits = (lines[0], lines[1:]) if len(lines) > 1 else ("", lines or [""])
+    maxw = W - 2 * M
+    # 핵심 혜택 105~140px (가장 크게), 첫 줄 85~110px — 넘치면 줄이되 잘리지 않게
+    bsize = 140
+    while max(_tracked_w(font(PT_BLACK, bsize), b) for b in benefits) > maxw and bsize > 72:
+        bsize -= 2
+    hsize = min(110, max(85, int(bsize * 0.8)))
+    while head and _tracked_w(font(PT_BLACK, hsize), head) > maxw and hsize > 56:
+        hsize -= 2
+    bf, hf = font(PT_BLACK, bsize), font(PT_BLACK, hsize)
+    bl, hl = int(bsize * 1.08), int(hsize * 1.12)   # 줄 간격
+    bottom = H - 110
+    y0 = bottom - bl * len(benefits) - (hl if head else 0)
+    # 텍스트 뒤에만 어두운 그라데이션 (텍스트 블록 위 200px 부터 아래로 진하게)
+    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), max(0, y0 - 220), H, 0, 190))
     d = ImageDraw.Draw(canvas)
-    total = 1 + len(post.items) + (1 if post.outro else 0)
     if not (config.get("alarm") or {}).get("hide_page"):
-        d.text((W - M, 64), f"{1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 210), anchor="ra",
-           stroke_width=2, stroke_fill=(0, 0, 0, 80))
-    lines = [t for t in post.title.split("\n") if t.strip()][:3]
-    # 첫 줄 브랜드(흰색), 나머지 1~2줄 혜택(강조색, 가장 크게). 혜택 줄들은 같은 크기로 맞춤
-    brand_line, benefits = (lines[0], lines[1:]) if len(lines) > 1 else ("", lines or [""])
-    bf = font(EB, 150 if len(benefits) == 1 else 132)
-    while max(_tw(bf, b) for b in benefits) > W - 2 * M and bf.size > 70:
-        bf = font(EB, bf.size - 4)
-    nf = font(EB, 104 if len(benefits) == 1 else 92)
-    while _tw(nf, brand_line) > W - 2 * M and nf.size > 56:
-        nf = font(EB, nf.size - 4)
-    lh = line_h(bf) - (8 if len(benefits) > 1 else 0)
-    y = H - 120 - line_h(bf) - lh * (len(benefits) - 1)
-    for i, b in enumerate(benefits):
-        _shadow_text(canvas, (M - 4, y + lh * i), b, bf, c["hl"])
-    if brand_line:
-        _shadow_text(canvas, (M, y - line_h(nf) + 6), brand_line, nf, (255, 255, 255))
-    credit = post.cover_credit or _post_credit(post)
-    if (config.get("alarm") or {}).get("hide_credit"):  # 출처는 게시글(소개)에 직접 적음
-        credit = ""
-    if credit and "Wikimedia" in credit:  # 카드에는 단순하게 (작가·라이선스 원문은 img/sources.json 에 보관)
-        credit = "사진 출처 · 위키피디아"
-    if credit:  # 사진 출처 표기 (왼쪽 위, 작게)
-        ImageDraw.Draw(canvas).text((M, 66), credit, font=font(R, 18), fill=(255, 255, 255, 200), anchor="lm",
-                                    stroke_width=2, stroke_fill=(0, 0, 0, 90))
+        total = 1 + len(post.items) + (1 if post.outro else 0)
+        d.text((W - M, 64), f"{1:02d}/{total:02d}", font=font(PT_BOLD, 28), fill=(255, 255, 255, 210), anchor="ra")
+    y = y0
+    if head:
+        _draw_tracked(d, (M, y), head, hf, COVER_WHITE)
+        y += hl
+    for b in benefits:
+        _draw_tracked(d, (M - 2, y), b, bf, COVER_YELLOW)
+        y += bl
     _watermark(canvas, config)
     return canvas.convert("RGB")
 

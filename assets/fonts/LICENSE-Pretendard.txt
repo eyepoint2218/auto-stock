@@ -1,0 +1,4 @@
+Pretendard 1.3.9 (Pretendard-Black.otf, Pretendard-Bold.otf)
+Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard)
+Licensed under the SIL Open Font License, Version 1.1 (https://scripts.sil.org/OFL)
+글꼴 단독 판매를 제외한 상업적 이용·수정·재배포 가능.
