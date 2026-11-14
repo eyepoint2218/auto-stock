@@ -7,7 +7,8 @@ channel: deals
 draft: true
 label: 11월 안에 써야 하는 혜택
 cover_style: photo
-cover_wiki: "Latte"   # 사람 없는 라테 사진 (자유 라이선스)
+cover_url: https://commons.wikimedia.org/wiki/File:Starbucks_Gyeongju_Daereungwon_branch.jpg   # 스타벅스 매장 사진 (위키미디어 공용)
+cover_credit: "사진 출처 · 위키피디아"
 theme: dark
 title: "KT 멤버십\n스타벅스 무료"
 items:
