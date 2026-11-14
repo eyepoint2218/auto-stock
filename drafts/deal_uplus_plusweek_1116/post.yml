@@ -6,7 +6,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_image: img/cover.jpg   # 사용자 제공 스타벅스 사진 (기사 사진은 모델 얼굴이 있어 제외)
+cover_image: img/cover.jpg   # 사용자 제공 스타벅스 아이스 아메리카노 사진
 theme: dark
 title: "LG유플러스\n스타벅스 1+1"
 items:
