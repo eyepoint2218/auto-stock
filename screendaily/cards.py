@@ -1149,8 +1149,11 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     note_l = [wrap(t, nf, W - 2 * M - 40) for t in notes]
     title = item.title or "혜택 받는 법"
     follow = (config.get("outro") or {}).get("inline_follow", "")  # STEP 아래 아이콘 + 팔로우 한 줄
+    grid = len(info) >= 4   # 할인 제품 목록 (제품|할인·가격) → 2열 표
+    cell_h, grid_rows = 96, (len(info) + 1) // 2
+    info_h = (40 + grid_rows * cell_h) if grid else (40 + sum(block_h(vf, vl) + 18 for vl in info_l) if info else 0)
     content = line_h(tf) + 50 + sum(step_h) + 22 * max(0, len(steps) - 1) + (110 if follow else 0) \
-        + (40 + sum(block_h(vf, vl) + 18 for vl in info_l) if info else 0) \
+        + info_h \
         + (50 + sum(block_h(nf, nl) + 10 for nl in note_l) if notes else 0)
     top, bottom = 130, H - 110
     y = top + max(0, (bottom - top - content) // 2)
@@ -1167,7 +1170,23 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
         d.text((cx, cy + 14), f"{i:02d}", font=font(EB, 44), fill=c["hl"], anchor="mm")
         draw_lines(d, lines, sf, M + 140, y + (h - block_h(sf, lines)) / 2, (255, 255, 255))
         y += h + 22
-    if info:
+    if grid:
+        y += 30
+        colw = (W - 2 * M + 20) / 2
+        nfnt, pfnt = font(B, 36), font(EB, 36)
+        for i, (k, v) in enumerate(info):
+            cx0 = M - 10 + (i % 2) * colw
+            cy0 = y + (i // 2) * cell_h
+            box = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+            ImageDraw.Draw(box).rounded_rectangle((cx0 + (0 if i % 2 == 0 else 10), cy0, cx0 + colw - (10 if i % 2 == 0 else 0), cy0 + cell_h - 14),
+                                                  radius=22, fill=(0, 0, 0, 70))
+            canvas.alpha_composite(box)
+            d = ImageDraw.Draw(canvas)
+            mid = cy0 + (cell_h - 14) / 2
+            d.text((cx0 + 30, mid), k.strip(), font=nfnt, fill=(255, 255, 255), anchor="lm")
+            d.text((cx0 + colw - 30, mid), v.strip(), font=pfnt, fill=c["hl"], anchor="rm")
+        y += grid_rows * cell_h
+    elif info:
         y += 18
         for (k, _), vl in zip(info, info_l):
             d.text((M, y + 2), k.strip(), font=kf, fill=c["hl"])
