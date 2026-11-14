@@ -6,7 +6,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: "https://images.pexels.com/photos/1383908/pexels-photo-1383908.jpeg?auto=compress&cs=tinysrgb&w=1280"   # Pexels 무료(상업 이용 가능) Pile of Baked Breads, 사람 없음
+cover_url: "https://cjnews.cj.net/?p=67529"   # CJ 뉴스룸 뚜레쥬르 기사 대표 이미지
 theme: dark
 title: "SKT T day\n뚜레쥬르 30%"
 items:
