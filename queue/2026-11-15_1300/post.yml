@@ -7,8 +7,8 @@ format: carousel
 channel: deals
 draft: false
 cover_style: photo
-cover_image: img/cover.jpg   # 아시아경제 기사 사진 (롯데리아 매장 간판, 사람 없는 쪽으로 자름)
-cover_focus: "0.25,0.5"
+cover_image: img/cover_slide.jpg   # 2장 흐린 배경도 같은 포스터
+cover_slide: img/cover_slide.jpg   # 사용자가 확정한 완성 표지 (롯데리아 공식 포스터 + 표지 문구)
 theme: dark
 title: "롯데리아\n오후 2~6시\n최대 38% 할인"
 items:

@@ -1279,7 +1279,10 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
         return out
     total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)
     covers = {"deal": render_deal_cover, "alarm": render_alarm_cover, "photo": render_photo_cover}
-    slides = [covers.get(post.cover_style, render_cover)(post, config)]
+    if post.cover_slide:  # 직접 만든 완성 표지를 그대로 01장으로
+        slides = [cover_crop(open_img(post.asset(post.cover_slide)), (W, H), (0.5, 0.5)).convert("RGB")]
+    else:
+        slides = [covers.get(post.cover_style, render_cover)(post, config)]
     for i, it in enumerate(post.items, 1):
         if it.type == "deal":
             slides.append(render_deal(post, it, i, total, config))

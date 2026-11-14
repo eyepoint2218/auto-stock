@@ -529,6 +529,8 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
         used.add(sources["cover"]["image"])
     if raw.get("cover_candidates"):
         used.update(f["image"] for f in sources.get("cover_candidates", {}).get("files", []))
+    if raw.get("cover_slide"):  # 직접 만든 완성 표지도 지우지 않음
+        used.add(str(raw["cover_slide"]))
     if raw.get("cover_image"):  # 직접 넣은 표지 이미지는 절대 지우지 않음
         used.add(str(raw["cover_image"]))
     for it in items:

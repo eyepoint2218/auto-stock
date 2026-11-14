@@ -85,6 +85,7 @@ class Post:
     cover_style: str = ""      # deal = 사진 + 두 줄, alarm = 잠금화면 알림 표지, photo = 3장 형식 사진 표지 (혜택알람)
     label_text: str = ""       # (자동) label 원래 글자 (대소문자 그대로)
     cover_credit: str = ""     # cover_image 사진 출처 (표지에 작게)
+    cover_slide: str = ""      # 완성된 표지 이미지를 01장으로 그대로 (사용자가 직접 만든 표지)
     cover_focus: str = ""      # 표지 사진에서 가운데로 올 위치 "가로,세로" (0~1, 예: 0.62,0.5)
     period: str = ""           # 혜택 기간 (2장 제목 아래, 예: 11.19(목) ~ 11.30(월))
     alarm: str = ""            # alarm 표지 위쪽 큰 글씨 (예: 11.18, D-1)
@@ -253,6 +254,7 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         cover_style=str(raw.get("cover_style", "") or ""),
         alarm=str(raw.get("alarm", "") or ""),
         cover_focus=str(raw.get("cover_focus", "") or ""),
+        cover_slide=str(raw.get("cover_slide", "") or ""),
         period=str(raw.get("period", "") or ""),
         cover_credit=str(raw.get("cover_credit", "") or "") or (
             (sources.get("cover") or {}).get("credit", "") if not raw.get("cover_image") else ""),
