@@ -223,7 +223,7 @@ def commons_license(src: str) -> str:
     artist = re.sub(r"^(this )?(photo|picture|image)( was)? (taken|made|created) by ", "", artist, flags=re.I)
     artist = re.split(r" \(|\. |, ", artist)[0].strip()
     lic = md.get("LicenseShortName", {}).get("value", "")
-    return " · ".join(x for x in (f"사진 {artist[:30]}" if artist else "", lic, "Wikimedia Commons") if x)
+    return "사진 출처 · " + " · ".join(x for x in (artist[:30], lic, "Wikimedia Commons") if x)
 
 
 def page_image(url: str) -> str:

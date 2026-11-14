@@ -6,8 +6,7 @@ channel: deals
 draft: true
 label: 겨울방학까지 넉넉하게
 cover_style: photo
-cover_url: https://www.insight.co.kr/news/581517   # 기사 대표 사진(롯데월드 보도자료 사진)을 워크플로가 받아옴
-cover_credit: "사진 제공 · 롯데월드"
+cover_wiki: "Lotte World"   # 사람 없는 롯데월드 대표 이미지 (초상권 고려, 자유 라이선스)
 theme: dark
 title: "롯데월드\n수험생 27,000원"
 items:
