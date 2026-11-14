@@ -114,6 +114,16 @@ def wait_urls(urls: list[str], timeout=120):
 def cmd_new(a, config):
     when = f"{a.date} {a.time}"
     datetime.strptime(when, "%Y-%m-%d %H:%M")
+    if a.deal is not None:  # 혜택알람 3장 템플릿 → drafts/ 에 초안으로
+        brand = a.deal or "브랜드"
+        d = DRAFTS_DIR / f"deal_{a.date}_{a.time.replace(':', '')}_{brand}"
+        if d.exists():
+            sys.exit(f"이미 있습니다: {d}")
+        (d / "img").mkdir(parents=True)
+        tpl = (ROOT / "examples" / "deal_template" / "post.yml").read_text(encoding="utf-8")
+        (d / "post.yml").write_text(tpl.replace("{when}", when).replace("{brand}", brand), encoding="utf-8")
+        print(f"만들었습니다: {d.relative_to(ROOT)}/post.yml (표지 이미지를 img/cover.jpg 로 넣으세요)")
+        return
     d = QUEUE_DIR / f"{a.date}_{a.time.replace(':', '')}"
     if d.exists():
         sys.exit(f"이미 있습니다: {d}")
@@ -293,6 +303,7 @@ def main(argv=None):
     s.add_argument("date", help="2026-11-17")
     s.add_argument("time", help="19:00")
     s.add_argument("--reel", action="store_true", help="릴스 영상으로 만들기")
+    s.add_argument("--deal", nargs="?", const="", default=None, metavar="브랜드", help="혜택알람 3장 템플릿 (drafts/ 에 생성)")
 
     sub.add_parser("list", help="예약 목록")
 
