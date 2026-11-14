@@ -77,10 +77,12 @@ channels:
       - 오늘의혜택
       - 쿠폰
       - 이벤트
-    alarm:                      # 혜택알람 고유 색 (표지 알림·쿠폰·마지막 장). 통신사 색은 라벨에만
-      accent: "#00B377"         # 에메랄드 그린: 큰 숫자·아이콘·스위치
-      splash: {base: "#0B3B30", hot: "#00C98A", soft: "#9BE8C8"}
-      cover_highlight: "#FFD400"  # 표지 혜택 글씨 (사진 위 가독성)
+    alarm:                      # 혜택알람 고유 색: 밝고 젊은 톤 (오렌지 + 레몬 + 크림)
+      accent: "#FF6B2C"         # 비비드 오렌지: 머리띠·라벨·아이콘
+      cover_highlight: "#FFE14D" # 레몬: 표지 혜택 스티커·STEP 원·FOLLOW
+      paper: "#FFF7EC"          # 크림: 2장 배경
+      ink: "#1F1F24"            # 글자
+      splash: {base: "#FF6B2C", hot: "#FFB13B", soft: "#FFD9A0"}   # 3장 배경
     png: true                   # out/ 에 PNG 도 함께 저장
     outro:
       style: follow_card        # 3장 고정 팔로우 카드 (모든 게시물 동일)

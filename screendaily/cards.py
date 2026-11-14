@@ -1022,45 +1022,67 @@ def _page_tag(d: ImageDraw.ImageDraw, idx: int, total: int, color=(255, 255, 255
     d.text((W - M, 64), f"{idx:02d}/{total:02d}", font=font(B, 28), fill=color, anchor="ra")
 
 
+def _light(config: dict) -> dict:
+    """밝은 테마 색 (채널 alarm: 설정). paper 배경, ink 글자, accent 메인, highlight 강조."""
+    a = config.get("alarm") or {}
+    return {"paper": hex2rgb(a.get("paper", "#FFF7EC")), "ink": hex2rgb(a.get("ink", "#1F1F24")),
+            "accent": hex2rgb(a.get("accent", "#FF6B2C")), "hl": hex2rgb(a.get("cover_highlight", "#FFE14D")),
+            "sp": a.get("splash") or ALARM_DEFAULT}
+
+
+def _sticker(text: str, f, bg, fg, angle: float = 0, pad=(34, 18), radius: int = 26) -> Image.Image:
+    """둥근 스티커 모양 글자 상자 (살짝 기울기 + 그림자)."""
+    tw = _tw(f, text)
+    w, h = int(tw + pad[0] * 2), int(f.size * 1.18 + pad[1] * 2)
+    layer = Image.new("RGBA", (w + 24, h + 24), (0, 0, 0, 0))
+    sh = Image.new("RGBA", layer.size, (0, 0, 0, 0))
+    ImageDraw.Draw(sh).rounded_rectangle((12, 18, w + 12, h + 18), radius=radius, fill=(0, 0, 0, 70))
+    layer.alpha_composite(sh.filter(ImageFilter.GaussianBlur(6)))
+    d = ImageDraw.Draw(layer)
+    d.rounded_rectangle((12, 12, w + 12, h + 12), radius=radius, fill=bg)
+    d.text((12 + pad[0], 12 + pad[1] + f.size * 0.04), text, font=f, fill=fg)
+    return layer.rotate(angle, resample=Image.BICUBIC, expand=True) if angle else layer
+
+
 def render_photo_cover(post: Post, config: dict) -> Image.Image:
-    """01 표지 (후킹용): 사진 + 브랜드 한 줄 + 혜택 한 줄만 크게. 채널명·아이디는 넣지 않음.
-    title 첫 줄 = 브랜드(흰색), 둘째 줄 = 혜택(강조색, 가장 크게)."""
-    sp, acc = _alarm_colors(post, config)
-    hl = hex2rgb((config.get("alarm") or {}).get("cover_highlight") or "#FFD400")
+    """01 표지 (후킹용, 밝은 톤): 사진은 밝게 그대로, 아래에 브랜드 스티커(흰색) + 혜택 스티커(레몬, 가장 크게)."""
+    c = _light(config)
     img = _post_photo(post)
     im = open_img(post.asset(img)) if img else None
-    canvas = cover_crop(im, (W, H), (0.5, 0.4)).convert("RGBA") if im else splash_bg(sp, 0)
-    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.45, H * 0.92, 0, 230))
+    canvas = cover_crop(im, (W, H), (0.5, 0.4)).convert("RGBA") if im else splash_bg(c["sp"], 0)
+    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.62, H, 0, 90))
     d = ImageDraw.Draw(canvas)
     total = 1 + len(post.items) + (1 if post.outro else 0)
-    _page_tag(d, 1, total, color=(255, 255, 255, 170))
+    tag = _sticker(f"{1:02d}/{total:02d}", font(EB, 26), (255, 255, 255), c["ink"], pad=(18, 8), radius=20)
+    canvas.alpha_composite(tag, (W - M - tag.width + 12, 44))
     lines = [t for t in post.title.split("\n") if t.strip()][:2]
     brand_line, benefit = (lines[0], lines[1]) if len(lines) > 1 else ("", lines[0] if lines else "")
-    bf = font(EB, 190)
-    while _tw(bf, benefit) > W - 2 * M and bf.size > 80:
+    bf = font(EB, 150)
+    while _tw(bf, benefit) + 80 > W - 2 * M and bf.size > 70:
         bf = font(EB, bf.size - 4)
-    nf = font(EB, 96)
-    while _tw(nf, brand_line) > W - 2 * M and nf.size > 56:
-        nf = font(EB, nf.size - 4)
-    y = H - 110 - line_h(bf)
-    d.text((M - 4, y), benefit, font=bf, fill=hl, stroke_width=3, stroke_fill=(0, 0, 0, 100))
+    big = _sticker(benefit, bf, c["hl"], c["ink"], angle=2, pad=(40, 16), radius=34)
+    by = H - 130 - big.height
+    canvas.alpha_composite(big, (M - 18, by))
     if brand_line:
-        d.text((M, y - line_h(nf)), brand_line, font=nf, fill=(255, 255, 255), stroke_width=2, stroke_fill=(0, 0, 0, 100))
+        nf = font(EB, 70)
+        small = _sticker(brand_line, nf, (255, 255, 255), c["ink"], angle=-2, pad=(30, 12), radius=26)
+        canvas.alpha_composite(small, (M - 6, by - small.height + 18))
     credit = _post_credit(post)
-    if credit:  # 사진 라이선스 표기 (작게)
-        d.text((W - M, H - 40), credit, font=font(R, 18), fill=(255, 255, 255, 150), anchor="rm")
+    if credit:
+        ImageDraw.Draw(canvas).text((W - M, H - 40), credit, font=font(R, 18), fill=(255, 255, 255, 190), anchor="rm",
+                                    stroke_width=2, stroke_fill=(0, 0, 0, 90))
     return canvas.convert("RGB")
 
 
 def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
-    """02 혜택 받는 법: desc 에서 '---' 위 줄 = STEP, 아래 '항목 | 내용' 줄 = 필수 정보."""
-    sp, acc = _alarm_colors(post, config)
-    canvas = Image.new("RGBA", (W, H), (246, 247, 244, 255))
+    """02 혜택 받는 법 (밝은 톤): 크림 배경, 오렌지 머리띠, STEP 카드, 아래 필수 정보."""
+    c = _light(config)
+    canvas = Image.new("RGBA", (W, H), c["paper"] + (255,))
     d = ImageDraw.Draw(canvas)
-    d.rectangle((0, 0, W, 210), fill=hex2rgb(sp["base"]))
-    d.text((M, 62), config.get("brand", ""), font=font(EB, 28), fill=(255, 255, 255, 230))
-    _page_tag(d, idx + 1, total)
-    d.text((M, 112), item.title or "혜택 받는 법", font=font(EB, 64), fill=(255, 255, 255))
+    d.rounded_rectangle((-40, -40, W + 40, 220), radius=60, fill=c["accent"])
+    d.text((M, 62), config.get("brand", ""), font=font(EB, 28), fill=(255, 255, 255, 235))
+    d.text((W - M, 64), f"{idx + 1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 235), anchor="ra")
+    d.text((M, 108), item.title or "혜택 받는 법", font=font(EB, 70), fill=(255, 255, 255))
     raw = (item.desc or "").split("\n")
     cut = next((i for i, ln in enumerate(raw) if ln.strip() == "---"), len(raw))
     steps = [ln.strip() for ln in raw[:cut] if ln.strip()]
@@ -1068,53 +1090,57 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     sf = font(B, 42)
     y = 270
     for i, st in enumerate(steps, 1):
-        lines = wrap(st, sf, W - 2 * M - 190)
+        lines = wrap(st, sf, W - 2 * M - 180)
         h = max(140, block_h(sf, lines) + 56)
-        d.rounded_rectangle((M - 10, y, W - M + 10, y + h), radius=28, fill=(255, 255, 255))
-        d.text((M + 20, y + h / 2 - 44), "STEP", font=font(EB, 24), fill=acc)
-        d.text((M + 20, y + h / 2 - 16), f"{i:02d}", font=font(EB, 54), fill=acc)
-        draw_lines(d, lines, sf, M + 160, y + (h - block_h(sf, lines)) / 2, (24, 24, 30))
+        d.rounded_rectangle((M - 10, y + 6, W - M + 10, y + h + 6), radius=30, fill=(240, 226, 206))
+        d.rounded_rectangle((M - 10, y, W - M + 10, y + h), radius=30, fill=(255, 255, 255))
+        cx, cy = M + 62, y + h / 2
+        d.ellipse((cx - 46, cy - 46, cx + 46, cy + 46), fill=c["hl"])
+        d.text((cx, cy - 14), "STEP", font=font(EB, 18), fill=c["ink"], anchor="mm")
+        d.text((cx, cy + 12), f"{i:02d}", font=font(EB, 36), fill=c["ink"], anchor="mm")
+        draw_lines(d, lines, sf, M + 150, y + (h - block_h(sf, lines)) / 2, c["ink"])
         y += h + 22
-    y += 18
-    d.line((M, y, W - M, y), fill=(210, 212, 206), width=2)
-    y += 30
-    kf, vf = font(EB, 32), font(R, 35)
+    y += 26
+    kf, vf = font(EB, 28), font(R, 34)
     for k, v in info:
-        vl = wrap(v.strip(), vf, W - 2 * M - 130)
-        d.text((M, y + 2), k.strip(), font=kf, fill=acc)
-        y = draw_lines(d, vl, vf, M + 130, y, (60, 60, 68)) + 20
+        vl = wrap(v.strip(), vf, W - 2 * M - 140)
+        kw = _tw(kf, k.strip()) + 32
+        d.rounded_rectangle((M, y, M + kw, y + 44), radius=22, fill=c["accent"])
+        d.text((M + kw / 2, y + 22), k.strip(), font=kf, fill=(255, 255, 255), anchor="mm")
+        y = draw_lines(d, vl, vf, M + 140, y + 2, c["ink"]) + 18
     return canvas.convert("RGB")
 
 
 def render_follow_card(post: Post, config: dict) -> Image.Image:
-    """03 팔로우 카드: 모든 게시물 동일한 고정 템플릿."""
+    """03 팔로우 카드 (밝은 톤, 모든 게시물 동일): 오렌지 배경 + 흰 글씨 + 레몬 FOLLOW."""
     o = config.get("outro", {})
-    sp, acc = _alarm_colors(post, config)
-    canvas = splash_bg(sp, 1)
+    c = _light(config)
+    canvas = splash_bg(c["sp"], 1)
     d = ImageDraw.Draw(canvas)
     total = 1 + len(post.items) + 1
-    d.text((M, 62), config.get("brand", ""), font=font(EB, 28), fill=(255, 255, 255, 230))
-    _page_tag(d, total, total)
-    y = 380
+    d.text((M, 62), config.get("brand", ""), font=font(EB, 28), fill=(255, 255, 255, 240))
+    d.text((W - M, 64), f"{total:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 240), anchor="ra")
+    y = 360
     for t in o.get("title", "무료·할인 혜택,\n놓치기 전에 팔로우!").split("\n"):
-        f = font(EB, 84)
+        f = font(EB, 88)
         while _tw(f, t) > W - 2 * M and f.size > 48:
             f = font(EB, f.size - 2)
         d.text((W / 2, y), t, font=f, fill=(255, 255, 255), anchor="ma")
         y += int(f.size * 1.35)
     y += 30
     for t in o.get("sub", "매일 새로운 할인정보를\n빠르게 알려드립니다.").split("\n"):
-        d.text((W / 2, y), t, font=font(B, 42), fill=(255, 255, 255, 215), anchor="ma")
+        d.text((W / 2, y), t, font=font(B, 42), fill=(255, 255, 255, 235), anchor="ma")
         y += 60
-    # 로고 + 계정 + FOLLOW
-    by = H - 330
-    canvas.alpha_composite(_app_icon(120, acc), (int(W / 2 - 60), by))
+    by = H - 360
+    ic = Image.new("RGBA", (130, 130), (0, 0, 0, 0))
+    idr = ImageDraw.Draw(ic)
+    idr.rounded_rectangle((0, 0, 129, 129), radius=36, fill=(255, 255, 255))
+    _bell(idr, 65, 65, 42, c["accent"])
+    canvas.alpha_composite(ic, (int(W / 2 - 65), by))
     d = ImageDraw.Draw(canvas)
-    d.text((W / 2, by + 150), config.get("handle", ""), font=font(EB, 40), fill=(255, 255, 255), anchor="ma")
-    ff = font(EB, 32)
-    fw = _tw(ff, "FOLLOW") + 80
-    d.rounded_rectangle((W / 2 - fw / 2, by + 215, W / 2 + fw / 2, by + 275), radius=30, fill=(255, 255, 255))
-    d.text((W / 2, by + 245), "FOLLOW", font=ff, fill=hex2rgb(sp["base"]), anchor="mm")
+    d.text((W / 2, by + 160), config.get("handle", ""), font=font(EB, 42), fill=(255, 255, 255), anchor="ma")
+    fl = _sticker("FOLLOW", font(EB, 36), c["hl"], c["ink"], angle=-2, pad=(44, 12), radius=30)
+    canvas.alpha_composite(fl, (int(W / 2 - fl.width / 2), by + 220))
     return canvas.convert("RGB")
 
 
