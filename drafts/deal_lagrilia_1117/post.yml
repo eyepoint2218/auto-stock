@@ -6,8 +6,7 @@ channel: deals
 draft: true
 label: 11월 안에 써야 하는 수험표
 cover_style: photo
-cover_url: https://www.slist.kr/news/articleView.html?idxno=780083   # 기사 대표 사진(보도자료 사진)을 워크플로가 받아옴
-cover_credit: "사진 제공 · 파리크라상"
+cover_wiki: "Spare ribs"   # 글자 없는 자유 라이선스 폭립 사진 (작가·라이선스 자동 표기)
 theme: dark
 title: "라그릴리아\n수험생 반값"
 items:
