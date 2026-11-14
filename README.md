@@ -128,7 +128,7 @@ git add queue && git commit -m "다음 주 예약" && git push
 
 ## 혜택알람 3장 고정 형식 (현재 기본)
 - 01 표지: `cover_style: photo` — 사진을 크게, `title` 첫 줄 = 브랜드(흰색), 둘째 줄 = 혜택(노란색, 가장 크게). 사진은 02 카드의 `wiki:`/`image:`
-- 02 혜택 받는 법: `type: steps` — `desc` 의 `---` 위 줄 = STEP 01·02·03, 아래 `항목 | 내용` = 기간·대상·조건·주의·출처·확인
+- 02 혜택 받는 법: `type: steps` — `desc` 의 `---` 위 줄 = STEP 01·02·03, 아래 한 줄 = 안내 문구(예: 자세한 내용은 상무초밥 홈페이지 참조). `항목 | 내용` 줄을 쓰면 정보 표로 나옴
 - 03 팔로우 카드: 채널 설정 `outro.style: follow_card` (모든 게시물 같은 템플릿, 문구는 `outro.title`·`outro.sub`)
 - 페이지 번호 01/03 자동, 채널 설정 `png: true` 면 out/ 에 PNG 도 저장 (인스타 업로드는 JPG)
 - 예시: `drafts/deal_sangmu_1119/`

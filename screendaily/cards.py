@@ -1095,11 +1095,19 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     cut = next((i for i, ln in enumerate(raw) if ln.strip() == "---"), len(raw))
     steps = [ln.strip() for ln in raw[:cut] if ln.strip()]
     info = [ln.split("|", 1) for ln in raw[cut + 1:] if "|" in ln]
-    sf = font(B, 42)
-    y = 270
-    for i, st in enumerate(steps, 1):
-        lines = wrap(st, sf, W - 2 * M - 180)
-        h = max(140, block_h(sf, lines) + 56)
+    notes = [ln.strip() for ln in raw[cut + 1:] if ln.strip() and "|" not in ln]  # '---' 아래 한 줄 안내
+    sf, nf = font(B, 44), font(B, 34)
+    kf, vf = font(EB, 28), font(R, 34)
+    step_l = [wrap(st, sf, W - 2 * M - 180) for st in steps]
+    step_h = [max(150, block_h(sf, ls) + 60) for ls in step_l]
+    info_l = [wrap(v.strip(), vf, W - 2 * M - 140) for _, v in info]
+    note_l = [wrap(t, nf, W - 2 * M - 40) for t in notes]
+    content = sum(step_h) + 26 * max(0, len(steps) - 1) \
+        + (40 + sum(block_h(vf, vl) + 18 for vl in info_l) if info else 0) \
+        + (50 + sum(block_h(nf, nl) + 10 for nl in note_l) if notes else 0)
+    top, bottom = 260, H - 100
+    y = top + max(0, (bottom - top - content) // 2)  # 내용이 적으면 세로 가운데
+    for i, (lines, h) in enumerate(zip(step_l, step_h), 1):
         d.rounded_rectangle((M - 10, y + 6, W - M + 10, y + h + 6), radius=30, fill=(240, 226, 206))
         d.rounded_rectangle((M - 10, y, W - M + 10, y + h), radius=30, fill=(255, 255, 255))
         cx, cy = M + 62, y + h / 2
@@ -1107,15 +1115,18 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
         d.text((cx, cy - 14), "STEP", font=font(EB, 18), fill=c["ink"], anchor="mm")
         d.text((cx, cy + 12), f"{i:02d}", font=font(EB, 36), fill=c["ink"], anchor="mm")
         draw_lines(d, lines, sf, M + 150, y + (h - block_h(sf, lines)) / 2, c["ink"])
-        y += h + 22
-    y += 26
-    kf, vf = font(EB, 28), font(R, 34)
-    for k, v in info:
-        vl = wrap(v.strip(), vf, W - 2 * M - 140)
-        kw = _tw(kf, k.strip()) + 32
-        d.rounded_rectangle((M, y, M + kw, y + 44), radius=22, fill=c["accent"])
-        d.text((M + kw / 2, y + 22), k.strip(), font=kf, fill=(255, 255, 255), anchor="mm")
-        y = draw_lines(d, vl, vf, M + 140, y + 2, c["ink"]) + 18
+        y += h + 26
+    if info:
+        y += 14
+        for (k, _), vl in zip(info, info_l):
+            kw = _tw(kf, k.strip()) + 32
+            d.rounded_rectangle((M, y, M + kw, y + 44), radius=22, fill=c["accent"])
+            d.text((M + kw / 2, y + 22), k.strip(), font=kf, fill=(255, 255, 255), anchor="mm")
+            y = draw_lines(d, vl, vf, M + 140, y + 2, c["ink"]) + 18
+    if notes:
+        y += 24
+        for nl in note_l:
+            y = draw_lines(d, nl, nf, 0, y, c["accent"], anchor_center=True) + 10
     _watermark(canvas, config, color=c["ink"] + (120,), shadow=False)
     return canvas.convert("RGB")
 
