@@ -1,3 +1,9 @@
 {
-  "by_title": {}
+  "by_title": {},
+  "cover": {
+    "key": "https://cjnews.cj.net/cgv%ec%97%ac%ec%9d%98%eb%8f%84-%ea%b0%9c%ea%b4%80-%ed%9b%84-%ec%b2%ab-%eb%a6%ac%eb%89%b4%ec%96%bc31%ec%9d%bc-%ec%83%88%eb%a1%ad%ea%b2%8c-%eb%ac%b8-%ec%97%b0%eb%8b%a4/",
+    "page_url": "https://cjnews.cj.net/cgv%ec%97%ac%ec%9d%98%eb%8f%84-%ea%b0%9c%ea%b4%80-%ed%9b%84-%ec%b2%ab-%eb%a6%ac%eb%89%b4%ec%96%bc31%ec%9d%bc-%ec%83%88%eb%a1%ad%ea%b2%8c-%eb%ac%b8-%ec%97%b0%eb%8b%a4/",
+    "image": "img/cover_web.jpg",
+    "src": "https://img.cjnews.cj.net/wp-content/uploads/2026/07/CGV_thumbnail-1-2.jpg"
+  }
 }
