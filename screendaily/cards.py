@@ -1100,6 +1100,7 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
         canvas.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, 165)))
     else:
         canvas = Image.new("RGBA", (W, H), (22, 22, 24, 255))
+    canvas.alpha_composite(_channel_icon(76, config), (M, 40))  # 채널 아이콘 (브랜드 각인)
     d = ImageDraw.Draw(canvas)
     d.text((W - M, 64), f"{idx + 1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 200), anchor="ra")
     raw = (item.desc or "").split("\n")
