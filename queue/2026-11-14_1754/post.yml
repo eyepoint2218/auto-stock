@@ -1,10 +1,10 @@
 # 혜택알람: 던킨 DDAY (11/14 단 하루, 최대 50% 혜택·최대 6천원)
 # 확인 2026-11-14 — 출처: 던킨 공식 홈페이지 DDAY 이벤트 페이지 (사용자 캡처). 매월 하루 브랜드 데이 (위키트리·스포츠경향 지난 회차 기사)
 # 미확인: 네이버페이 40% 최대 할인 금액(캡처에서 잘림) → 카드에 금액 안 씀
-publish_at: "2026-11-14 18:00"
+publish_at: "2026-11-14 17:54"
 format: carousel
 channel: deals
-draft: true
+draft: false
 cover_style: photo
 cover_image: img/cover.jpg   # 사용자 제공 도넛 진열대 사진
 cover_focus: "0.6,0.5"
