@@ -6,7 +6,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_wiki: "Bakery"   # 빵 진열 이미지, 사람 얼굴 없는지 미리보기에서 확인
+cover_wiki: "Bread"   # 빵만 나오는 사진
 theme: dark
 title: "SKT T day\n뚜레쥬르 30%"
 items:
