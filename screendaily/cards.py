@@ -1145,19 +1145,29 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     return canvas.convert("RGB")
 
 
-def render_follow_card(post: Post, config: dict) -> Image.Image:
-    """03 팔로우 카드 (모든 캐러셀 공용): 채널 오렌지 + 프로필과 같은 흰 종·레몬 알림 점 아이콘."""
-    o = config.get("outro", {})
+def _channel_icon(size: int, config: dict) -> Image.Image:
+    """프로필과 같은 채널 아이콘: 오렌지 둥근 사각형 + 흰 종 + 레몬 알림 점."""
     c = _light(config)
-    canvas = Image.new("RGBA", (W, H), c["accent"] + (255,))
+    ic = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    d = ImageDraw.Draw(ic)
+    d.rounded_rectangle((0, 0, size - 1, size - 1), radius=int(size * .26), fill=c["accent"])
+    _bell(d, size / 2, size * .53, size * .3, (255, 255, 255))
+    r = size * .085
+    cx, cy = size * .7, size * .27
+    d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=c["hl"])
+    return ic
+
+
+def render_follow_card(post: Post, config: dict) -> Image.Image:
+    """03 팔로우 카드 (모든 캐러셀 공용): 무채색 배경, 채널 아이콘만 오렌지."""
+    o = config.get("outro", {})
+    canvas = Image.new("RGBA", (W, H), (17, 17, 19, 255))
     d = ImageDraw.Draw(canvas)
     total = 1 + len(post.items) + 1
-    d.text((W - M, 64), f"{total:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 200), anchor="ra")
-    # 프로필과 같은 아이콘: 흰 종 + 레몬 알림 점
-    bx, by = W / 2, 330
-    _bell(d, bx, by, 130, (255, 255, 255))
-    d.ellipse((bx + 70, by - 190, bx + 150, by - 110), fill=c["hl"])
-    y = 560
+    d.text((W - M, 64), f"{total:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 170), anchor="ra")
+    canvas.alpha_composite(_channel_icon(200, config), (int(W / 2 - 100), 210))
+    d = ImageDraw.Draw(canvas)
+    y = 520
     for t in o.get("title", "무료·할인 혜택,\n놓치기 전에 팔로우!").split("\n"):
         f = font(EB, 86)
         while _tw(f, t) > W - 2 * M and f.size > 48:
@@ -1166,14 +1176,14 @@ def render_follow_card(post: Post, config: dict) -> Image.Image:
         y += int(f.size * 1.35)
     y += 24
     for t in o.get("sub", "매일 새로운 할인정보를\n빠르게 알려드립니다.").split("\n"):
-        d.text((W / 2, y), t, font=font(B, 40), fill=(255, 255, 255, 225), anchor="ma")
+        d.text((W / 2, y), t, font=font(R, 40), fill=(190, 190, 196), anchor="ma")
         y += 58
     hy = H - 250
     d.text((W / 2, hy), config.get("handle", ""), font=font(EB, 46), fill=(255, 255, 255), anchor="ma")
     ff = font(EB, 34)
     fw = _tw(ff, "FOLLOW") + 96
     d.rounded_rectangle((W / 2 - fw / 2, hy + 80, W / 2 + fw / 2, hy + 146), radius=33, fill=(255, 255, 255))
-    d.text((W / 2, hy + 113), "FOLLOW", font=ff, fill=c["accent"], anchor="mm")
+    d.text((W / 2, hy + 113), "FOLLOW", font=ff, fill=(17, 17, 19), anchor="mm")
     return canvas.convert("RGB")
 
 
