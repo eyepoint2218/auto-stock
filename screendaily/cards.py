@@ -1051,29 +1051,37 @@ def _watermark(canvas: Image.Image, config: dict, color=(255, 255, 255, 170), sh
     d.text((W / 2, H - 38), config.get("handle", ""), font=font(B, 24), fill=color, anchor="mm", **kw)
 
 
+def _shadow_text(canvas: Image.Image, xy, text: str, f, fill, blur: int = 10, alpha: int = 170):
+    """그림자 깔린 글자 (사진 위 가독성)."""
+    sh = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    ImageDraw.Draw(sh).text((xy[0] + 3, xy[1] + 5), text, font=f, fill=(0, 0, 0, alpha))
+    canvas.alpha_composite(sh.filter(ImageFilter.GaussianBlur(blur)))
+    ImageDraw.Draw(canvas).text(xy, text, font=f, fill=fill)
+
+
 def render_photo_cover(post: Post, config: dict) -> Image.Image:
-    """01 표지 (후킹용, 밝은 톤): 사진은 밝게 그대로, 아래에 브랜드 스티커(흰색) + 혜택 스티커(레몬, 가장 크게)."""
+    """01 표지 (후킹용): 사진 + 아래쪽 굵은 고딕 두 줄. 첫 줄 브랜드(흰색), 둘째 줄 혜택(강조색, 가장 크게)."""
     c = _light(config)
     img = _post_photo(post)
     im = open_img(post.asset(img)) if img else None
     canvas = cover_crop(im, (W, H), (0.5, 0.4)).convert("RGBA") if im else splash_bg(c["sp"], 0)
-    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.62, H, 0, 90))
+    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.5, H, 0, 215))
     d = ImageDraw.Draw(canvas)
     total = 1 + len(post.items) + (1 if post.outro else 0)
-    tag = _sticker(f"{1:02d}/{total:02d}", font(EB, 26), (255, 255, 255), c["ink"], pad=(18, 8), radius=20)
-    canvas.alpha_composite(tag, (W - M - tag.width + 12, 44))
+    d.text((W - M, 64), f"{1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 210), anchor="ra",
+           stroke_width=2, stroke_fill=(0, 0, 0, 80))
     lines = [t for t in post.title.split("\n") if t.strip()][:2]
     brand_line, benefit = (lines[0], lines[1]) if len(lines) > 1 else ("", lines[0] if lines else "")
     bf = font(EB, 150)
-    while _tw(bf, benefit) + 80 > W - 2 * M and bf.size > 70:
+    while _tw(bf, benefit) > W - 2 * M and bf.size > 70:
         bf = font(EB, bf.size - 4)
-    big = _sticker(benefit, bf, c["hl"], c["ink"], angle=2, pad=(40, 16), radius=34)
-    by = H - 130 - big.height
-    canvas.alpha_composite(big, (M - 18, by))
+    nf = font(EB, 104)
+    while _tw(nf, brand_line) > W - 2 * M and nf.size > 56:
+        nf = font(EB, nf.size - 4)
+    y = H - 120 - line_h(bf)
+    _shadow_text(canvas, (M - 4, y), benefit, bf, c["hl"])
     if brand_line:
-        nf = font(EB, 70)
-        small = _sticker(brand_line, nf, (255, 255, 255), c["ink"], angle=-2, pad=(30, 12), radius=26)
-        canvas.alpha_composite(small, (M - 6, by - small.height + 18))
+        _shadow_text(canvas, (M, y - line_h(nf) + 6), brand_line, nf, (255, 255, 255))
     credit = post.cover_credit or _post_credit(post)
     if credit:  # 사진 출처·라이선스 표기 (왼쪽 위, 작게)
         ImageDraw.Draw(canvas).text((M, 66), credit, font=font(R, 18), fill=(255, 255, 255, 200), anchor="lm",
