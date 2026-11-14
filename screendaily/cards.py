@@ -1016,6 +1016,109 @@ def render_toggle_outro(post: Post, config: dict) -> Image.Image:
     return canvas.convert("RGB")
 
 
+# ---------------------------------------------------------------- 혜택알람 3장 고정 형식: 사진 표지 · 혜택 받는 법 · 팔로우 카드
+
+def _page_tag(d: ImageDraw.ImageDraw, idx: int, total: int, color=(255, 255, 255, 220)):
+    d.text((W - M, 64), f"{idx:02d}/{total:02d}", font=font(B, 28), fill=color, anchor="ra")
+
+
+def render_photo_cover(post: Post, config: dict) -> Image.Image:
+    """01 표지: 사진을 크게, 아래 그라데이션 위에 브랜드(흰색) + 혜택(가장 크게, 강조색). title 첫 줄 = 브랜드."""
+    sp, acc = _alarm_colors(post, config)
+    hl = hex2rgb((config.get("alarm") or {}).get("cover_highlight") or "#FFD400")
+    img = _post_photo(post)
+    im = open_img(post.asset(img)) if img else None
+    canvas = cover_crop(im, (W, H), (0.5, 0.4)).convert("RGBA") if im else splash_bg(sp, 0)
+    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), 0, 220, 110, 0))
+    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.5, H * 0.9, 0, 225))
+    d = ImageDraw.Draw(canvas)
+    d.text((M, 62), config.get("brand", ""), font=font(EB, 28), fill=(255, 255, 255, 230))
+    total = 1 + len(post.items) + (1 if post.outro else 0)
+    _page_tag(d, 1, total)
+    lines = [t for t in post.title.split("\n") if t.strip()][:2]
+    brand_line, benefit = (lines[0], lines[1]) if len(lines) > 1 else ("", lines[0] if lines else "")
+    bf = font(EB, 132)
+    while _tw(bf, benefit) > W - 2 * M and bf.size > 70:
+        bf = font(EB, bf.size - 4)
+    nf = font(EB, 76)
+    y = H - 150 - line_h(bf)
+    d.text((M, y), benefit, font=bf, fill=hl, stroke_width=2, stroke_fill=(0, 0, 0, 90))
+    if brand_line:
+        d.text((M, y - line_h(nf) - 6), brand_line, font=nf, fill=(255, 255, 255), stroke_width=2, stroke_fill=(0, 0, 0, 90))
+    credit = _post_credit(post)
+    if credit:
+        d.text((W - M, 108), credit, font=font(R, 20), fill=(255, 255, 255, 190), anchor="ra",
+               stroke_width=2, stroke_fill=(0, 0, 0, 120))
+    d.text((W / 2, H - 70), config.get("handle", ""), font=font(B, 28), fill=(255, 255, 255, 210), anchor="mm")
+    return canvas.convert("RGB")
+
+
+def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
+    """02 혜택 받는 법: desc 에서 '---' 위 줄 = STEP, 아래 '항목 | 내용' 줄 = 필수 정보."""
+    sp, acc = _alarm_colors(post, config)
+    canvas = Image.new("RGBA", (W, H), (246, 247, 244, 255))
+    d = ImageDraw.Draw(canvas)
+    d.rectangle((0, 0, W, 210), fill=hex2rgb(sp["base"]))
+    d.text((M, 62), config.get("brand", ""), font=font(EB, 28), fill=(255, 255, 255, 230))
+    _page_tag(d, idx + 1, total)
+    d.text((M, 112), item.title or "혜택 받는 법", font=font(EB, 64), fill=(255, 255, 255))
+    raw = (item.desc or "").split("\n")
+    cut = next((i for i, ln in enumerate(raw) if ln.strip() == "---"), len(raw))
+    steps = [ln.strip() for ln in raw[:cut] if ln.strip()]
+    info = [ln.split("|", 1) for ln in raw[cut + 1:] if "|" in ln]
+    sf = font(B, 42)
+    y = 270
+    for i, st in enumerate(steps, 1):
+        lines = wrap(st, sf, W - 2 * M - 190)
+        h = max(140, block_h(sf, lines) + 56)
+        d.rounded_rectangle((M - 10, y, W - M + 10, y + h), radius=28, fill=(255, 255, 255))
+        d.text((M + 20, y + h / 2 - 44), "STEP", font=font(EB, 24), fill=acc)
+        d.text((M + 20, y + h / 2 - 16), f"{i:02d}", font=font(EB, 54), fill=acc)
+        draw_lines(d, lines, sf, M + 160, y + (h - block_h(sf, lines)) / 2, (24, 24, 30))
+        y += h + 22
+    y += 18
+    d.line((M, y, W - M, y), fill=(210, 212, 206), width=2)
+    y += 30
+    kf, vf = font(EB, 32), font(R, 35)
+    for k, v in info:
+        vl = wrap(v.strip(), vf, W - 2 * M - 130)
+        d.text((M, y + 2), k.strip(), font=kf, fill=acc)
+        y = draw_lines(d, vl, vf, M + 130, y, (60, 60, 68)) + 20
+    return canvas.convert("RGB")
+
+
+def render_follow_card(post: Post, config: dict) -> Image.Image:
+    """03 팔로우 카드: 모든 게시물 동일한 고정 템플릿."""
+    o = config.get("outro", {})
+    sp, acc = _alarm_colors(post, config)
+    canvas = splash_bg(sp, 1)
+    d = ImageDraw.Draw(canvas)
+    total = 1 + len(post.items) + 1
+    d.text((M, 62), config.get("brand", ""), font=font(EB, 28), fill=(255, 255, 255, 230))
+    _page_tag(d, total, total)
+    y = 380
+    for t in o.get("title", "무료·할인 혜택,\n놓치기 전에 팔로우!").split("\n"):
+        f = font(EB, 84)
+        while _tw(f, t) > W - 2 * M and f.size > 48:
+            f = font(EB, f.size - 2)
+        d.text((W / 2, y), t, font=f, fill=(255, 255, 255), anchor="ma")
+        y += int(f.size * 1.35)
+    y += 30
+    for t in o.get("sub", "매일 새로운 할인정보를\n빠르게 알려드립니다.").split("\n"):
+        d.text((W / 2, y), t, font=font(B, 42), fill=(255, 255, 255, 215), anchor="ma")
+        y += 60
+    # 로고 + 계정 + FOLLOW
+    by = H - 330
+    canvas.alpha_composite(_app_icon(120, acc), (int(W / 2 - 60), by))
+    d = ImageDraw.Draw(canvas)
+    d.text((W / 2, by + 150), config.get("handle", ""), font=font(EB, 40), fill=(255, 255, 255), anchor="ma")
+    ff = font(EB, 32)
+    fw = _tw(ff, "FOLLOW") + 80
+    d.rounded_rectangle((W / 2 - fw / 2, by + 215, W / 2 + fw / 2, by + 275), radius=30, fill=(255, 255, 255))
+    d.text((W / 2, by + 245), "FOLLOW", font=ff, fill=hex2rgb(sp["base"]), anchor="mm")
+    return canvas.convert("RGB")
+
+
 def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.images:
         out = []
@@ -1028,11 +1131,13 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             out.append(im)
         return out
     total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)
-    covers = {"deal": render_deal_cover, "alarm": render_alarm_cover}
+    covers = {"deal": render_deal_cover, "alarm": render_alarm_cover, "photo": render_photo_cover}
     slides = [covers.get(post.cover_style, render_cover)(post, config)]
     for i, it in enumerate(post.items, 1):
         if it.type == "deal":
             slides.append(render_deal(post, it, i, total, config))
+        elif it.type == "steps":
+            slides.append(render_steps(post, it, i, total, config))
         elif it.type == "coupon":
             slides.append(render_coupon(post, it, i, total, config))
         elif it.type == "photo":  # 직접 넣은 이미지를 그대로 한 장 (공식 이벤트 이미지 등)
@@ -1046,6 +1151,6 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.recommend:
         slides.append(render_recommend(post, len(slides), total, config))
     if post.outro:
-        toggle = (config.get("outro") or {}).get("style") == "toggle"
-        slides.append(render_toggle_outro(post, config) if toggle else render_outro(post, config))
+        style = (config.get("outro") or {}).get("style")
+        slides.append({"toggle": render_toggle_outro, "follow_card": render_follow_card}.get(style, render_outro)(post, config))
     return slides

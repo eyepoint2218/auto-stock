@@ -37,6 +37,8 @@ def generate(post: Post, config: dict, force: bool = False) -> list[Path]:
     slides = render_letterbox(post, config) if letterbox else render_all(post, config)
     for i, im in enumerate(slides, 1):
         im.save(out / f"{i:02d}.jpg", "JPEG", quality=92, optimize=True, progressive=True)
+        if config.get("png"):  # 직접 올리거나 보관할 PNG (인스타 API 업로드는 JPG 사용)
+            im.save(out / f"{i:02d}.png", "PNG", optimize=True)
 
     if post.format == "reel":
         fdir = out / "frames"

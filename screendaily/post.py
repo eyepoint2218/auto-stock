@@ -51,7 +51,7 @@ class Item:
     role: str = ""    # 배우 소개: 배역 이름 (비우면 TMDB 출연 기록에서 자동)
     year: str = ""    # 배우 스토리: 큰 숫자 대신 연도 표시 (예: 1997)
     stage: str = ""   # 배우 스토리: 단계 표시 (예: 데뷔, 첫 주연, 전환점)
-    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음), deal = 사진 + 두 줄 할인 카드, coupon = 쿠폰 티켓 정보 카드
+    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음), deal = 사진 + 두 줄 할인 카드, coupon = 쿠폰 티켓 정보 카드, steps = 혜택 받는 법(STEP)
     brand: str = ""   # 이야기 카드 색을 config.yml brands: 의 브랜드 색으로 (예: SKT, KT, LGU)
 
 
@@ -82,7 +82,7 @@ class Post:
     outro_title: str = ""      # 마지막 장 큰 문구 (비우면 config 기본값 "매일 한 편, 오늘 뭐 볼지 고민 끝")
     outro_cta: str = ""        # 마지막 장 버튼 문구
     outro_save: str = ""       # 마지막 장 저장 유도 문구
-    cover_style: str = ""      # deal = 사진 + 두 줄, alarm = 잠금화면 알림 표지 (혜택알람)
+    cover_style: str = ""      # deal = 사진 + 두 줄, alarm = 잠금화면 알림 표지, photo = 3장 형식 사진 표지 (혜택알람)
     label_text: str = ""       # (자동) label 원래 글자 (대소문자 그대로)
     alarm: str = ""            # alarm 표지 위쪽 큰 글씨 (예: 11.18, D-1)
     alarm_sub: str = ""        # alarm 표지 큰 글씨 위 작은 줄 (예: 11월 18일 수요일)

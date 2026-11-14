@@ -126,6 +126,13 @@ git add queue && git commit -m "다음 주 예약" && git push
 - 연결 확인: Actions → "인스타 연결 테스트" (DEALS 토큰이 있으면 같이 확인), 또는 `python -m screendaily check --channel deals`
 - 같은 시간에 두 채널을 예약하면 폴더 이름이 겹치니 `queue/2026-11-15_1900_deals/` 처럼 뒤에 붙이세요 (예약 시간은 post.yml 의 `publish_at` 기준).
 
+## 혜택알람 3장 고정 형식 (현재 기본)
+- 01 표지: `cover_style: photo` — 사진을 크게, `title` 첫 줄 = 브랜드(흰색), 둘째 줄 = 혜택(노란색, 가장 크게). 사진은 02 카드의 `wiki:`/`image:`
+- 02 혜택 받는 법: `type: steps` — `desc` 의 `---` 위 줄 = STEP 01·02·03, 아래 `항목 | 내용` = 기간·대상·조건·주의·출처·확인
+- 03 팔로우 카드: 채널 설정 `outro.style: follow_card` (모든 게시물 같은 템플릿, 문구는 `outro.title`·`outro.sub`)
+- 페이지 번호 01/03 자동, 채널 설정 `png: true` 면 out/ 에 PNG 도 저장 (인스타 업로드는 JPG)
+- 예시: `drafts/deal_sangmu_1119/`
+
 ## 단일 혜택 캐러셀 (혜택알람)
 혜택 하나를 3장 안팎으로: 알림 표지 → 쿠폰 티켓 → 알람 켜기
 - 알림 표지: 게시물에 `cover_style: alarm` — `alarm` = 위쪽 큰 글씨(예: 11.18), `alarm_sub` = 그 위 작은 줄,
