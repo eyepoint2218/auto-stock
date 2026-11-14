@@ -1,9 +1,8 @@
 {
   "by_title": {},
   "cover": {
-    "key": "https://images.pexels.com/photos/1395321/pexels-photo-1395321.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    "page_url": "https://images.pexels.com/photos/1395321/pexels-photo-1395321.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    "image": "img/cover_web.jpeg",
-    "src": "https://images.pexels.com/photos/1395321/pexels-photo-1395321.jpeg?auto=compress&cs=tinysrgb&w=1600"
+    "key": "manual",
+    "image": "img/cover.jpg",
+    "note": "사용자 제공 도넛 진열대 사진"
   }
 }

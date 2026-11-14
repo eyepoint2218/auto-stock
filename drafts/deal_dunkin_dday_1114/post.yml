@@ -6,7 +6,8 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: "https://images.pexels.com/photos/1395321/pexels-photo-1395321.jpeg?auto=compress&cs=tinysrgb&w=1600"   # Pexels 무료 도넛 사진 (기사 사진은 사람 얼굴)
+cover_image: img/cover.jpg   # 사용자 제공 도넛 진열대 사진
+cover_focus: "0.6,0.5"
 theme: dark
 title: "던킨\n오늘 하루\n최대 50%"
 items:
