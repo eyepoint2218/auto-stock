@@ -1,3 +1,10 @@
 {
-  "by_title": {}
+  "by_title": {},
+  "cover": {
+    "key": "wiki:Spare ribs",
+    "page_url": "https://en.wikipedia.org/wiki/Spare_ribs",
+    "credit": "사진 Edo de Roo · CC BY-SA 4.0 · Wikimedia Commons",
+    "image": "img/cover_web.jpg",
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Spareribs_20160506_182617113.jpg/1280px-Spareribs_20160506_182617113.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+  }
 }
