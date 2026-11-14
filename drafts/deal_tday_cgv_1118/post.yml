@@ -1,0 +1,30 @@
+# 혜택알람: SKT T day CGV 영화 8,500원 (11/18 하루)
+# 확인 2026-11-14 — 출처: T 멤버십 T day 페이지(검색 요약), SK텔레콤 뉴스룸 11월 혜택, 더퍼블릭·AP신문
+# 미확인: 등급별 대상(Club 프리미엄 찬스 표기) → 카드에 쓰지 않고 게시글에서 앱 확인 안내
+publish_at: "2026-11-17 19:00"
+format: carousel
+channel: deals
+draft: true
+cover_style: photo
+cover_wiki: "Movie theater"   # 사람 없는 상영관 이미지인지 미리보기에서 확인
+theme: dark
+title: "SKT T day\nCGV 8,500원"
+items:
+  - type: steps
+    title: 혜택 받는 법
+    desc: |
+      11/18 오전 9시~밤 11:59 T 멤버십 앱 '무비' 메뉴
+      영화 고르고 앱에서 바로 결제
+      CGV 앱·홈페이지·현장 예매는 적용 안 됨
+caption: |
+  SKT T day CGV 영화 8,500원 예매 (11월 18일 하루)
+
+  기간: 2026년 11월 18일 오전 9시 ~ 오후 11시 59분
+  대상: SKT T 멤버십 고객 (등급별 대상은 T 멤버십 앱에서 확인)
+  혜택: CGV 영화 티켓 8,500원 + CGV 매점 할인 쿠폰 (쿠폰 사용 11월 22일까지)
+  방법: T 멤버십 앱 '무비'에서 영화 선택 후 결제 (CGV 앱·홈페이지·현장 예매 제외)
+
+  세부 조건은 T 멤버십 앱에서 확인하세요.
+
+  팔로우하고 혜택알람 받아보세요
+hashtags: [SKT티데이, CGV할인, 영화할인, T멤버십]
