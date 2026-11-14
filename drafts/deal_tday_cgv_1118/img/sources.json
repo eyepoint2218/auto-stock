@@ -5,5 +5,22 @@
     "page_url": "https://cjnews.cj.net/cgv%ec%97%ac%ec%9d%98%eb%8f%84-%ea%b0%9c%ea%b4%80-%ed%9b%84-%ec%b2%ab-%eb%a6%ac%eb%89%b4%ec%96%bc31%ec%9d%bc-%ec%83%88%eb%a1%ad%ea%b2%8c-%eb%ac%b8-%ec%97%b0%eb%8b%a4/",
     "image": "img/cover_web.jpg",
     "src": "https://img.cjnews.cj.net/wp-content/uploads/2026/07/CGV_thumbnail-1-2.jpg"
+  },
+  "cover_candidates": {
+    "page_url": "https://cjnews.cj.net/cgv%ec%97%ac%ec%9d%98%eb%8f%84-%ea%b0%9c%ea%b4%80-%ed%9b%84-%ec%b2%ab-%eb%a6%ac%eb%89%b4%ec%96%bc31%ec%9d%bc-%ec%83%88%eb%a1%ad%ea%b2%8c-%eb%ac%b8-%ec%97%b0%eb%8b%a4/",
+    "files": [
+      {
+        "image": "img/cand_01.jpg",
+        "src": "https://img.cjnews.cj.net/wp-content/uploads/2026/07/01.-CGV%EC%97%AC%EC%9D%98%EB%8F%84-%EC%A0%84%EA%B2%BD-%EC%82%AC%EC%A7%84-e1785464040573.jpg"
+      },
+      {
+        "image": "img/cand_02.jpg",
+        "src": "https://img.cjnews.cj.net/wp-content/uploads/2026/07/02.-CGV%EC%97%AC%EC%9D%98%EB%8F%84-%EC%A0%84%EA%B2%BD-%EC%82%AC%EC%A7%84-e1785464106635.jpg"
+      },
+      {
+        "image": "img/cand_06.png",
+        "src": "https://cjnews.cj.net/wp-content/themes/CJNewsroom2025/assets/images/wa-cert.png"
+      }
+    ]
   }
 }
