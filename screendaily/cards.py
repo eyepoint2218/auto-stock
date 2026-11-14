@@ -1074,8 +1074,8 @@ def render_photo_cover(post: Post, config: dict) -> Image.Image:
         nf = font(EB, 70)
         small = _sticker(brand_line, nf, (255, 255, 255), c["ink"], angle=-2, pad=(30, 12), radius=26)
         canvas.alpha_composite(small, (M - 6, by - small.height + 18))
-    credit = _post_credit(post)
-    if credit:  # 사진 라이선스 표기 (왼쪽 위, 작게)
+    credit = post.cover_credit or _post_credit(post)
+    if credit:  # 사진 출처·라이선스 표기 (왼쪽 위, 작게)
         ImageDraw.Draw(canvas).text((M, 66), credit, font=font(R, 18), fill=(255, 255, 255, 200), anchor="lm",
                                     stroke_width=2, stroke_fill=(0, 0, 0, 90))
     _watermark(canvas, config)

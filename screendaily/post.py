@@ -84,6 +84,7 @@ class Post:
     outro_save: str = ""       # 마지막 장 저장 유도 문구
     cover_style: str = ""      # deal = 사진 + 두 줄, alarm = 잠금화면 알림 표지, photo = 3장 형식 사진 표지 (혜택알람)
     label_text: str = ""       # (자동) label 원래 글자 (대소문자 그대로)
+    cover_credit: str = ""     # cover_image 사진 출처 (표지에 작게)
     alarm: str = ""            # alarm 표지 위쪽 큰 글씨 (예: 11.18, D-1)
     alarm_sub: str = ""        # alarm 표지 큰 글씨 위 작은 줄 (예: 11월 18일 수요일)
     channel: str = ""          # 운영 채널 (config.yml channels: 의 이름). 비우면 기본 채널(스크린데일리)
@@ -247,6 +248,7 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         channel=str(raw.get("channel", "") or ""),
         cover_style=str(raw.get("cover_style", "") or ""),
         alarm=str(raw.get("alarm", "") or ""),
+        cover_credit=str(raw.get("cover_credit", "") or ""),
         label_text=str(raw.get("label", "") or ""),
         alarm_sub=str(raw.get("alarm_sub", "") or ""),
         reveal=bool(raw.get("reveal", False)),
