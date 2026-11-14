@@ -16,7 +16,7 @@ items:
   - type: steps
     title: 혜택 받는 법
     desc: |
-      STEP 1 내용
+      STEP 1 내용 (STEP 중 하나에 '11/19~11/30' 처럼 기간 필수)
       STEP 2 내용
       STEP 3 내용
 caption: |
