@@ -229,7 +229,9 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         subtitle=str(raw.get("subtitle", "") or ""),
         bubble=str(raw.get("bubble", "") or ""),
         theme=str(raw.get("theme", "dark")).lower(),
-        cover_image=str(raw.get("cover_image", "") or ""),
+        cover_image=str(raw.get("cover_image", "") or "") or (
+            (sources.get("cover") or {}).get("image", "")
+            if (slot_dir / (sources.get("cover") or {}).get("image", "_")).is_file() else ""),
         items=items,
         images=[str(x) for x in raw.get("images") or []],
         outro=bool(raw.get("outro", True)),
@@ -248,7 +250,8 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         channel=str(raw.get("channel", "") or ""),
         cover_style=str(raw.get("cover_style", "") or ""),
         alarm=str(raw.get("alarm", "") or ""),
-        cover_credit=str(raw.get("cover_credit", "") or ""),
+        cover_credit=str(raw.get("cover_credit", "") or "") or (
+            (sources.get("cover") or {}).get("credit", "") if not raw.get("cover_image") else ""),
         label_text=str(raw.get("label", "") or ""),
         alarm_sub=str(raw.get("alarm_sub", "") or ""),
         reveal=bool(raw.get("reveal", False)),

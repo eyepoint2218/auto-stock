@@ -226,6 +226,57 @@ def commons_license(src: str) -> str:
     return " · ".join(x for x in (f"사진 {artist[:30]}" if artist else "", lic, "Wikimedia Commons") if x)
 
 
+def page_image(url: str) -> str:
+    """웹페이지 주소면 대표 이미지(og:image / twitter:image) 주소를, 이미지 주소면 그대로 돌려줌."""
+    if urllib.parse.urlparse(url).path.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+        return url
+    r = _get(url, headers={"User-Agent": "Mozilla/5.0 (compatible; screendaily-card-generator/1.0)"})
+    if r.headers.get("content-type", "").startswith("image/"):
+        return url
+    html = r.text
+    for prop in ("og:image", "twitter:image", "og:image:url"):
+        m = re.search(r'<meta[^>]+(?:property|name)=["\']%s["\'][^>]+content=["\']([^"\']+)' % re.escape(prop), html, re.I) \
+            or re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+(?:property|name)=["\']%s["\']' % re.escape(prop), html, re.I)
+        if m:
+            return urllib.parse.urljoin(url, m.group(1).replace("&amp;", "&"))
+    raise RuntimeError(f"대표 이미지를 찾지 못했습니다: {url}")
+
+
+def fetch_cover(slot_dir: Path, raw: dict, sources: dict) -> str | None:
+    """표지 이미지를 웹에서: cover_url(이미지 주소 또는 기사·페이지 주소) → cover_wiki(위키 대표 사진)."""
+    if raw.get("cover_image"):
+        return None
+    url, wiki = str(raw.get("cover_url") or "").strip(), str(raw.get("cover_wiki") or "").strip()
+    key = url or (f"wiki:{wiki}" if wiki else "")
+    if not key:
+        return None
+    cur = sources.get("cover") or {}
+    if cur.get("key") == key and (slot_dir / cur.get("image", "_")).is_file():
+        return None
+    entry = {"key": key}
+    if url:
+        src = page_image(url)
+        entry["page_url"] = url
+    else:
+        meta = wiki_lookup([wiki]).get(wiki)
+        if not meta:
+            raise RuntimeError(f"위키 이미지 없음: {wiki}")
+        src = meta.get("thumb") or meta["src"]
+        entry["page_url"] = meta["page_url"]
+        lic = commons_license(meta["src"])
+        if lic:
+            entry["credit"] = lic
+    ext = Path(urllib.parse.urlparse(src).path).suffix.lower()
+    ext = ext if ext in (".jpg", ".jpeg", ".png", ".webp") else ".jpg"
+    rel = f"img/cover_web{ext}"
+    (slot_dir / "img").mkdir(exist_ok=True)
+    (slot_dir / rel).write_bytes(_get(src).content)
+    _shrink(slot_dir / rel, 1800)
+    entry["image"], entry["src"] = rel, src
+    sources["cover"] = entry
+    return rel
+
+
 # ------------------------------------------------------------------ 게시물 단위
 
 def load_sources(slot_dir: Path) -> dict:
@@ -352,6 +403,15 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
         except Exception as e:  # noqa: BLE001
             print(f"  ⚠ 배우 사진 가져오기 실패: {e}")
 
+    # 1-5) 표지 이미지 (cover_url / cover_wiki)
+    try:
+        rel = fetch_cover(slot_dir, raw, sources)
+        if rel:
+            saved.append(rel)
+            print(f"  ✓ 표지 이미지 → {rel}")
+    except Exception as e:  # noqa: BLE001
+        print(f"  ⚠ 표지 이미지 가져오기 실패: {e}")
+
     # 2) 위키백과 (TMDB 결과가 없는 작품만)
     need = [it for it in items if it.get("wiki") and not it.get("image") and str(it["title"]) not in by_title]
     if need:
@@ -385,13 +445,15 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             print(f"  ✓ 위키 {it['title']} → {rel}")
             time.sleep(1)
 
-    if saved or by_title or sources.get("actor"):
+    if saved or by_title or sources.get("actor") or sources.get("cover"):
         img_dir.mkdir(exist_ok=True)
         (img_dir / "sources.json").write_text(json.dumps(sources, ensure_ascii=False, indent=2), encoding="utf-8")
     # 더 이상 안 쓰는 이미지 정리
     used = {v for e in by_title.values() for k, v in e.items() if k in ("image", "poster")}
     if sources.get("actor", {}).get("image"):
         used.add(sources["actor"]["image"])
+    if sources.get("cover", {}).get("image"):
+        used.add(sources["cover"]["image"])
     for it in items:
         if it.get("image"):
             used.add(str(it["image"]))

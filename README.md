@@ -128,6 +128,7 @@ git add queue && git commit -m "다음 주 예약" && git push
 
 ## 혜택알람 3장 고정 형식 (현재 기본)
 - **새로 만들기:** `python -m screendaily new 2026-11-20 18:00 --deal 메가커피` → `drafts/deal_2026-11-20_1800_메가커피/` 에 템플릿 생성. 표지 이미지를 `img/cover.jpg` 로 넣고 title·STEP·caption 만 채우면 됨 (템플릿: `examples/deal_template/post.yml`)
+- 01 표지 이미지 웹에서 가져오기: `cover_url:` 에 이미지 주소나 기사·페이지 주소(대표 사진 og:image 자동), 또는 `cover_wiki:` 에 영문 위키 문서명 → 미리보기 워크플로가 `img/cover_web.jpg` 로 받음. 출처는 `cover_credit`
 - 01 표지: `cover_style: photo` — 사진을 크게, `title` 첫 줄 = 브랜드(흰색), 둘째 줄 = 혜택(노란색, 가장 크게). 사진은 02 카드의 `wiki:`/`image:`
 - 02 혜택 받는 법: `type: steps` — `desc` 의 `---` 위 줄 = STEP 01·02·03, 아래 한 줄 = 안내 문구(예: 자세한 내용은 상무초밥 홈페이지 참조). `항목 | 내용` 줄을 쓰면 정보 표로 나옴
 - 03 팔로우 카드: 채널 설정 `outro.style: follow_card` (모든 게시물 같은 템플릿, 문구는 `outro.title`·`outro.sub`)
