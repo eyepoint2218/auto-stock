@@ -1,50 +1,9 @@
 {
   "by_title": {},
-  "cover_candidates": {
-    "page_url": "https://view.asiae.co.kr/article/2026102708471295718",
-    "files": [
-      {
-        "image": "img/cand_03.jpg",
-        "src": "https://cwcontent.asiae.co.kr/amgimagelink/98/2026111014143746205A.jpg"
-      },
-      {
-        "image": "img/cand_04.jpg",
-        "src": "https://cwcontent.asiae.co.kr/amgimagelink/98/2025120210184443956A.jpg"
-      },
-      {
-        "image": "img/cand_06.jpg",
-        "src": "https://cwcontent.asiae.co.kr/amgimagelink/98/2026031811021787671A.jpg"
-      },
-      {
-        "image": "img/cand_07.jpg",
-        "src": "https://cphoto.asiae.co.kr/listimglink/1/2024122119143961608_1734776080.jpg"
-      },
-      {
-        "image": "img/cand_08.png",
-        "src": "https://cwcontent.asiae.co.kr/asiaresize/93/2026111109300894771_1794357009.png"
-      },
-      {
-        "image": "img/cand_09.jpg",
-        "src": "https://cphoto.asiae.co.kr/listimglink/1/2026102708455075133_1793058350.jpg"
-      },
-      {
-        "image": "img/cand_10.jpg",
-        "src": "https://cwcontent.asiae.co.kr/asiaresize/308/2023072413273117285_1690172852.jpg"
-      },
-      {
-        "image": "img/cand_13.jpg",
-        "src": "https://cwcontent.asiae.co.kr/asiaresize/308/2026111113464795340_1794372408.jpg"
-      },
-      {
-        "image": "img/cand_14.jpg",
-        "src": "https://cwcontent.asiae.co.kr/asiaresize/308/2026022609181953392_1772065098.jpg"
-      }
-    ]
-  },
   "cover": {
-    "key": "https://view.asiae.co.kr/article/2026102708471295718",
+    "key": "manual",
+    "image": "img/cover.jpg",
     "page_url": "https://view.asiae.co.kr/article/2026102708471295718",
-    "image": "img/cover_web.jpg",
     "src": "https://cphoto.asiae.co.kr/listimglink/1/2024122119143961608_1734776080.jpg"
   }
 }
