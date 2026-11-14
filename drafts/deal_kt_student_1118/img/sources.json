@@ -1,3 +1,10 @@
 {
-  "by_title": {}
+  "by_title": {},
+  "cover": {
+    "key": "https://commons.wikimedia.org/wiki/File:Starbucks_Grande_Iced_Pumpkin_Spice_Latte.jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Starbucks_Grande_Iced_Pumpkin_Spice_Latte.jpg",
+    "credit": "사진 출처 · JimmyStardust · CC BY-SA 4.0 · Wikimedia Commons",
+    "image": "img/cover_web.jpg",
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Starbucks_Grande_Iced_Pumpkin_Spice_Latte.jpg/1280px-Starbucks_Grande_Iced_Pumpkin_Spice_Latte.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+  }
 }
