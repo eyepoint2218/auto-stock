@@ -1,3 +1,10 @@
 {
-  "by_title": {}
+  "by_title": {},
+  "cover": {
+    "key": "wiki:Pork ribs",
+    "page_url": "https://en.wikipedia.org/wiki/Pork_ribs",
+    "credit": "사진 출처 · Gunawan Kartapranata · CC BY-SA 3.0 · Wikimedia Commons",
+    "image": "img/cover_web.jpg",
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/Balinese_Roasted_Pork_Ribs_-_Iga_Babi_Panggang_Bali.JPG/1280px-Balinese_Roasted_Pork_Ribs_-_Iga_Babi_Panggang_Bali.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+  }
 }
