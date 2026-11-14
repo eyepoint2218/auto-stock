@@ -1044,6 +1044,13 @@ def _sticker(text: str, f, bg, fg, angle: float = 0, pad=(34, 18), radius: int =
     return layer.rotate(angle, resample=Image.BICUBIC, expand=True) if angle else layer
 
 
+def _watermark(canvas: Image.Image, config: dict, color=(255, 255, 255, 170), shadow=True):
+    """모든 장 하단 가운데에 작은 채널 주소 (퍼가기 방지)."""
+    d = ImageDraw.Draw(canvas)
+    kw = dict(stroke_width=2, stroke_fill=(0, 0, 0, 70)) if shadow else {}
+    d.text((W / 2, H - 38), config.get("handle", ""), font=font(B, 24), fill=color, anchor="mm", **kw)
+
+
 def render_photo_cover(post: Post, config: dict) -> Image.Image:
     """01 표지 (후킹용, 밝은 톤): 사진은 밝게 그대로, 아래에 브랜드 스티커(흰색) + 혜택 스티커(레몬, 가장 크게)."""
     c = _light(config)
@@ -1068,9 +1075,10 @@ def render_photo_cover(post: Post, config: dict) -> Image.Image:
         small = _sticker(brand_line, nf, (255, 255, 255), c["ink"], angle=-2, pad=(30, 12), radius=26)
         canvas.alpha_composite(small, (M - 6, by - small.height + 18))
     credit = _post_credit(post)
-    if credit:
-        ImageDraw.Draw(canvas).text((W - M, H - 40), credit, font=font(R, 18), fill=(255, 255, 255, 190), anchor="rm",
+    if credit:  # 사진 라이선스 표기 (왼쪽 위, 작게)
+        ImageDraw.Draw(canvas).text((M, 66), credit, font=font(R, 18), fill=(255, 255, 255, 200), anchor="lm",
                                     stroke_width=2, stroke_fill=(0, 0, 0, 90))
+    _watermark(canvas, config)
     return canvas.convert("RGB")
 
 
@@ -1108,6 +1116,7 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
         d.rounded_rectangle((M, y, M + kw, y + 44), radius=22, fill=c["accent"])
         d.text((M + kw / 2, y + 22), k.strip(), font=kf, fill=(255, 255, 255), anchor="mm")
         y = draw_lines(d, vl, vf, M + 140, y + 2, c["ink"]) + 18
+    _watermark(canvas, config, color=c["ink"] + (120,), shadow=False)
     return canvas.convert("RGB")
 
 
@@ -1131,7 +1140,7 @@ def render_follow_card(post: Post, config: dict) -> Image.Image:
     for t in o.get("sub", "매일 새로운 할인정보를\n빠르게 알려드립니다.").split("\n"):
         d.text((W / 2, y), t, font=font(B, 42), fill=(255, 255, 255, 235), anchor="ma")
         y += 60
-    by = H - 360
+    by = H - 400
     ic = Image.new("RGBA", (130, 130), (0, 0, 0, 0))
     idr = ImageDraw.Draw(ic)
     idr.rounded_rectangle((0, 0, 129, 129), radius=36, fill=(255, 255, 255))
@@ -1141,6 +1150,7 @@ def render_follow_card(post: Post, config: dict) -> Image.Image:
     d.text((W / 2, by + 160), config.get("handle", ""), font=font(EB, 42), fill=(255, 255, 255), anchor="ma")
     fl = _sticker("FOLLOW", font(EB, 36), c["hl"], c["ink"], angle=-2, pad=(44, 12), radius=30)
     canvas.alpha_composite(fl, (int(W / 2 - fl.width / 2), by + 220))
+    _watermark(canvas, config, color=(255, 255, 255, 170), shadow=False)
     return canvas.convert("RGB")
 
 
