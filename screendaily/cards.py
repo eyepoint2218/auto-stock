@@ -1147,7 +1147,11 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     kf, vf = font(EB, 28), font(R, 34)
     step_l = [wrap(st, sf, W - 2 * M - 170) for st in steps]
     step_h = [max(140, block_h(sf, ls) + 56) for ls in step_l]
-    in_cell_h, in_rows = 70, (len(info) + 1) // 2
+    in_cell_h = 70
+    _gw = W - M - 20 - (M + 140)   # STEP 박스 안 표 너비
+    _fits2 = all(_tw(font(B, 32), k.strip()) + _tw(font(EB, 32), v.strip()) + 60 < _gw / 2 for k, v in info) if info else True
+    in_cols = 2 if _fits2 else 1   # 제품명이 길면 1열
+    in_rows = (len(info) + in_cols - 1) // in_cols
     if host >= 0 and info:
         step_h[host] = block_h(sf, step_l[host]) + 56 + in_rows * in_cell_h + 20
     info_l = [wrap(v.strip(), vf, W - 2 * M - 140) for _, v in info]
@@ -1176,12 +1180,12 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
         if i - 1 == host and info:  # STEP 박스 안: 문구 + 할인 제품 표
             draw_lines(d, lines, sf, M + 140, y + 28, (255, 255, 255))
             gx0, gx1 = M + 140, W - M - 20
-            colw = (gx1 - gx0) / 2
+            colw = (gx1 - gx0) / in_cols
             gy = y + 28 + block_h(sf, lines) + 16
             nfnt, pfnt = font(B, 32), font(EB, 32)
             for j, (k, v) in enumerate(info):
-                x0 = gx0 + (j % 2) * colw
-                yy = gy + (j // 2) * in_cell_h + in_cell_h / 2
+                x0 = gx0 + (j % in_cols) * colw
+                yy = gy + (j // in_cols) * in_cell_h + in_cell_h / 2
                 d.text((x0, yy), k.strip(), font=nfnt, fill=(235, 235, 235), anchor="lm")
                 d.text((x0 + colw - 24, yy), v.strip(), font=pfnt, fill=c["hl"], anchor="rm")
         else:
