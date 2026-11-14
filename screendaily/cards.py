@@ -1023,33 +1023,32 @@ def _page_tag(d: ImageDraw.ImageDraw, idx: int, total: int, color=(255, 255, 255
 
 
 def render_photo_cover(post: Post, config: dict) -> Image.Image:
-    """01 표지: 사진을 크게, 아래 그라데이션 위에 브랜드(흰색) + 혜택(가장 크게, 강조색). title 첫 줄 = 브랜드."""
+    """01 표지 (후킹용): 사진 + 브랜드 한 줄 + 혜택 한 줄만 크게. 채널명·아이디는 넣지 않음.
+    title 첫 줄 = 브랜드(흰색), 둘째 줄 = 혜택(강조색, 가장 크게)."""
     sp, acc = _alarm_colors(post, config)
     hl = hex2rgb((config.get("alarm") or {}).get("cover_highlight") or "#FFD400")
     img = _post_photo(post)
     im = open_img(post.asset(img)) if img else None
     canvas = cover_crop(im, (W, H), (0.5, 0.4)).convert("RGBA") if im else splash_bg(sp, 0)
-    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), 0, 220, 110, 0))
-    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.5, H * 0.9, 0, 225))
+    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.45, H * 0.92, 0, 230))
     d = ImageDraw.Draw(canvas)
-    d.text((M, 62), config.get("brand", ""), font=font(EB, 28), fill=(255, 255, 255, 230))
     total = 1 + len(post.items) + (1 if post.outro else 0)
-    _page_tag(d, 1, total)
+    _page_tag(d, 1, total, color=(255, 255, 255, 170))
     lines = [t for t in post.title.split("\n") if t.strip()][:2]
     brand_line, benefit = (lines[0], lines[1]) if len(lines) > 1 else ("", lines[0] if lines else "")
-    bf = font(EB, 132)
-    while _tw(bf, benefit) > W - 2 * M and bf.size > 70:
+    bf = font(EB, 190)
+    while _tw(bf, benefit) > W - 2 * M and bf.size > 80:
         bf = font(EB, bf.size - 4)
-    nf = font(EB, 76)
-    y = H - 150 - line_h(bf)
-    d.text((M, y), benefit, font=bf, fill=hl, stroke_width=2, stroke_fill=(0, 0, 0, 90))
+    nf = font(EB, 96)
+    while _tw(nf, brand_line) > W - 2 * M and nf.size > 56:
+        nf = font(EB, nf.size - 4)
+    y = H - 110 - line_h(bf)
+    d.text((M - 4, y), benefit, font=bf, fill=hl, stroke_width=3, stroke_fill=(0, 0, 0, 100))
     if brand_line:
-        d.text((M, y - line_h(nf) - 6), brand_line, font=nf, fill=(255, 255, 255), stroke_width=2, stroke_fill=(0, 0, 0, 90))
+        d.text((M, y - line_h(nf)), brand_line, font=nf, fill=(255, 255, 255), stroke_width=2, stroke_fill=(0, 0, 0, 100))
     credit = _post_credit(post)
-    if credit:
-        d.text((W - M, 108), credit, font=font(R, 20), fill=(255, 255, 255, 190), anchor="ra",
-               stroke_width=2, stroke_fill=(0, 0, 0, 120))
-    d.text((W / 2, H - 70), config.get("handle", ""), font=font(B, 28), fill=(255, 255, 255, 210), anchor="mm")
+    if credit:  # 사진 라이선스 표기 (작게)
+        d.text((W - M, H - 40), credit, font=font(R, 18), fill=(255, 255, 255, 150), anchor="rm")
     return canvas.convert("RGB")
 
 
