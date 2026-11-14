@@ -83,6 +83,7 @@ channels:
       paper: "#FFF7EC"          # 크림: 2장 배경
       ink: "#1F1F24"            # 글자
       hide_credit: true         # 표지에 사진 출처를 찍지 않음 (게시글에 직접 적기)
+      hide_page: true           # 페이지 번호(01/03) 표시 안 함
       splash: {base: "#FF6B2C", hot: "#FFB13B", soft: "#FFD9A0"}   # 3장 배경
     png: true                   # out/ 에 PNG 도 함께 저장
     outro:

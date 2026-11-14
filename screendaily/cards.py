@@ -1076,7 +1076,8 @@ def render_photo_cover(post: Post, config: dict) -> Image.Image:
     canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.5, H, 0, 215))
     d = ImageDraw.Draw(canvas)
     total = 1 + len(post.items) + (1 if post.outro else 0)
-    d.text((W - M, 64), f"{1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 210), anchor="ra",
+    if not (config.get("alarm") or {}).get("hide_page"):
+        d.text((W - M, 64), f"{1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 210), anchor="ra",
            stroke_width=2, stroke_fill=(0, 0, 0, 80))
     lines = [t for t in post.title.split("\n") if t.strip()][:2]
     brand_line, benefit = (lines[0], lines[1]) if len(lines) > 1 else ("", lines[0] if lines else "")
@@ -1113,7 +1114,8 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     else:
         canvas = Image.new("RGBA", (W, H), (22, 22, 24, 255))
     d = ImageDraw.Draw(canvas)
-    d.text((W - M, 64), f"{idx + 1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 200), anchor="ra")
+    if not (config.get("alarm") or {}).get("hide_page"):
+        d.text((W - M, 64), f"{idx + 1:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 200), anchor="ra")
     raw = (item.desc or "").split("\n")
     cut = next((i for i, ln in enumerate(raw) if ln.strip() == "---"), len(raw))
     steps = [ln.strip() for ln in raw[:cut] if ln.strip()]
@@ -1184,7 +1186,8 @@ def render_follow_card(post: Post, config: dict) -> Image.Image:
     canvas = Image.new("RGBA", (W, H), (17, 17, 19, 255))
     d = ImageDraw.Draw(canvas)
     total = 1 + len(post.items) + 1
-    d.text((W - M, 64), f"{total:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 170), anchor="ra")
+    if not (config.get("alarm") or {}).get("hide_page"):
+        d.text((W - M, 64), f"{total:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 170), anchor="ra")
     canvas.alpha_composite(_channel_icon(200, config), (int(W / 2 - 100), 210))
     d = ImageDraw.Draw(canvas)
     y = 520
