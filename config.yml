@@ -67,9 +67,9 @@ reel:
 # 업로드 계정: GitHub Secrets 에 IG_ACCESS_TOKEN_<ig_secret_suffix>, IG_USER_ID_<ig_secret_suffix>
 #   (graph.facebook.com 방식이면 Variables 에 IG_API_HOST_<ig_secret_suffix>)
 channels:
-  deals:                        # 혜택알람 (@today.hyetaek): 모든 혜택·할인 정보 채널 (통신사·카드·브랜드 이벤트·쿠폰 등)
+  deals:                        # 혜택알람 (@hyetaek.alarm): 모든 혜택·할인 정보 채널 (통신사·카드·브랜드 이벤트·쿠폰 등)
     brand: "혜택알람"            # 카드 위쪽·마지막 장에 찍히는 이름
-    handle: "@today.hyetaek"    # 카드 아래 워터마크·마지막 장
+    handle: "@hyetaek.alarm"    # 카드 아래 워터마크·마지막 장
     ig_secret_suffix: DEALS
     default_hashtags:
       - 혜택알람
