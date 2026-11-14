@@ -1,0 +1,19 @@
+# 혜택알람: 처갓집양념치킨 순살 후라이드 반마리 무료 — 표지 시안 (혜택 조건 미확인, 공식 확인 후 STEP·게시글 작성)
+publish_at: "2026-11-16 13:00"
+format: carousel
+channel: deals
+draft: true
+cover_style: photo
+cover_image: img/cover.jpg   # 사용자 제공 치킨 사진 (원래 박힌 문구 부분은 잘라냄)
+cover_focus: "0.5,0.6"
+title: "처갓집 양념치킨\n순살 후라이드\n반마리 무료"
+items:
+  - type: steps
+    title: 혜택 받는 법
+    desc: |
+      (공식 확인 후 작성) 기간 ~
+      (공식 확인 후 작성)
+      (공식 확인 후 작성)
+caption: |
+  (공식 확인 후 작성)
+hashtags: [처갓집양념치킨, 처갓집, 치킨할인]
