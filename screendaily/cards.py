@@ -1146,35 +1146,34 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
 
 
 def render_follow_card(post: Post, config: dict) -> Image.Image:
-    """03 팔로우 카드: 모든 캐러셀 공용 (색 없이 검정·흰색만, 사진·브랜드와 무관하게 어울림)."""
+    """03 팔로우 카드 (모든 캐러셀 공용): 채널 오렌지 + 프로필과 같은 흰 종·레몬 알림 점 아이콘."""
     o = config.get("outro", {})
-    canvas = Image.new("RGBA", (W, H), (17, 17, 19, 255))
+    c = _light(config)
+    canvas = Image.new("RGBA", (W, H), c["accent"] + (255,))
     d = ImageDraw.Draw(canvas)
     total = 1 + len(post.items) + 1
-    d.text((W - M, 64), f"{total:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 170), anchor="ra")
-    y = 380
+    d.text((W - M, 64), f"{total:02d}/{total:02d}", font=font(B, 28), fill=(255, 255, 255, 200), anchor="ra")
+    # 프로필과 같은 아이콘: 흰 종 + 레몬 알림 점
+    bx, by = W / 2, 330
+    _bell(d, bx, by, 130, (255, 255, 255))
+    d.ellipse((bx + 70, by - 190, bx + 150, by - 110), fill=c["hl"])
+    y = 560
     for t in o.get("title", "무료·할인 혜택,\n놓치기 전에 팔로우!").split("\n"):
-        f = font(EB, 88)
+        f = font(EB, 86)
         while _tw(f, t) > W - 2 * M and f.size > 48:
             f = font(EB, f.size - 2)
         d.text((W / 2, y), t, font=f, fill=(255, 255, 255), anchor="ma")
         y += int(f.size * 1.35)
-    y += 30
+    y += 24
     for t in o.get("sub", "매일 새로운 할인정보를\n빠르게 알려드립니다.").split("\n"):
-        d.text((W / 2, y), t, font=font(R, 40), fill=(190, 190, 196), anchor="ma")
+        d.text((W / 2, y), t, font=font(B, 40), fill=(255, 255, 255, 225), anchor="ma")
         y += 58
-    by = H - 380
-    ic = Image.new("RGBA", (130, 130), (0, 0, 0, 0))
-    idr = ImageDraw.Draw(ic)
-    idr.rounded_rectangle((0, 0, 129, 129), radius=36, fill=(255, 255, 255))
-    _bell(idr, 65, 65, 42, (17, 17, 19))
-    canvas.alpha_composite(ic, (int(W / 2 - 65), by))
-    d = ImageDraw.Draw(canvas)
-    d.text((W / 2, by + 160), config.get("handle", ""), font=font(EB, 42), fill=(255, 255, 255), anchor="ma")
+    hy = H - 250
+    d.text((W / 2, hy), config.get("handle", ""), font=font(EB, 46), fill=(255, 255, 255), anchor="ma")
     ff = font(EB, 34)
     fw = _tw(ff, "FOLLOW") + 96
-    d.rounded_rectangle((W / 2 - fw / 2, by + 230, W / 2 + fw / 2, by + 296), radius=33, fill=(255, 255, 255))
-    d.text((W / 2, by + 263), "FOLLOW", font=ff, fill=(17, 17, 19), anchor="mm")
+    d.rounded_rectangle((W / 2 - fw / 2, hy + 80, W / 2 + fw / 2, hy + 146), radius=33, fill=(255, 255, 255))
+    d.text((W / 2, hy + 113), "FOLLOW", font=ff, fill=c["accent"], anchor="mm")
     return canvas.convert("RGB")
 
 
