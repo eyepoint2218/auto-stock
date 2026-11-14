@@ -6,17 +6,16 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: "https://m.inews24.com/v/2023769"
-cover_candidates: true
+cover_image: img/cover.jpg   # 사용자 제공 스타벅스 사진 (기사 사진은 모델 얼굴이 있어 제외)
 theme: dark
 title: "LG유플러스\n스타벅스 1+1"
 items:
   - type: steps
     title: 혜택 받는 법
     desc: |
-      11/16~11/20 U+one 앱에서 유플투쁠 열기
-      원하는 제휴사 쿠폰 받기 (제휴사별 1인 1회)
-      스타벅스 아메리카노 1+1 · 공차 최대 50% · 다이소 3,000원 금액권
+      11/16~11/20 U+one 앱 유플투쁠
+      원하는 쿠폰 받기 (제휴사별 1회)
+      스타벅스 아메리카노 1+1 · 공차 최대 50%
 caption: |
   LG유플러스 유플투쁠 플러스 위크, 스타벅스 1+1 등 쿠폰 50여 개 (11월 16일 ~ 20일)
 

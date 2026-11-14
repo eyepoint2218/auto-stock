@@ -1,18 +1,8 @@
 {
   "by_title": {},
-  "cover_candidates": {
-    "page_url": "https://m.inews24.com/v/2023769",
-    "files": [
-      {
-        "image": "img/cand_01.jpg",
-        "src": "https://image.inews24.com/v1/a1ba26ef736478.jpg"
-      }
-    ]
-  },
   "cover": {
-    "key": "https://m.inews24.com/v/2023769",
-    "page_url": "https://m.inews24.com/v/2023769",
-    "image": "img/cover_web.jpg",
-    "src": "https://static.inews24.com/v1/a1ba26ef736478.jpg"
+    "key": "manual",
+    "image": "img/cover.jpg",
+    "note": "KT 스타벅스 게시물과 같은 사용자 제공 사진"
   }
 }
