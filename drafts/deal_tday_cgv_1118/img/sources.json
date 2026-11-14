@@ -1,3 +1,9 @@
 {
-  "by_title": {}
+  "by_title": {},
+  "cover": {
+    "key": "https://images.pexels.com/photos/391535/pexels-photo-391535.jpeg?auto=compress&cs=tinysrgb&w=1280",
+    "page_url": "https://images.pexels.com/photos/391535/pexels-photo-391535.jpeg?auto=compress&cs=tinysrgb&w=1280",
+    "image": "img/cover_web.jpeg",
+    "src": "https://images.pexels.com/photos/391535/pexels-photo-391535.jpeg?auto=compress&cs=tinysrgb&w=1280"
+  }
 }
