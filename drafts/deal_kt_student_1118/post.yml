@@ -7,6 +7,7 @@ channel: deals
 draft: true
 label: 11월 안에 써야 하는 혜택
 cover_style: photo
+cover_focus: "0.66,0.5"   # 컵이 가운데 오도록
 cover_url: https://commons.wikimedia.org/wiki/File:Starbucks_-_Coffee_Frappuccino_(51259869202).jpg   # 스타벅스 컵 실사 사진 (위키미디어 공용, CC BY 2.0)
 theme: dark
 title: "KT 멤버십\n스타벅스 무료"

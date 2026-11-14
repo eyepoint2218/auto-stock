@@ -1059,12 +1059,20 @@ def _shadow_text(canvas: Image.Image, xy, text: str, f, fill, blur: int = 10, al
     ImageDraw.Draw(canvas).text(xy, text, font=f, fill=fill)
 
 
+def _focus(post: Post, default=(0.5, 0.4)) -> tuple[float, float]:
+    try:
+        x, y = (float(v) for v in post.cover_focus.split(","))
+        return (min(max(x, 0), 1), min(max(y, 0), 1))
+    except Exception:  # noqa: BLE001
+        return default
+
+
 def render_photo_cover(post: Post, config: dict) -> Image.Image:
     """01 표지 (후킹용): 사진 + 아래쪽 굵은 고딕 두 줄. 첫 줄 브랜드(흰색), 둘째 줄 혜택(강조색, 가장 크게)."""
     c = _light(config)
     img = _post_photo(post)
     im = open_img(post.asset(img)) if img else None
-    canvas = cover_crop(im, (W, H), (0.5, 0.4)).convert("RGBA") if im else splash_bg(c["sp"], 0)
+    canvas = cover_crop(im, (W, H), _focus(post)).convert("RGBA") if im else splash_bg(c["sp"], 0)
     canvas.alpha_composite(vgrad((W, H), (0, 0, 0), H * 0.5, H, 0, 215))
     d = ImageDraw.Draw(canvas)
     total = 1 + len(post.items) + (1 if post.outro else 0)
@@ -1100,7 +1108,7 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     img = post.cover_image or item.image or _post_photo(post)  # 표지와 같은 사진 우선
     im = open_img(post.asset(img)) if img else None
     if im:
-        canvas = cover_crop(im, (W, H), (0.5, 0.45)).filter(ImageFilter.GaussianBlur(18)).convert("RGBA")
+        canvas = cover_crop(im, (W, H), _focus(post, (0.5, 0.45))).filter(ImageFilter.GaussianBlur(18)).convert("RGBA")
         canvas.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, 165)))
     else:
         canvas = Image.new("RGBA", (W, H), (22, 22, 24, 255))
