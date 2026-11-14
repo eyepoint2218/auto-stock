@@ -86,7 +86,7 @@ channels:
     png: true                   # out/ 에 PNG 도 함께 저장
     outro:
       style: follow_card        # 3장 고정 팔로우 카드 (모든 게시물 동일)
-      title: "무료·할인 혜택,\n매일 먼저 알려드려요"
+      title: "무료·할인 혜택,\n놓치기 전에 팔로우!"
       sub: "놓치기 쉬운 혜택,\n혜택알람 받아보세요"
       inline_follow: "팔로우하고 혜택알람 받아보세요"   # 2장 STEP 아래 아이콘 옆
       # 이전 마지막 장(알람 켜기 스위치)으로 돌리려면 style: toggle
