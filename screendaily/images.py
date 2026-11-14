@@ -226,8 +226,20 @@ def commons_license(src: str) -> str:
     return "사진 출처 · " + " · ".join(x for x in (artist[:30], lic, "Wikimedia Commons") if x)
 
 
+def commons_thumb(url: str, width: int = 1280) -> str:
+    """위키미디어 공용 파일 페이지(commons.wikimedia.org/wiki/File:...) → API 로 썸네일 주소."""
+    name = urllib.parse.unquote(url.split("/wiki/", 1)[1]).replace("_", " ")
+    r = _get("https://commons.wikimedia.org/w/api.php", params={
+        "action": "query", "format": "json", "titles": name, "prop": "imageinfo",
+        "iiprop": "url", "iiurlwidth": width})
+    ii = next(iter(r.json()["query"]["pages"].values()))["imageinfo"][0]
+    return ii.get("thumburl") or ii["url"]
+
+
 def page_image(url: str) -> str:
     """웹페이지 주소면 대표 이미지(og:image / twitter:image) 주소를, 이미지 주소면 그대로 돌려줌."""
+    if "commons.wikimedia.org/wiki/File:" in url:
+        return commons_thumb(url)
     if urllib.parse.urlparse(url).path.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
         return url
     r = _get(url, headers={"User-Agent": "Mozilla/5.0 (compatible; screendaily-card-generator/1.0)"})
@@ -270,7 +282,14 @@ def fetch_cover(slot_dir: Path, raw: dict, sources: dict) -> str | None:
     ext = ext if ext in (".jpg", ".jpeg", ".png", ".webp") else ".jpg"
     rel = f"img/cover_web{ext}"
     (slot_dir / "img").mkdir(exist_ok=True)
-    (slot_dir / rel).write_bytes(_get(src).content)
+    r = _get(src)
+    if not r.headers.get("content-type", "").startswith("image/"):
+        raise RuntimeError(f"이미지가 아닌 응답: {r.headers.get('content-type')} ({src[:80]})")
+    (slot_dir / rel).write_bytes(r.content)
+    if "wikimedia.org" in src and "credit" not in entry:
+        lic = commons_license(src)
+        if lic:
+            entry["credit"] = lic
     _shrink(slot_dir / rel, 1800)
     entry["image"], entry["src"] = rel, src
     sources["cover"] = entry
