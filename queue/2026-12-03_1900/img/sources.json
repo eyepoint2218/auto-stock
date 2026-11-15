@@ -17,6 +17,15 @@
       "image": "img/6246ee_still.jpg",
       "layout": "cover",
       "poster": "img/6246ee_poster.jpg"
+    },
+    "나의 문어 선생님": {
+      "source": "tmdb",
+      "tmdb": "movie/682110",
+      "tmdb_name": "나의 문어 선생님",
+      "page_url": "https://www.themoviedb.org/movie/682110",
+      "image": "img/33593a_still.jpg",
+      "layout": "cover",
+      "poster": "img/33593a_poster.jpg"
     }
   }
 }
