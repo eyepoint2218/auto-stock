@@ -51,7 +51,8 @@ class Item:
     role: str = ""    # 배우 소개: 배역 이름 (비우면 TMDB 출연 기록에서 자동)
     year: str = ""    # 배우 스토리: 큰 숫자 대신 연도 표시 (예: 1997)
     stage: str = ""   # 배우 스토리: 단계 표시 (예: 데뷔, 첫 주연, 전환점)
-    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음), deal = 사진 + 두 줄 할인 카드, coupon = 쿠폰 티켓 정보 카드, steps = 혜택 받는 법(STEP)
+    type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음), deal = 사진 + 두 줄 할인 카드, coupon = 쿠폰 티켓 정보 카드, steps = 혜택 받는 법(STEP), list = 분야별 혜택 모음(사진 + 목록)
+    note: str = ""    # list 카드 맨 아래 작은 안내 (줄바꿈으로 여러 줄)
     brand: str = ""   # 이야기 카드 색을 config.yml brands: 의 브랜드 색으로 (예: SKT, KT, LGU)
 
 
