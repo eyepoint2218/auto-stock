@@ -17,6 +17,15 @@
       "image": "img/685bc4_still.jpg",
       "layout": "cover",
       "poster": "img/685bc4_poster.jpg"
+    },
+    "섹스 에듀케이션": {
+      "source": "tmdb",
+      "tmdb": "tv/81356",
+      "tmdb_name": "오티스의 비밀 상담소",
+      "page_url": "https://www.themoviedb.org/tv/81356",
+      "image": "img/bb702d_still.jpg",
+      "layout": "cover",
+      "poster": "img/bb702d_poster.jpg"
     }
   }
 }
