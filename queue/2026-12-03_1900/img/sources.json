@@ -9,16 +9,7 @@
       "layout": "cover",
       "poster": "img/4bd13c_poster.jpg"
     },
-    "아워 플래닛": {
-      "source": "tmdb",
-      "tmdb": "tv/16831",
-      "tmdb_name": "Our Planet",
-      "page_url": "https://www.themoviedb.org/tv/16831",
-      "image": "img/41dddf_still.jpg",
-      "layout": "cover",
-      "poster": "img/41dddf_poster.jpg"
-    },
-    "필의 좋은 여행": {
+    "필이 좋은 여행, 한입만!": {
       "source": "tmdb",
       "tmdb": "tv/76305",
       "tmdb_name": "필이 좋은 여행, 한입만!",

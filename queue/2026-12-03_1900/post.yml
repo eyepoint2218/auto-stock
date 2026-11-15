@@ -3,7 +3,7 @@ format: carousel
 label: MOOD
 theme: light
 title: "보고 나면\n당장 떠나고 싶어지는 것들"
-subtitle: "여행 욕구 폭발하는 예능·다큐 3편"
+subtitle: "떠나고 싶어지는 예능·다큐 3편"
 bubble: "통장 잔고 주의"
 items:
   - title: 먹보와 털보
@@ -12,12 +12,12 @@ items:
     tmdb: tv
     desc: 비와 노홍철이 바이크를 타고 국내 곳곳을 누비며 먹고 노는 여행 예능. 두 사람의 티키타카만으로도 즐거워요.
     bubble: "바이크 여행 각"
-  - title: 아워 플래닛
+  - title: 나의 문어 선생님
     ott: 넷플릭스
     genre: 자연 다큐멘터리
-    tmdb: "tv:Our Planet"
-    desc: 지구 곳곳의 자연과 야생동물을 압도적인 영상으로 담은 다큐. 데이비드 애튼버러의 내레이션이 함께해요.
-  - title: 필의 좋은 여행
+    tmdb: "movie:My Octopus Teacher"
+    desc: 남아프리카공화국의 바닷속, 한 남자와 문어가 쌓아가는 특별한 우정을 담은 다큐. 아카데미 장편 다큐멘터리상 수상작이에요.
+  - title: "필이 좋은 여행, 한입만!"
     ott: 넷플릭스
     genre: 음식 · 여행 다큐
     tmdb: "tv:Somebody Feed Phil"
