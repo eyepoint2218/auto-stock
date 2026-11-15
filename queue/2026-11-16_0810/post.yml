@@ -18,10 +18,9 @@
 # 사진: 전부 사람 얼굴 없는 Wikimedia Commons 사진, 작가·라이선스는 img/sources.json (카드에 안 찍음, 게시글 소개에 운영자가 직접)
 #   water_slide.jpg 는 원본 아래쪽(사람 있는 부분)을 잘라낸 것
 # 뺀 것(올해 확인 안 됨): 경주월드·유월드, CGV·메가박스, 아웃백·빕스·쿠우쿠우·올웨이즈샤브·엽떡·청년다방·63레스토랑, 호텔 뷔페, 국립숲체원, 슈마커, 김해 시설
-publish_at: "2026-11-19 21:00"   # 수능 당일 시험 끝난 뒤
+publish_at: "2026-11-16 08:10"   # 사용자 요청: 바로 업로드
 format: carousel
 channel: deals
-draft: true
 label: 수능 끝 혜택
 cover_style: photo
 cover_image: img/cover.jpg   # 사람 없는 롤러코스터 트랙 (Wikimedia Commons, 퍼블릭 도메인)
