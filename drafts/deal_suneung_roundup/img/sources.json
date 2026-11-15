@@ -6,23 +6,23 @@
       "page_url": "https://commons.wikimedia.org/wiki/File:A_yellow_roller_coaster_track_set_amid_trees.jpg",
       "credit": "사진 출처 · Neal Ziring · Public domain · Wikimedia Commons"
     },
-    "초밥·스테이크 수험생 반값": {
-      "source": "wikipedia",
-      "image": "img/sushi.jpg",
-      "page_url": "https://en.wikipedia.org/wiki/Sushi",
-      "credit": "사진 출처 · chidorian from Japan · CC BY-SA 2.0 · Wikimedia Commons"
-    },
     "반값 아쿠아리움부터\n1만 원 스파까지": {
-      "source": "wikipedia",
-      "image": "img/aquarium.jpg",
-      "page_url": "https://en.wikipedia.org/wiki/Aquarium",
-      "credit": "사진 출처 · User Aleš Tošovský · Public domain · Wikimedia Commons"
+      "source": "wikimedia_commons",
+      "image": "img/aquarium_tunnel.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3AAquarium_Tunnels%2C_Kelly_Tarlton_Aquarium.jpg",
+      "credit": "사진 출처 · Ingolfson · Public domain · Wikimedia Commons"
     },
     "영화 9,900원\n스타벅스 무료": {
       "source": "wikimedia_commons",
       "image": "img/cinema_seats.jpg",
       "page_url": "https://commons.wikimedia.org/wiki/File:Empty_Movie_Theater_Seats_(54279616742).jpg",
       "credit": "사진 출처 · Eden · CC BY 2.0 · Wikimedia Commons"
+    },
+    "초밥·스테이크 수험생 반값": {
+      "source": "wikimedia_commons",
+      "image": "img/steak.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3AGrilled_steak_served_on_a_plate_with_avocado_and_sauce.jpg",
+      "credit": "사진 출처 · Shixart1985 · CC BY 2.0 · Wikimedia Commons"
     }
   },
   "cover": {

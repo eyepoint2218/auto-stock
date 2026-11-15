@@ -1232,7 +1232,6 @@ def render_list(post: Post, item: Item, idx: int, total: int, config: dict) -> I
     stage = 분야(노란 작은 글씨), title = 큰 제목, desc = 한 줄에 '브랜드 | 혜택 | 기간', note = 맨 아래 안내."""
     img = item.image
     im = open_img(post.asset(img)) if img else None
-    canvas = cover_crop(im, (W, H), (0.5, 0.35)).convert("RGBA") if im else splash_bg(_light(config)["sp"], idx)
     rows = []
     for ln in (item.desc or "").splitlines():
         parts = [t.strip() for t in ln.split("|")]
@@ -1264,7 +1263,13 @@ def render_list(post: Post, item: Item, idx: int, total: int, config: dict) -> I
         k -= 0.03
         (kf, hf, nf, bf, pf, tf, hl, rl, tl, gap), h = layout(k)
     y = bottom - h
-    canvas.alpha_composite(vgrad((W, H), (12, 12, 14), max(0, y - 420), y + 40, 0, 236))
+    # 사진은 글자 위 보이는 영역에 맞춰 넣음 (화면 전체로 키우면 일부만 보여서)
+    if im:
+        canvas = Image.new("RGBA", (W, H), (12, 12, 14, 255))
+        canvas.alpha_composite(cover_crop(im, (W, min(H, y + 160)), (0.5, 0.5)).convert("RGBA"), (0, 0))
+    else:
+        canvas = splash_bg(_light(config)["sp"], idx)
+    canvas.alpha_composite(vgrad((W, H), (12, 12, 14), max(0, y - 300), y + 40, 0, 236))
     canvas.alpha_composite(Image.new("RGBA", (W, H - y - 40), (12, 12, 14, 236)), (0, y + 40))
     d = ImageDraw.Draw(canvas)
     if item.stage:

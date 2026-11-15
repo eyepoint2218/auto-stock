@@ -35,7 +35,7 @@ items:
   - type: list
     stage: 아쿠아리움 · 전망대 · 스파
     title: "반값 아쿠아리움부터\n1만 원 스파까지"
-    image: img/aquarium.jpg
+    image: img/aquarium_tunnel.jpg   # 사람 없는 아쿠아리움 터널 (Commons, 퍼블릭 도메인)
     desc: |
       씨라이프 코엑스·부산 | 수험생 본인 입장권 50% | 11.19~12.18
       롯데월드 아쿠아리움 | 입장권 18,500원 | 11.19~11.30
@@ -46,7 +46,7 @@ items:
   - type: list
     stage: 외식
     title: 초밥·스테이크 수험생 반값
-    image: img/sushi.jpg
+    image: img/steak.jpg   # 스테이크 (Commons, CC BY 2.0)
     desc: |
       상무초밥 | 수험생 본인 주문 메뉴 50% | 11.19~11.30
       라그릴리아 | 스테이크·폭립 50% (5만 원 이상 주문, 테이블당 1회) | ~11.30
