@@ -1227,6 +1227,78 @@ def render_steps(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     return canvas.convert("RGB")
 
 
+def render_list(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
+    """총정리용 분야 카드: 위쪽은 사진 그대로, 아래쪽은 어둡게 깔고 혜택 목록.
+    stage = 분야(노란 작은 글씨), title = 큰 제목, desc = 한 줄에 '브랜드 | 혜택 | 기간', note = 맨 아래 안내."""
+    img = item.image
+    im = open_img(post.asset(img)) if img else None
+    rows = []
+    for ln in (item.desc or "").splitlines():
+        parts = [t.strip() for t in ln.split("|")]
+        if parts and parts[0]:
+            rows.append((parts + ["", ""])[:3])
+    notes = [t.strip() for t in (item.note or "").splitlines() if t.strip()]
+    maxw = W - 2 * M
+    white, yellow, soft, muted = (255, 255, 255), COVER_YELLOW, (222, 222, 228), (170, 170, 178)
+
+    def layout(k: float):
+        kf, hf = font(PT_BOLD, int(34 * k)), font(PT_BLACK, int(78 * k))
+        nf, bf, pf, tf = font(PT_BOLD, int(39 * k)), font(PT_BOLD, int(31 * k)), font(PT_BOLD, int(29 * k)), font(PT_BOLD, int(25 * k))
+        hl = wrap(item.title, hf, maxw)
+        rl = []
+        for name, ben, per in rows:
+            pw = _tw(pf, per) + (24 if per else 0)
+            rl.append((wrap(name, nf, maxw - pw)[:1], wrap(ben, bf, maxw - 34 * k), per))
+        tl = [l for n in notes for l in wrap(n, tf, maxw)]
+        gap = int(20 * k)
+        h = int(kf.size * 1.3) + int(10 * k) + len(hl) * int(hf.size * 1.12) + int(26 * k) + 2 + int(26 * k)
+        h += sum(int(nf.size * 1.25) + len(b) * int(bf.size * 1.32) for _, b, _ in rl) + gap * max(0, len(rl) - 1)
+        h += (int(22 * k) + len(tl) * int(tf.size * 1.4)) if tl else 0
+        return (kf, hf, nf, bf, pf, tf, hl, rl, tl, gap), h
+
+    k = 1.0
+    (kf, hf, nf, bf, pf, tf, hl, rl, tl, gap), h = layout(k)
+    bottom = H - 92
+    while bottom - h < 300 and k > 0.7:
+        k -= 0.03
+        (kf, hf, nf, bf, pf, tf, hl, rl, tl, gap), h = layout(k)
+    y = bottom - h
+    # 사진은 글자 위 보이는 영역에 맞춰 넣음 (화면 전체로 키우면 일부만 보여서)
+    if im:
+        canvas = Image.new("RGBA", (W, H), (12, 12, 14, 255))
+        canvas.alpha_composite(cover_crop(im, (W, min(H, y + 160)), (0.5, 0.5)).convert("RGBA"), (0, 0))
+    else:
+        canvas = splash_bg(_light(config)["sp"], idx)
+    canvas.alpha_composite(vgrad((W, H), (12, 12, 14), max(0, y - 300), y + 40, 0, 236))
+    canvas.alpha_composite(Image.new("RGBA", (W, H - y - 40), (12, 12, 14, 236)), (0, y + 40))
+    d = ImageDraw.Draw(canvas)
+    if item.stage:
+        _draw_tracked(d, (M, y), item.stage, kf, yellow, -0.01)
+    y += int(kf.size * 1.3) + int(10 * k)
+    for ln in hl:
+        _draw_tracked(d, (M - 2, y), ln, hf, white)
+        y += int(hf.size * 1.12)
+    y += int(26 * k)
+    d.line((M, y, W - M, y), fill=(255, 255, 255, 120), width=2)
+    y += 2 + int(26 * k)
+    for i, (nl, bl, per) in enumerate(rl):
+        d.text((M, y), nl[0] if nl else "", font=nf, fill=white)
+        if per:
+            d.text((W - M, y + (nf.size - pf.size) * 0.6), per, font=pf, fill=yellow, anchor="ra")
+        y += int(nf.size * 1.25)
+        for b in bl:
+            d.text((M, y), b, font=bf, fill=soft)
+            y += int(bf.size * 1.32)
+        y += gap if i < len(rl) - 1 else 0
+    if tl:
+        y += int(22 * k)
+        for t in tl:
+            d.text((M, y), t, font=tf, fill=muted)
+            y += int(tf.size * 1.4)
+    _watermark(canvas, config)
+    return canvas.convert("RGB")
+
+
 def _channel_icon(size: int, config: dict) -> Image.Image:
     """프로필과 같은 채널 아이콘: 오렌지 둥근 사각형 + 흰 종 + 레몬 알림 점."""
     c = _light(config)
@@ -1292,6 +1364,8 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             slides.append(render_deal(post, it, i, total, config))
         elif it.type == "steps":
             slides.append(render_steps(post, it, i, total, config))
+        elif it.type == "list":
+            slides.append(render_list(post, it, i, total, config))
         elif it.type == "coupon":
             slides.append(render_coupon(post, it, i, total, config))
         elif it.type == "photo":  # 직접 넣은 이미지를 그대로 한 장 (공식 이벤트 이미지 등)

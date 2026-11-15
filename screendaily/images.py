@@ -194,7 +194,7 @@ def wiki_lookup(titles: list[str]) -> dict[str, dict]:
 
 
 # 작품(영화·드라마)이 아닌 카드: TMDB 검색 안 함, 위키 사진은 썸네일 + 작가·라이선스 표기
-NON_WORK = ("story", "quote", "deal", "coupon", "steps", "note", "photo")
+NON_WORK = ("story", "quote", "deal", "coupon", "steps", "note", "photo", "list")
 
 
 def _shrink(path: Path, max_side: int):

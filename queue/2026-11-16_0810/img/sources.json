@@ -1,0 +1,41 @@
+{
+  "by_title": {
+    "초밥·스테이크 수험생 반값": {
+      "source": "wikimedia_commons",
+      "image": "img/steak.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3AGrilled_steak_served_on_a_plate_with_avocado_and_sauce.jpg",
+      "credit": "사진 출처 · Shixart1985 · CC BY 2.0 · Wikimedia Commons"
+    },
+    "놀이공원 5곳 수험생 할인": {
+      "source": "wikimedia_commons",
+      "image": "img/coaster_loops.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:A_yellow_roller_coaster_track_set_amid_trees.jpg",
+      "credit": "사진 출처 · Neal Ziring · Public domain · Wikimedia Commons"
+    },
+    "반값 아쿠아리움부터\n과학관 무료까지": {
+      "source": "wikimedia_commons",
+      "image": "img/aquarium_tunnel.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File%3AAquarium_Tunnels%2C_Kelly_Tarlton_Aquarium.jpg",
+      "credit": "사진 출처 · Ingolfson · Public domain · Wikimedia Commons"
+    },
+    "영화 9,900원,\n항공권 최대 25%": {
+      "source": "wikimedia_commons",
+      "image": "img/cinema_seats.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:Empty_Movie_Theater_Seats_(54279616742).jpg",
+      "credit": "사진 출처 · Eden · CC BY 2.0 · Wikimedia Commons"
+    },
+    "워터파크 1만 원,\n숙박 최대 84%": {
+      "source": "wikimedia_commons",
+      "image": "img/water_slide.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:Water_slide_and_pool.jpg",
+      "credit": "사진 출처 · Brandt Luke Zorn · CC BY-SA 2.0 · Wikimedia Commons",
+      "note": "원본 아래쪽(사람) 잘라냄"
+    }
+  },
+  "cover": {
+    "source": "wikimedia_commons",
+    "image": "img/cover.jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Roller_coaster_track.jpg",
+    "credit": "사진 출처 · Neal Ziring · Public domain · Wikimedia Commons"
+  }
+}
