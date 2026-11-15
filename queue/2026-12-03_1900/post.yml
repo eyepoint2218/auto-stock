@@ -15,12 +15,12 @@ items:
   - title: 아워 플래닛
     ott: 넷플릭스
     genre: 자연 다큐멘터리
-    tmdb: tv
+    tmdb: "tv:Our Planet"
     desc: 지구 곳곳의 자연과 야생동물을 압도적인 영상으로 담은 다큐. 데이비드 애튼버러의 내레이션이 함께해요.
   - title: 필의 좋은 여행
     ott: 넷플릭스
     genre: 음식 · 여행 다큐
-    tmdb: tv
+    tmdb: "tv:Somebody Feed Phil"
     desc: 세계 각지를 다니며 그 도시의 음식을 맛보는 여행 다큐. 보는 내내 배고프고, 비행기 표를 검색하게 돼요.
 caption: |
   보고 나면 비행기 표 검색하게 되는 콘텐츠 ✈️

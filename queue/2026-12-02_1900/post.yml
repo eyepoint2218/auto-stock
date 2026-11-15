@@ -15,7 +15,7 @@ items:
   - title: 섹스 에듀케이션
     ott: 넷플릭스
     genre: 하이틴 · 코미디
-    tmdb: tv
+    tmdb: "tv:Sex Education"
     desc: 성 상담사 엄마를 둔 고등학생 오티스가 학교에서 몰래 상담소를 엽니다. 웃기면서도 의외로 뭉클한 영국 하이틴 시리즈.
   - title: 웬즈데이
     ott: 넷플릭스
