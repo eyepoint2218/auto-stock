@@ -131,6 +131,9 @@ class Post:
     def full_caption(self, config: dict) -> str:
         tags, _ = self.hashtag_split(config)
         parts = [self.caption.strip()]
+        intro = str(config.get("channel_intro") or "").strip()  # 모든 게시글 끝에 붙는 채널 소개 (config.yml)
+        if intro and intro not in self.caption:
+            parts.append(intro)
         if self.credits:
             parts.append(self.credits.strip())
         if tags:
