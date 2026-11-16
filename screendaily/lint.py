@@ -57,8 +57,9 @@ def lint_post(p: Post, config: dict | None = None) -> list[str]:
                 if _len(getattr(it, k)) > 12:
                     w.append(f"items[{i}].{k} 가 {_len(getattr(it, k))}자예요. 할인 카드는 줄마다 12자 이하로 짧게.")
     steps = [it for it in p.items if it.type == "steps"]
-    if p.channel == "deals" and steps and not any("~" in (it.desc or "") for it in steps):
-        w.append("혜택알람 2장 STEP 에 기간이 없어요. STEP 안에 '11/19~11/30' 처럼 시작~마감 날짜를 넣으세요.")
+    if p.channel == "deals" and steps and not any(
+            "~" in (it.desc or "") or re.search(r"\d{1,2}/\d{1,2}\s*(오늘\s*)?하루", it.desc or "") for it in steps):
+        w.append("혜택알람 2장 STEP 에 기간이 없어요. STEP 안에 '11/19~11/30' 처럼 시작~마감 날짜를 (하루 행사는 '11/19 하루') 넣으세요.")
     if EMOJI.search(p.caption or ""):
         w.append("게시글(caption)에는 이모지를 넣지 않아요.")
     if p.format == "reel" and len(p.items) > REEL_ITEMS_MAX:
