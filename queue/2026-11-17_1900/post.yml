@@ -1,5 +1,4 @@
-publish_at: "2026-11-17 19:00"
-draft: true   # 11/17 사용자가 직접 업로드 (자동 업로드 안 함)
+publish_at: "2026-11-17 18:00"   # 사용자 요청으로 19시 → 18시
 format: carousel
 label: HIDDEN
 theme: dark
