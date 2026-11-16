@@ -1,5 +1,5 @@
 publish_at: "2026-11-17 09:00"   # 11/17 02:25 인스타 403 활동 제한 → 사용자 요청으로 오전 9시 재시도
-draft: true   # 11/17 오전 사용자가 직접 업로드 완료
+draft: true   # 11/17 02:25 자동 업로드가 403 오류를 냈지만 실제로는 게시됨 (운영자 확인)
 format: carousel
 label: MOOD
 theme: light
