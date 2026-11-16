@@ -134,11 +134,28 @@ class Post:
         intro = str(config.get("channel_intro") or "").strip()  # 모든 게시글 끝에 붙는 채널 소개 (config.yml)
         if intro and intro not in self.caption:
             parts.append(intro)
+        search = self.search_line(config)
+        if search:
+            parts.append(search)
         if self.credits:
             parts.append(self.credits.strip())
         if tags:
             parts.append(" ".join("#" + t for t in tags))
         return "\n\n".join(p for p in parts if p)
+
+    def search_line(self, config: dict) -> str:
+        """인스타 검색 노출용 키워드 한 줄: 이 게시물 작품명 + 채널 키워드 (config search_keywords)."""
+        words: list[str] = []
+        for it in self.items:
+            if it.type not in ("deal", "coupon", "steps", "note", "photo", "list", "story", "quote") and it.title:
+                words.append(it.title.replace("\n", " ").strip())
+        words += [str(k).strip() for k in (config.get("search_keywords") or []) if str(k).strip()]
+        seen, out = set(), []
+        for w in words:
+            if w and w not in seen and w not in self.caption:
+                seen.add(w)
+                out.append(w)
+        return " · ".join(out)
 
     def source_hash(self) -> str:
         h = hashlib.sha256(GENERATOR_VERSION.encode())
