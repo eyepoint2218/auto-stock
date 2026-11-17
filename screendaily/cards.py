@@ -1091,7 +1091,13 @@ def render_photo_cover(post: Post, config: dict) -> Image.Image:
     c = _light(config)
     img = _post_photo(post)
     im = open_img(post.asset(img)) if img else None
-    canvas = cover_crop(im, (W, H), _focus(post)).convert("RGBA") if im else splash_bg(c["sp"], 0)
+    if im and post.cover_fit == "contain":  # 가로 사진을 자르지 않고 전체 표시 (로고·간판이 잘리지 않게)
+        canvas = cover_crop(im, (W, H), (0.5, 0.5)).convert("RGBA").filter(ImageFilter.GaussianBlur(40))
+        canvas.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, 110)))
+        fit = im.convert("RGBA").resize((W, round(im.height * W / im.width)), Image.LANCZOS)
+        canvas.alpha_composite(fit.crop((0, 0, W, min(fit.height, H))), (0, 0))
+    else:
+        canvas = cover_crop(im, (W, H), _focus(post)).convert("RGBA") if im else splash_bg(c["sp"], 0)
     lines = [t.strip() for t in post.title.split("\n") if t.strip()][:3]
     head, benefits = (lines[0], lines[1:]) if len(lines) > 1 else ("", lines or [""])
     maxw = W - 2 * M

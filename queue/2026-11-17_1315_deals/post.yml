@@ -8,7 +8,7 @@ format: carousel
 channel: deals
 cover_style: photo
 cover_image: img/cover.jpg
-cover_focus: "0.33,0.5"
+cover_fit: contain   # 가로 사진 전체 표시 (컵·간판 공차 로고 안 잘리게)
 theme: dark
 title: "LG유플러스\n공차 최대 50%"
 items:
