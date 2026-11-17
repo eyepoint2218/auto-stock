@@ -2,14 +2,14 @@
 # 확인 2026-11-17 — 출처: 위키트리 '공차코리아, 11월 19일 공차데이서 무료 토핑 제공', 리뷰타임스·싱글리스트 공차 11월 프로모션 (2026.11)
 #   대상 음료 20종, 무료 토핑 7종(펄·미니펄·알로에 등) 중 1가지
 # 미확인(카드에 쓰지 않음): 대상 음료 20종 목록, 사이즈 조건, 앱 쿠폰 필요 여부, 1인당 횟수
-# 표지: Wikimedia Commons CC0 밀크티 사진 (브랜드·사람 없음), img/sources.json
+# 표지: Wikimedia Commons 흑당 버블티 사진 (CC BY-SA 4.0, 컵에 다른 브랜드 로고 — 운영자 허용), img/sources.json
 publish_at: "2026-11-19 12:00"
 format: carousel
 channel: deals
 draft: true
 cover_style: photo
 cover_image: img/cover.jpg
-cover_focus: "0.5,0.35"
+cover_focus: "0.5,0.4"
 theme: dark
 title: "공차데이\n토핑 1개 무료"
 items:
