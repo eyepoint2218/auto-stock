@@ -9,7 +9,8 @@ channel: deals
 draft: true   # 표지 수정 중 잠시 멈춤
 cover_style: photo
 cover_image: img/cover.jpg
-cover_fit: contain   # 가로 사진 전체 표시 (컵·간판 공차 로고 안 잘리게)
+cover_focus: "0.2,0.5"   # 컵과 컵의 공차 로고가 다 보이게
+cover_shade: none   # 글자 뒤 어두운 배경 없이 사진 그대로 (운영자 요청)
 theme: dark
 title: "LG유플러스\n공차 최대 50%"
 items:

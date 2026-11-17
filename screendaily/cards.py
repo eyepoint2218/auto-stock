@@ -1113,7 +1113,8 @@ def render_photo_cover(post: Post, config: dict) -> Image.Image:
     bottom = H - 95
     y0 = bottom - bl * len(benefits) - (hl if head else 0)
     # 텍스트 뒤에만 어두운 그라데이션 (텍스트 블록 위 200px 부터 아래로 진하게)
-    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), max(0, y0 - 220), H, 0, 190))
+    if post.cover_shade != "none":
+        canvas.alpha_composite(vgrad((W, H), (0, 0, 0), max(0, y0 - 220), H, 0, 190))
     d = ImageDraw.Draw(canvas)
     if not (config.get("alarm") or {}).get("hide_page"):
         total = 1 + len(post.items) + (1 if post.outro else 0)

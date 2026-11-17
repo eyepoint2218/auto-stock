@@ -87,6 +87,7 @@ class Post:
     label_text: str = ""       # (자동) label 원래 글자 (대소문자 그대로)
     cover_credit: str = ""     # cover_image 사진 출처 (표지에 작게)
     cover_slide: str = ""      # 완성된 표지 이미지를 01장으로 그대로 (사용자가 직접 만든 표지)
+    cover_shade: str = ""      # none = 표지 글자 뒤 어두운 그라데이션 없이 사진 그대로
     cover_fit: str = ""        # contain = 표지 사진을 자르지 않고 가로에 맞춰 위쪽에 전체 표시 (아래는 같은 사진을 흐리게 채움)
     cover_focus: str = ""      # 표지 사진에서 가운데로 올 위치 "가로,세로" (0~1, 예: 0.62,0.5)
     period: str = ""           # 혜택 기간 (2장 제목 아래, 예: 11.19(목) ~ 11.30(월))
@@ -277,6 +278,7 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         alarm=str(raw.get("alarm", "") or ""),
         cover_focus=str(raw.get("cover_focus", "") or ""),
         cover_fit=str(raw.get("cover_fit", "") or ""),
+        cover_shade=str(raw.get("cover_shade", "") or ""),
         cover_slide=str(raw.get("cover_slide", "") or ""),
         period=str(raw.get("period", "") or ""),
         cover_credit=str(raw.get("cover_credit", "") or "") or (
