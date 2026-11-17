@@ -8,7 +8,7 @@
 2. **사실 확인**: 웹 검색으로 실록·문집·백과(한국민족문화대백과, 국사편찬위원회 등)를 대조. 확인된 것만 쓴다.
 3. **회차 만들기**: `python -m historygram new N 이름 slug` → `episodes/epNN_slug/episode.yml` 채우기.
 4. **검사**: `python -m historygram check epNN` 경고 0개.
-5. **미리보기**: `python -m historygram render epNN` → 1장·6장 완성, 2~5장은 배치 미리보기(`*_layout.png`).
+5. **미리보기**: `python -m historygram render epNN` → 1·5·7장 완성, 2·3·4·6장(삽화 자리)은 배치 미리보기(`*_layout.png`).
 6. **GPT 프롬프트**: `python -m historygram prompt epNN` → 운영자에게 코드 블록 하나로 그대로 전달(한 번에 복붙).
 7. **삽화 받기**: 운영자가 GPT 그림 4장을 보내면 장면을 보고 2~5장 순서를 맞춰 `ingest epNN 2장 3장 4장 5장` → `render epNN`.
 8. **검수 후 전달**: 한글 오탈자, 인물 일관성, 복식 고증, 글자 잘림·겹침을 화면으로 확인 → `out/preview.png` 보여주고 `out/epNN_slug.zip`(PNG 7장 + caption.txt) 전달.
