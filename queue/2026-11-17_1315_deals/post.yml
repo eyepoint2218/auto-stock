@@ -2,13 +2,13 @@
 # 확인 2026-11-17 — 출처: 공차코리아 11월 프로모션 보도 (푸드투데이·싱글리스트·뉴스탭·리뷰타임스, 2026.11)
 #   "LG유플러스 VIP·VVIP 멤버십 고객 대상 1만원 이상 결제 시 이용 가능한 즉시할인 멤버십 쿠폰, 등급에 따라 30~50%, 쿠폰 사용 11월 30일까지"
 # 미확인(카드에 쓰지 않음): 쿠폰 받는 앱 메뉴 정확한 위치, 등급별 할인율(VIP 30%·VVIP 50% 인지), 최대 할인 금액, 받기 시작일
-# 표지: Wikimedia Commons CC0 타로 밀크티 손에 든 사진 (컵 로고 일부 보임 — 운영자 허용), img/sources.json
-publish_at: "2026-11-17 12:00"
+# 표지: 운영자 제공 이미지 (공차 매장 + 타로 밀크티, 11/17)
+publish_at: "2026-11-17 13:15"   # 12시 업로드가 안 돼서 바로 올림
 format: carousel
 channel: deals
-draft: true
 cover_style: photo
 cover_image: img/cover.jpg
+cover_focus: "0.33,0.5"
 theme: dark
 title: "LG유플러스\n공차 최대 50%"
 items:
