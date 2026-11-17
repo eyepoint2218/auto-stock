@@ -42,8 +42,8 @@ img.alpha_composite(icon(220), ((W - 220) // 2, 190))
 d = ImageDraw.Draw(img)
 
 y = 560
-for parts in ([("한 장씩 넘기며", WHITE)], [("배우는 ", WHITE), ("역사", YELLOW)]):
-    font = f(BLACK, 112)
+for parts in ([("매일 한 장", WHITE)], [("역사", YELLOW)]):
+    font = f(BLACK, 128)
     total = sum(font.getlength(t) for t, _ in parts)
     assert total <= W - 180
     x = (W - total) / 2
@@ -55,9 +55,9 @@ for parts in ([("한 장씩 넘기며", WHITE)], [("배우는 ", WHITE), ("역�
 hy = H - 260
 d.text((W / 2, hy), HANDLE, font=f(BLACK, 50), fill=WHITE, anchor="ma")
 ff = f(BLACK, 36)
-fw = ff.getlength("FOLLOW") + 110
+fw = ff.getlength("팔로우") + 120
 d.rounded_rectangle((W / 2 - fw / 2, hy + 88, W / 2 + fw / 2, hy + 160), radius=36, fill=YELLOW)
-d.text((W / 2, hy + 124), "FOLLOW", font=ff, fill=(0, 0, 0), anchor="mm")
+d.text((W / 2, hy + 124), "팔로우", font=ff, fill=(0, 0, 0), anchor="mm")
 
 out = HERE / "06.png"
 img.convert("RGB").save(out)
