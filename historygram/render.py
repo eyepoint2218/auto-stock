@@ -23,8 +23,8 @@ PROFILE = PKG / "assets/profile.png"
 
 # 2~4장 기본값 (episode.yml 의 slides.N 에서 덮어쓸 수 있음)
 DEFAULTS = {
-    2: dict(pos="bottom", size=84, crop=.5, shade=170),
-    3: dict(pos="bottom", size=76, crop=.5, shade=170),
+    2: dict(pos="bottom", size=96, crop=.5, shade=180),
+    3: dict(pos="bottom", size=96, crop=.5, shade=180),
     4: dict(pos="top", size=96, crop=.5, shade=190),
 }
 
