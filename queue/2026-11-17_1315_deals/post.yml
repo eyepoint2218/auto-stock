@@ -6,7 +6,6 @@
 publish_at: "2026-11-17 13:15"   # 12시 업로드가 안 돼서 바로 올림
 format: carousel
 channel: deals
-draft: true   # 표지 수정 중 잠시 멈춤
 cover_style: photo
 cover_image: img/cover.jpg
 cover_focus: "1,0.5"   # 벽 공차 간판(로고+Gong cha)이 다 보이게 (운영자 요청)
