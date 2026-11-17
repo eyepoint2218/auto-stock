@@ -38,7 +38,7 @@ def icon(size):
 
 
 img = Image.new("RGBA", (W, H), (0, 0, 0, 255))
-img.alpha_composite(icon(220), ((W - 220) // 2, 190))
+img.alpha_composite(icon(260), ((W - 260) // 2, 170))
 d = ImageDraw.Draw(img)
 
 y = 560
