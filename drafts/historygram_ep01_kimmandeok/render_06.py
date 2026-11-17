@@ -41,18 +41,16 @@ img = Image.new("RGBA", (W, H), (0, 0, 0, 255))
 img.alpha_composite(icon(220), ((W - 220) // 2, 190))
 d = ImageDraw.Draw(img)
 
-y = 500
-for parts in ([("교과서 밖", YELLOW)], [("역사 이야기,", WHITE)], [("놓치지 마세요", WHITE)]):
-    font = f(BLACK, 92)
+y = 560
+for parts in ([("한 장씩 넘기며", WHITE)], [("배우는 ", WHITE), ("역사", YELLOW)]):
+    font = f(BLACK, 112)
     total = sum(font.getlength(t) for t, _ in parts)
     assert total <= W - 180
     x = (W - total) / 2
     for t, c in parts:
         d.text((x, y), t, font=font, fill=c)
         x += font.getlength(t)
-    y += 124
-
-d.text((W / 2, y + 30), "한 장씩 넘기며 배우는 역사", font=f(BOLD, 40), fill=GRAY, anchor="ma")
+    y += 150
 
 hy = H - 260
 d.text((W / 2, hy), HANDLE, font=f(BLACK, 50), fill=WHITE, anchor="ma")
