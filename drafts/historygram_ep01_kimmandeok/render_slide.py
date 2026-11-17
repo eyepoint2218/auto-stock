@@ -36,6 +36,18 @@ SLIDES = {
 }
 
 
+HANDLE = "@historygram.kr"
+
+
+def stamp(img):
+    """오른쪽 아래 채널명 (작게, 옅은 그림자)."""
+    from PIL import ImageDraw, ImageFont
+    d = ImageDraw.Draw(img)
+    f = ImageFont.truetype(str(Path(__file__).resolve().parents[2] / "assets/fonts/Pretendard-Bold.otf"), 26)
+    d.text((1080 - 40, 1350 - 40), HANDLE, font=f, fill=(0, 0, 0), anchor="rs", stroke_width=3, stroke_fill=(0, 0, 0))
+    d.text((1080 - 40, 1350 - 40), HANDLE, font=f, fill=(230, 230, 230), anchor="rs")
+
+
 def fit(img, anchor):
     s = max(W / img.width, H / img.height)
     img = img.resize((round(img.width * s), round(img.height * s)), Image.LANCZOS)
@@ -86,6 +98,7 @@ def render(no):
         d.text((W - 38, 40), cfg["note"], font=nf, fill=(0, 0, 0), anchor="ra", stroke_width=3, stroke_fill=(0, 0, 0))
         d.text((W - 38, 40), cfg["note"], font=nf, fill=(235, 235, 235), anchor="ra")
 
+    stamp(img)
     out = HERE / f"{no:02d}.png"
     img.save(out)
     print(out)

@@ -7,6 +7,18 @@ WHITE, YELLOW = (255, 255, 255), (255, 229, 0)
 ROOT = Path(__file__).resolve().parents[2]
 font = ImageFont.truetype(str(ROOT / "assets/fonts/Pretendard-Black.otf"), 104)
 
+
+HANDLE = "@historygram.kr"
+
+
+def stamp(img):
+    """오른쪽 아래 채널명 (작게, 옅은 그림자)."""
+    from PIL import ImageDraw, ImageFont
+    d = ImageDraw.Draw(img)
+    f = ImageFont.truetype(str(Path(__file__).resolve().parents[2] / "assets/fonts/Pretendard-Bold.otf"), 26)
+    d.text((1080 - 40, 1350 - 40), HANDLE, font=f, fill=(0, 0, 0), anchor="rs", stroke_width=3, stroke_fill=(0, 0, 0))
+    d.text((1080 - 40, 1350 - 40), HANDLE, font=f, fill=(230, 230, 230), anchor="rs")
+
 # 줄마다 (글자, 색) 조각
 lines = [
     [("“제 두 눈으로", WHITE)],
@@ -26,6 +38,7 @@ for parts in lines:
         d.text((x, y), t, font=font, fill=c)
         x += d.textlength(t, font=font)
     y += line_h
+stamp(img)
 out = Path(__file__).with_name("01.png")
 img.save(out)
 print(out, img.size)
