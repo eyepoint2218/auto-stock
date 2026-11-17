@@ -183,6 +183,21 @@ def slide5(ep: dict, folder: Path) -> tuple[Image.Image, bool]:
     return img, has_art
 
 
+def slide_quiz(ep: dict) -> Image.Image:
+    """인물 공개 직전 퀴즈 카드: 검은 배경에 아주 큰 글자 'O는 / [누구]일까?'."""
+    intro = ep["slides"][5].get("intro", "그의 이름은")
+    lines = ep.get("quiz") or [f"{'그녀' if '그녀' in intro else '그'}는", "[누구]일까?"]
+    size = fit_size(lines, BLACK_F, 240)
+    img = Image.new("RGB", (W, H), (0, 0, 0))
+    f = font(BLACK_F, size)
+    asc, desc = f.getmetrics()
+    lh = int((asc + desc) * 1.15)
+    y = (H - lh * len(lines)) / 2 + (lh - asc - desc) / 2
+    img = draw_block(img, [(l, size, BLACK_F) for l in lines], y, shadow=False, leading=1.15)
+    stamp(img)
+    return img
+
+
 def slide6(copy: tuple[str, ...] = ("매일 한 장", "[역사]")) -> Image.Image:
     img = Image.new("RGBA", (W, H), (0, 0, 0, 255))
     if PROFILE.exists():
@@ -225,22 +240,28 @@ def render_episode(ep: dict, folder: Path) -> list[Path]:
     for no in (2, 3, 4):
         img, ok = slide_story(ep, folder, no)
         save(img, no, ok)
-    img, ok = slide5(ep, folder)
-    save(img, 5, ok)
-    save(slide6(tuple(ep.get("follow_copy", ["매일 한 장", "[역사]"]))), 6)
+    save(slide_quiz(ep), 5)                    # 퀴즈 카드 '그는 누구일까?'
+    img, ok = slide5(ep, folder)               # 인물 공개 (삽화 art_05)
+    save(img, 6, ok)
+    save(slide6(tuple(ep.get("follow_copy", ["매일 한 장", "[역사]"]))), 7)
     return saved
 
 
+SLIDE_COUNT = 7
+
+
 def pack(folder: Path, caption: str) -> Path | None:
-    """6장이 모두 완성됐으면 미리보기 시트와 zip(PNG 6장 + caption.txt)을 만든다."""
+    """모든 장이 완성됐으면 미리보기 시트와 zip(PNG 7장 + caption.txt)을 만든다."""
     out = folder / "out"
-    pngs = [out / f"{i:02d}.png" for i in range(1, 7)]
+    pngs = [out / f"{i:02d}.png" for i in range(1, SLIDE_COUNT + 1)]
     (out / "caption.txt").write_text(caption, encoding="utf-8")
-    g = 16
-    sheet = Image.new("RGB", (3 * 360 + 4 * g, 2 * 450 + 3 * g), (240, 240, 240))
-    for i in range(6):
+    g, cols = 16, 4
+    rows_n = -(-SLIDE_COUNT // cols)
+    sheet = Image.new("RGB", (cols * 300 + (cols + 1) * g, rows_n * 375 + (rows_n + 1) * g), (240, 240, 240))
+    for i in range(SLIDE_COUNT):
         p = pngs[i] if pngs[i].exists() else out / f"{i + 1:02d}_layout.png"
-        sheet.paste(Image.open(p).resize((360, 450), Image.LANCZOS), (g + (i % 3) * (360 + g), g + (i // 3) * (450 + g)))
+        sheet.paste(Image.open(p).resize((300, 375), Image.LANCZOS),
+                    (g + (i % cols) * (300 + g), g + (i // cols) * (375 + g)))
     sheet.save(out / "preview.png")
     if not all(p.exists() for p in pngs):
         return None

@@ -5,7 +5,7 @@
   python -m historygram check ep02           # 규칙 검사
   python -m historygram prompt ep02          # GPT 이미지 프롬프트(한 번에 복붙) 출력 + gpt_prompt.txt
   python -m historygram ingest ep02 2장.png 3장.png 4장.png 5장.png   # GPT 삽화를 art_02~05.jpg 로 저장
-  python -m historygram render ep02          # out/ 에 PNG(삽화 없으면 배치 미리보기) + preview.png (+ 6장 다 있으면 zip)
+  python -m historygram render ep02          # out/ 에 PNG(삽화 없으면 배치 미리보기) + preview.png (+ 7장 다 있으면 zip)
 """
 from __future__ import annotations
 
