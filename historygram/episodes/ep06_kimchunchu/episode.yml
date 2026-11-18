@@ -1,5 +1,5 @@
 ep: 6
-status: draft   # draft → images → done
+status: done
 
 quiz: ["그는", "[누구]일까요?"]
 
@@ -19,6 +19,8 @@ slides:
   4:
     lines: ["그 외교로 신라는", "[통일]의 문을", "열었어요."]
     note: 재구성 연출
+    pos: bottom
+    shade: 210
   5:
     intro: 그의 이름은
     name: 김춘추
