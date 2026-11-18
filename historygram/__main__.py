@@ -46,15 +46,16 @@ def caption_of(ep: dict) -> str:
 def check(ep: dict) -> list[str]:
     warn = []
     name = ep["slides"][5]["name"]
-    for no in (1, 2, 3, 4):
+    text_keys = [1, *R.story_keys(ep)]
+    for no in text_keys:
         for line in ep["slides"][no]["lines"]:
             if name in R.plain(line):
                 warn.append(f"{no}장에 이름 노출: {line}")
-    for no in (2, 3, 4):
-        if name in ep["images"]["scenes"][no]:
+    for no in R.story_keys(ep):
+        if name in ep["images"]["scenes"].get(no, ""):
             warn.append(f"{no}장 그림 프롬프트에 이름이 들어감(얼굴 공개 위험)")
     texts = [ep["caption"], *ep["hashtags"], ep["slides"][5]["desc"]]
-    texts += [l for no in (1, 2, 3, 4) for l in ep["slides"][no]["lines"]]
+    texts += [l for no in text_keys for l in ep["slides"][no]["lines"]]
     if any(EMOJI.search(t) for t in texts):
         warn.append("이모지 사용 금지")
     if len(ep["hashtags"]) > 5:
@@ -65,9 +66,9 @@ def check(ep: dict) -> list[str]:
         warn.append("sources(사료·출처) 비어 있음")
     if not ep.get("staging"):
         warn.append("staging(사실과 연출 구분) 비어 있음")
-    for no in (1, 2, 3, 4):
+    for no in text_keys:
         lines = ep["slides"][no]["lines"]
-        base = ep["slides"][no].get("size", 104 if no == 1 else R.DEFAULTS[no]["size"])
+        base = ep["slides"][no].get("size", 104 if no == 1 else R.DEFAULTS.get(no, R.DEFAULTS[2])["size"])
         if R.fit_size(lines, R.BLACK_F, base, 0) < 60:
             warn.append(f"{no}장 글자가 길어 60px 미만으로 줄어듦 → 줄을 나누거나 줄이기")
     return warn
@@ -112,12 +113,19 @@ def main(argv: list[str]) -> None:
 
     if cmd == "ingest":
         from PIL import Image
-        if len(rest) != 5:
-            sys.exit("사용: ingest epNN 2장 3장 4장 5장 (순서대로 이미지 4개)")
-        for no, src in zip((2, 3, 4, 5), rest[1:]):
-            dst = folder / f"art_{no:02d}.jpg"
+        keys = [*R.story_keys(ep), 5]
+        args = rest[1:]
+        if args and all("=" in a for a in args):        # 한 장만: ingest ep02 3.5=새그림.png
+            pairs = [(yaml.safe_load(a.split("=", 1)[0]), a.split("=", 1)[1]) for a in args]
+        elif len(args) == len(keys):                    # 전부: 스토리 장 순서 + 마지막 인물 공개
+            pairs = list(zip(keys, args))
+        else:
+            sys.exit(f"사용: ingest epNN 이미지 {len(keys)}개 (장 순서 {keys}) 또는 ingest epNN 키=이미지")
+        for no, src in pairs:
+            stem = R.art_stem(no)
+            dst = folder / f"{stem}.jpg"
             Image.open(src).convert("RGB").save(dst, quality=92)
-            (folder / f"art_{no:02d}.png").unlink(missing_ok=True)
+            (folder / f"{stem}.png").unlink(missing_ok=True)
             print(dst)
         return
 

@@ -15,17 +15,22 @@ SPACE = {"bottom": "화면 아래 1/3은 어둡고 단순하게 비워 둔다.",
 
 
 def build(ep: dict) -> str:
+    from .render import story_keys
     img = ep["images"]
-    head = ("역사 인스타그램 캐러셀에 쓸 삽화 4장을 차례로 만들어줘. 각 장은 별도의 이미지 1장씩, "
-            "세로 1024×1536으로 생성해줘. 한 장 만들 때마다 멈추지 말고 2장 → 3장 → 4장 → 5장 순서로 이어서 만들어줘.")
-    body = [head, "", STYLE.format(era=img["era"], hero=img["hero"]), ""]
-    for no in (2, 3, 4, 5):
+    keys = [*story_keys(ep), 5]
+    n = len(keys)
+    order = " → ".join(f"{i}번" for i in range(1, n + 1))
+    head = (f"역사 인스타그램 캐러셀에 쓸 삽화 {n}장을 차례로 만들어줘. 각 장은 별도의 이미지 1장씩, "
+            f"세로 1024×1536으로 생성해줘. 한 장 만들 때마다 멈추지 말고 {order} 순서로 이어서 만들어줘.")
+    body = [head, "", STYLE.format(era=img["era"], hero=img["hero"]).replace("4장 모두", f"{n}장 모두")
+            .replace("2~4번째 그림", f"1~{n - 1}번째 그림"), ""]
+    for i, no in enumerate(keys, 1):
         pos = ep["slides"][no].get("pos", "top" if no == 4 else "bottom")
         scene = img["scenes"][no].strip()
         if no == 5:
             scene += " 인물은 화면 가운데 위쪽에 두고, 화면 아래 1/3은 단순하게 비워 둔다."
         else:
             scene += " " + SPACE[pos]
-        body.append(f"[{no}장] {scene}")
+        body.append(f"[{i}번 그림] {scene}")
         body.append("")
     return "\n".join(body).strip() + "\n"

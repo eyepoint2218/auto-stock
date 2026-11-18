@@ -120,9 +120,9 @@ def stamp(img: Image.Image) -> None:
     d.text((W - 40, H - 40), HANDLE, font=f, fill=(230, 230, 230), anchor="rs")
 
 
-def placeholder(no: int) -> Image.Image:
+def placeholder(stem: str) -> Image.Image:
     img = Image.new("RGB", (W, H), (70, 66, 60))
-    ImageDraw.Draw(img).text((W / 2, H * .4), f"{no}장 삽화 자리 (art_0{no}.jpg)",
+    ImageDraw.Draw(img).text((W / 2, H * .4), f"삽화 자리 ({stem}.jpg)",
                              font=font(BOLD_F, 40), fill=(150, 145, 135), anchor="mm")
     return img
 
@@ -145,17 +145,27 @@ def slide1(ep: dict) -> Image.Image:
     return img
 
 
-def slide_art(ep: dict, folder: Path, no: int) -> tuple[Image.Image, bool]:
-    art = next((p for p in (folder / f"art_{no:02d}.jpg", folder / f"art_{no:02d}.png") if p.exists()), None)
+def story_keys(ep: dict) -> list:
+    """삽화가 들어가는 스토리 장 키(2, 3, 3.5, 4 ...). 3.5 처럼 소수 키로 중간에 장을 끼워 넣는다."""
+    return sorted(k for k in ep["slides"] if k not in (1, 5))
+
+
+def art_stem(key) -> str:
+    return f"art_{key:02d}" if float(key).is_integer() else "art_" + str(key).replace(".", "_")
+
+
+def slide_art(ep: dict, folder: Path, no) -> tuple[Image.Image, bool]:
+    stem = art_stem(int(no) if float(no).is_integer() else no)
+    art = next((p for p in (folder / f"{stem}.jpg", folder / f"{stem}.png") if p.exists()), None)
     cfg = {**DEFAULTS.get(no, DEFAULTS[2]), **ep["slides"][no]}
     has_art = art is not None
-    img = cover(Image.open(art), cfg["crop"]) if has_art else placeholder(no)
+    img = cover(Image.open(art), cfg["crop"]) if has_art else placeholder(stem)
     img = shade(img, cfg["pos"], cfg["shade"])
     return img, has_art
 
 
-def slide_story(ep: dict, folder: Path, no: int) -> tuple[Image.Image, bool]:
-    cfg = {**DEFAULTS[no], **ep["slides"][no]}
+def slide_story(ep: dict, folder: Path, no) -> tuple[Image.Image, bool]:
+    cfg = {**DEFAULTS.get(no, DEFAULTS[2]), **ep["slides"][no]}
     img, has_art = slide_art(ep, folder, no)
     size = fit_size(cfg["lines"], BLACK_F, cfg["size"])
     rows = [(l, size, BLACK_F) for l in cfg["lines"]]
@@ -236,23 +246,26 @@ def render_episode(ep: dict, folder: Path) -> list[Path]:
         img.save(p)
         saved.append(p)
 
-    save(slide1(ep), 1)
-    for no in (2, 3, 4):
-        img, ok = slide_story(ep, folder, no)
-        save(img, no, ok)
-    save(slide_quiz(ep), 5)                    # 퀴즈 카드 '그는 누구일까?'
+    n = 1
+    save(slide1(ep), n)
+    for key in story_keys(ep):
+        n += 1
+        img, ok = slide_story(ep, folder, key)
+        save(img, n, ok)
+    n += 1
+    save(slide_quiz(ep), n)                    # 퀴즈 카드 '그는 누구일까요?'
+    n += 1
     img, ok = slide5(ep, folder)               # 인물 공개 (삽화 art_05)
-    save(img, 6, ok)
-    save(slide6(tuple(ep.get("follow_copy", ["매일 한 장", "[역사]"]))), 7)
+    save(img, n, ok)
+    n += 1
+    save(slide6(tuple(ep.get("follow_copy", ["매일 한 장", "[역사]"]))), n)
     return saved
 
 
-SLIDE_COUNT = 7
-
-
 def pack(folder: Path, caption: str) -> Path | None:
-    """모든 장이 완성됐으면 미리보기 시트와 zip(PNG 7장 + caption.txt)을 만든다."""
+    """모든 장이 완성됐으면 미리보기 시트와 zip(PNG 전부 + caption.txt)을 만든다."""
     out = folder / "out"
+    SLIDE_COUNT = len({p.name[:2] for p in out.glob("[0-9][0-9]*.png")})
     pngs = [out / f"{i:02d}.png" for i in range(1, SLIDE_COUNT + 1)]
     (out / "caption.txt").write_text(caption, encoding="utf-8")
     g, cols = 16, 4
