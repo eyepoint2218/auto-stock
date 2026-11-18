@@ -1,5 +1,5 @@
 ep: 5
-status: draft   # draft → images → done
+status: done
 
 quiz: ["그녀는", "[누구]일까요?"]
 
@@ -19,6 +19,7 @@ slides:
   4:
     lines: ["그 슬픔은", "[나당동맹]으로 이어져", "삼국의 운명을 바꿨어요."]
     note: 재구성 연출
+    shade: 225
   5:
     intro: 그녀의 이름은
     name: 고타소
