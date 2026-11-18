@@ -88,7 +88,7 @@ def main(argv: list[str]) -> None:
 
     if cmd == "next":
         people = yaml.safe_load((PKG / "people.yml").read_text(encoding="utf-8"))
-        todo = [p for p in people if not p.get("done")]
+        todo = [p for p in people if not p.get("done") and not p.get("ep")]
         for p in todo[:5]:
             print(f"- {p['name']} ({p['years']}): {p['hook']}")
         return
