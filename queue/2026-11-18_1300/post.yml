@@ -10,8 +10,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: https://www.burgerking.co.kr/event/detail/1777
-cover_candidates: true
+cover_wiki: "Whopper"   # 사람 없는 와퍼 사진 (자유 라이선스). 공식 페이지는 후보 이미지를 못 받아옴
 theme: dark
 title: "버거킹\n버거 2개\n6,000원부터"
 items:
