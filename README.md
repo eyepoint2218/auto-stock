@@ -189,3 +189,9 @@ assets/bgm/                릴스 배경음악
 screendaily/               코드 (cards.py 디자인 · reel.py 영상 · instagram.py 업로드)
 .github/workflows/         자동 실행 (업로드 · 미리보기 · 토큰 연장 · 연결 테스트)
 ```
+
+---
+
+## 부록: 알리익스프레스 인기상품 블로그 (반자동)
+매일 아침 알리 인기상품 10개로 네이버 블로그 초안(`blog/날짜/post.html`)을 자동으로 만듭니다. 올리는 건 직접 합니다.
+설정·사용법은 [`docs/aliblog.md`](docs/aliblog.md) 참고. 코드는 `aliblog/`.

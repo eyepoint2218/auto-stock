@@ -1,0 +1,65 @@
+name: 알리 블로그 초안
+
+# 매일 아침 알리익스프레스 인기상품 10개로 네이버 블로그 초안을 만든다 (업로드는 사람이 직접).
+# 결과: blog/날짜/post.html (레포에 저장) + 사진 포함 zip (이 실행 화면 아래 Artifacts, 14일 보관)
+on:
+  schedule:
+    - cron: "47 22 * * *"   # 매일 07:47 (한국시간)
+  workflow_dispatch:
+    inputs:
+      count:
+        description: "상품 개수"
+        default: "10"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: screendaily-content
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: 초안 만들기
+        id: make
+        env:
+          ALI_APP_KEY: ${{ secrets.ALI_APP_KEY }}
+          ALI_APP_SECRET: ${{ secrets.ALI_APP_SECRET }}
+          ALI_TRACKING_ID: ${{ secrets.ALI_TRACKING_ID }}
+        run: |
+          if [ -z "$ALI_APP_KEY" ]; then
+            echo "::notice::ALI_APP_KEY 가 아직 없어 예시 초안만 만듭니다 (docs/aliblog.md 참고)"
+            python -m aliblog daily --sample
+            echo "dir=$(ls -d blog/*_sample | tail -1)" >> "$GITHUB_OUTPUT"
+          else
+            python -m aliblog daily --count "${{ inputs.count || '10' }}"
+            echo "dir=blog/$(TZ=Asia/Seoul date +%F)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blog-${{ github.run_number }}
+          path: ${{ steps.make.outputs.dir }}
+          retention-days: 14
+
+      - name: 레포에 저장
+        run: |
+          git config user.name "screendaily-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add blog
+          git diff --cached --quiet && exit 0
+          git commit -m "blog: 알리 인기상품 초안 $(TZ=Asia/Seoul date +%F)"
+          for i in 1 2 3; do git pull --rebase -q && git push && exit 0; sleep 5; done
+          exit 1

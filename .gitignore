@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .env
 .venv/
+# 알리 블로그: 사진은 Actions 결과물(zip)로만, 예시는 저장 안 함
+blog/*/images/
+blog/*_sample/
