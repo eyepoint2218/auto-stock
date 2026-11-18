@@ -33,12 +33,20 @@ def sample_products(n: int) -> list[dict]:
     } for i in range(1, n + 1)]
 
 
-def sample_images(out, n: int) -> None:
+def sample_images(out, n: int) -> list[str]:
+    """예시 사진을 저장하고, 파일 하나로 열리도록 data URI 도 돌려준다."""
+    import base64
+    import io
     from PIL import Image, ImageDraw
+    uris = []
     for i in range(1, n + 1):
         im = Image.new("RGB", (500, 500), (225, 228, 232))
         ImageDraw.Draw(im).text((210, 240), f"SAMPLE {i}", fill=(90, 90, 90))
         im.save(out / f"{i:02d}.png")
+        buf = io.BytesIO()
+        im.save(buf, "PNG")
+        uris.append("data:image/png;base64," + base64.b64encode(buf.getvalue()).decode())
+    return uris
 
 
 def download_images(products: list[dict], out) -> int:
@@ -77,9 +85,8 @@ def cmd_daily(a) -> int:
     img = out / "images"
     img.mkdir(parents=True, exist_ok=True)
     if a.sample:
-        sample_images(img, len(products))
-        for i, p in enumerate(products, 1):
-            p["product_main_image_url"] = f"images/{i:02d}.png"
+        for p, uri in zip(products, sample_images(img, len(products))):
+            p["product_main_image_url"] = uri
     elif not a.no_images:
         print(f"사진 {download_images(products, img)}/{len(products)}장 저장")
 
