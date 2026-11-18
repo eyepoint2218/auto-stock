@@ -40,7 +40,9 @@ def load(folder: Path) -> dict:
 def caption_of(ep: dict) -> str:
     tags = " ".join("#" + t.lstrip("#") for t in ep["hashtags"])
     intro = (PKG / "channel_intro.txt").read_text(encoding="utf-8").strip()
-    return f"{ep['caption'].strip()}\n\n{intro}\n\n{tags}\n"
+    kw = " ".join(ep.get("search_keywords", []))
+    kw = f"\n\n{kw}" if kw else ""
+    return f"{ep['caption'].strip()}\n\n{intro}{kw}\n\n{tags}\n"
 
 
 def check(ep: dict) -> list[str]:
@@ -62,6 +64,11 @@ def check(ep: dict) -> list[str]:
         warn.append(f"해시태그 {len(ep['hashtags'])}개 (최대 5개)")
     if ep["caption"].strip().startswith(GREET):
         warn.append("게시글이 인사로 시작함")
+    if not ep.get("search_keywords"):
+        warn.append("search_keywords(검색 노출 키워드) 비어 있음")
+    first = ep["caption"].strip().split("\n")[0]
+    if len(first) > 125:
+        warn.append(f"게시글 첫 줄이 {len(first)}자 (더 보기 전에 보이는 125자 안에 후킹을 끝내기)")
     if not ep.get("sources"):
         warn.append("sources(사료·출처) 비어 있음")
     if not ep.get("staging"):
