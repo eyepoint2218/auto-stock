@@ -186,7 +186,7 @@ def slide5(ep: dict, folder: Path) -> tuple[Image.Image, bool]:
 def slide_quiz(ep: dict) -> Image.Image:
     """인물 공개 직전 퀴즈 카드: 검은 배경에 아주 큰 글자 'O는 / [누구]일까?'."""
     intro = ep["slides"][5].get("intro", "그의 이름은")
-    lines = ep.get("quiz") or [f"{'그녀' if '그녀' in intro else '그'}는", "[누구]일까?"]
+    lines = ep.get("quiz") or [f"{'그녀' if '그녀' in intro else '그'}는", "[누구]일까요?"]
     size = fit_size(lines, BLACK_F, 240)
     img = Image.new("RGB", (W, H), (0, 0, 0))
     f = font(BLACK_F, size)
