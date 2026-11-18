@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import os
+import sys
 import time
 from pathlib import Path
 
@@ -96,35 +97,48 @@ class Instagram:
                 raise InstagramError(f"미디어 처리 시간 초과 ({code})")
             time.sleep(5)
 
-    def publish(self, container_id: str) -> str:
+    def publish(self, container_id: str, caption: str = "") -> str:
         self.wait_ready(container_id)
         try:
             return self._call("POST", f"{self.user_id}/media_publish", creation_id=container_id)["id"]
-        except InstagramError:
-            # 인스타가 오류를 돌려주면서도 실제로는 몇 초~몇 분 뒤 게시하는 경우가 있다 → 최대 2분 확인
-            for _ in range(8):
+        except InstagramError as err:
+            # 인스타가 오류(특히 403 활동 제한)를 돌려주면서도 실제로는 몇 초~몇 분 뒤 게시하는 경우가 있다.
+            # → 최대 5분 동안 컨테이너 상태와 계정의 최근 게시물(같은 캡션)을 확인해서, 올라갔으면 성공으로 처리.
+            print(f"  게시 요청이 오류를 돌려줌 ({err}) — 실제로 올라갔는지 확인합니다", file=sys.stderr)
+            for _ in range(20):
                 time.sleep(15)
+                if caption:
+                    try:
+                        found = self.find_published(caption)
+                    except InstagramError:
+                        found = None
+                    if found:
+                        print("  오류가 났지만 실제로 게시된 것을 확인했습니다 (성공으로 처리)", file=sys.stderr)
+                        return found["id"]
                 try:
                     st = self._call("GET", container_id, fields="status_code")
                 except InstagramError:
                     st = {}
-                if st.get("status_code") == "PUBLISHED":
+                if st.get("status_code") == "PUBLISHED" and not caption:
                     recent = self.recent_media(1)
                     if recent:
                         return recent[0]["id"]
             raise
 
-    def recent_media(self, limit: int = 10) -> list[dict]:
+    def recent_media(self, limit: int = 10, strict: bool = False) -> list[dict]:
         try:
             return self._call("GET", f"{self.user_id}/media", fields="id,caption,timestamp,permalink",
                               limit=str(limit)).get("data", [])
         except InstagramError:
+            if strict:
+                raise
             return []
 
     def find_published(self, caption: str, limit: int = 10) -> dict | None:
-        """같은 캡션으로 이미 올라간 게시물이 있으면 반환 (중복 게시 방지)."""
+        """같은 캡션으로 이미 올라간 게시물이 있으면 반환 (중복 게시 방지).
+        최근 게시물을 읽지 못하면 InstagramError — 확인 못 한 채로 올리면 중복될 수 있어서."""
         key = caption.strip()[:80]
-        for m in self.recent_media(limit):
+        for m in self.recent_media(limit, strict=True):
             if key and (m.get("caption") or "").strip()[:80] == key:
                 return m
         return None
@@ -138,7 +152,7 @@ class Instagram:
     # ------------------------------------------------------------ 게시
     def post_image(self, url: str, caption: str) -> str:
         c = self._call("POST", f"{self.user_id}/media", image_url=url, caption=caption)
-        return self.publish(c["id"])
+        return self.publish(c["id"], caption)
 
     def post_carousel(self, urls: list[str], caption: str) -> str:
         if len(urls) == 1:
@@ -153,7 +167,7 @@ class Instagram:
             self.wait_ready(cid, timeout=300)
         c = self._call("POST", f"{self.user_id}/media", media_type="CAROUSEL",
                        children=",".join(children), caption=caption)
-        return self.publish(c["id"])
+        return self.publish(c["id"], caption)
 
     def post_reel_file(self, path: Path, caption: str, share_to_feed: bool = True) -> str:
         """로컬 영상 파일을 resumable 업로드 방식으로 올린다 (공개 URL 불필요)."""
@@ -168,12 +182,12 @@ class Instagram:
         })
         if r.status_code >= 400:
             raise InstagramError(f"영상 업로드 실패 {r.status_code}: {r.text[:300]}")
-        return self.publish(c["id"])
+        return self.publish(c["id"], caption)
 
     def post_reel_url(self, url: str, caption: str, share_to_feed: bool = True) -> str:
         c = self._call("POST", f"{self.user_id}/media", media_type="REELS", video_url=url,
                        caption=caption, share_to_feed=str(share_to_feed).lower())
-        return self.publish(c["id"])
+        return self.publish(c["id"], caption)
 
     # ------------------------------------------------------------ 토큰
     def refresh_token(self) -> dict:
