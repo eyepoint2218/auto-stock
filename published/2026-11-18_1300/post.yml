@@ -8,7 +8,7 @@
 publish_at: "2026-11-18 13:00"
 format: carousel
 channel: deals
-draft: true   # 13:10 인스타 403 — 실제 게시 여부 확인 전까지 자동 재시도 멈춤 (중복 방지)
+draft: true   # 13:10 자동 업로드가 403 오류를 냈지만 실제 게시됨 (운영자 확인)
 cover_style: photo
 cover_wiki: "Whopper"   # 사람 없는 와퍼 사진 (자유 라이선스). 공식 페이지는 후보 이미지를 못 받아옴
 theme: dark
