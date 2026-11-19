@@ -1,5 +1,5 @@
 // LIFE POLICY 카드뉴스 렌더러 — ISSUE 001 원본 레이아웃을 좌표로 고정한 템플릿
-// 사용법: node render.js issues/issue-002.json [출력폴더]
+// 사용법: node render.js issues/issue-00N.json [출력폴더]   (새 호는 issues/_template.json 복사)
 // 텍스트에서 [대괄호]로 감싼 부분은 파란색 강조.
 const { chromium } = require('playwright');
 const fs = require('fs');
@@ -7,6 +7,19 @@ const path = require('path');
 
 const cfgPath = path.resolve(process.argv[2] || 'issues/issue-002.json');
 const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+
+// 시리즈 고정값(series.json): 푸터 문구, 5장 순서, 마지막 팔로우 장을 모든 호에 강제 적용
+const series = JSON.parse(fs.readFileSync(path.join(__dirname, 'series.json'), 'utf8'));
+cfg.footer = series.footer;
+cfg.slides = cfg.slides.filter((s) => s.type !== 'follow').concat([series.follow]);
+const order = cfg.slides.map((s) => s.type).join(',');
+if (order !== series.order.join(',')) { console.error(`장 구성이 고정 순서와 다릅니다: ${order} (고정: ${series.order.join(',')})`); process.exit(1); }
+// 후킹 규칙: 표지 큰 글씨에 2·3장의 결과 숫자를 쓰지 않는다
+{
+  const cover = cfg.slides[0], cmp = cfg.slides[1];
+  const reveal = [cmp.rows[1].value, cmp.banner].map((v) => v.replace(/[^0-9.,%p]/g, '')).filter((v) => /\d/.test(v));
+  if (reveal.some((v) => cover.big.includes(v))) { console.error(`표지에 결과가 노출됩니다: "${cover.big}" — 질문형으로 바꾸세요 (예: "인상? 동결?", "얼마나?")`); process.exit(1); }
+}
 const OUT = path.resolve(process.argv[3] || path.join(__dirname, 'out', path.basename(cfgPath, '.json')));
 fs.mkdirSync(OUT, { recursive: true });
 
