@@ -1,5 +1,5 @@
 ep: 7
-status: draft   # draft → images → done
+status: done
 
 quiz: ["그는", "[누구]일까요?"]
 
@@ -18,6 +18,8 @@ slides:
   4:
     lines: ["백제와 고구려를", "무너뜨리며 [삼국통일]의", "선봉에 섰어요."]
     note: 재구성 연출
+    pos: bottom
+    shade: 210
   5:
     intro: 그의 이름은
     name: 김유신
