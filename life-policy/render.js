@@ -57,7 +57,7 @@ ${body}
 </body></html>`;
 
 // 지정 폭을 넘으면 글자 크기를 줄임(원본 크기가 상한)
-const fitText = (html, size, maxW, style = '') => `<span class="fit" data-maxw="${maxW}" style="font-size:${size}px;${style}">${html}</span>`;
+const fitText = (html, size, maxW, style = '', grow = 0) => `<span class="fit" data-maxw="${maxW}" data-grow="${grow}" style="font-size:${size}px;${style}">${html}</span>`;
 
 const rows = (r, y1, y2, h, boxW, labelSizes, numSize, divX, sepY) => {
   const one = (row, y, bg, numColor) => `
@@ -66,23 +66,23 @@ const rows = (r, y1, y2, h, boxW, labelSizes, numSize, divX, sepY) => {
   <div style="font-size:${labelSizes[1]}px;font-weight:${labelSizes[1] < labelSizes[0] ? 800 : 900};letter-spacing:-0.03em;line-height:1.25">${esc(row.label[1])}</div>
 </div>
 <div class="a" style="left:${divX}px;top:${y + 28}px;width:2px;height:${h - 56}px;background:var(--rule)"></div>
-<div class="a h" style="left:${divX + 40}px;top:${y}px;height:${h}px;display:flex;align-items:center;color:${numColor}">${fitText(esc(row.value), numSize, 1000 - divX - 40)}</div>`;
+<div class="a h" style="left:${divX + 40}px;top:${y}px;height:${h}px;display:flex;align-items:center;color:${numColor}">${fitText(esc(row.value), numSize, 1000 - divX - 50, '', Math.round(numSize * 1.4))}</div>`;
   return one(r[0], y1, 'var(--box1)', 'var(--navy)') +
     `<div class="a" style="left:${divX - 2}px;top:${sepY}px;width:${1000 - divX + 2}px;height:2px;background:var(--gray)"></div>` +
     one(r[1], y2, 'var(--box2)', 'var(--blue)');
 };
 
-const banner = (text, y, h, size) => `<div class="a h" style="left:92px;top:${y}px;width:908px;height:${h}px;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff">${fitText(esc(text), size, 860, 'transform-origin:center')}</div>`;
+const banner = (text, y, h, size) => `<div class="a h" style="left:92px;top:${y}px;width:908px;height:${h}px;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff">${fitText(esc(text), size, 820, 'transform-origin:center')}</div>`;
 
-const title = (t, top, size, lh) => `<div class="a h" style="left:88px;top:${top}px;line-height:${lh}px">${fitText(hl(t), size, 914)}</div>`;
+const title = (t, top, size, lh) => `<div class="a h" style="left:88px;top:${top}px;height:${lh}px;display:flex;align-items:center">${fitText(hl(t), size, 914, '', size * 1.08)}</div>`;
 
 const LAYOUT = {
   cover: (s) => `
 ${s.lines.map((l, i) => `<div class="a h" style="left:88px;top:${178 + i * 158}px;line-height:160px">${fitText(hl(l), 134, 914)}</div>`).join('')}
 <div class="a" style="left:100px;top:715px;height:117px;padding:0 36px;min-width:790px;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-size:62px;font-weight:800;letter-spacing:-0.03em">${esc(s.label)}</div>
-<div class="a h" style="left:86px;top:858px;color:var(--blue);line-height:260px">${fitText(esc(s.big), 262, 914, 'letter-spacing:-0.05em')}</div>`,
+<div class="a h" style="left:86px;top:846px;height:330px;display:flex;align-items:center;color:var(--blue);line-height:1">${fitText(esc(s.big), 262, 900, 'letter-spacing:-0.05em', 360)}</div>`,
   compare: (s) => title(s.title, 186, 132, 140) + rows(s.rows, 390, 622, 183, 280, [54, 54], 120, 411, 596) + banner(s.banner, 893, 170, 136),
-  calc: (s) => title(s.title, 190, 112, 124) + rows(s.rows, 352, 574, 175, 286, [50, 40], 104, 418, 549) + banner(s.banner, 810, 162, 124) +
+  calc: (s) => title(s.title, 190, 112, 124) + rows(s.rows, 352, 574, 175, 286, [50, 40], 104, 418, 549) + banner(s.banner, 810, 162, 134) +
     `<div class="a" style="left:124px;top:1012px;font-weight:800;letter-spacing:-0.03em;line-height:60px">${fitText(esc(s.note), 52, 876)}</div>`,
   when: (s) => title(s.title, 184, 110, 124) +
     `<div class="a h" style="left:88px;top:326px;color:var(--blue);line-height:124px">${fitText(esc(s.period), 116, 914)}</div>
@@ -105,7 +105,9 @@ ${s.box.map((l) => `<div style="font-weight:700;letter-spacing:-0.03em;line-heig
     await page.evaluate(() => document.fonts.ready);
     const shrunk = await page.evaluate(() => [...document.querySelectorAll('.fit')].map((e) => {
       const max = +e.dataset.maxw, w = e.getBoundingClientRect().width;
-      if (w > max) { const k = max / w; e.style.fontSize = (parseFloat(e.style.fontSize) * k).toFixed(1) + 'px'; return e.textContent + ` → ${Math.round(k * 100)}%`; }
+      const fs0 = parseFloat(e.style.fontSize), cap = +e.dataset.grow;
+      if (cap && w < max) { const k = Math.min(max / w, cap / fs0); e.style.fontSize = (fs0 * k).toFixed(1) + 'px'; return; }
+      if (w > max) { const k = max / w; e.style.fontSize = (fs0 * k).toFixed(1) + 'px'; return e.textContent + ` → ${Math.round(k * 100)}%`; }
     }).filter(Boolean));
     if (shrunk.length) console.log(`slide ${i + 1} 자동 축소:`, shrunk.join(' | '));
     const fonts = await page.evaluate(() => [...document.fonts].filter((f) => f.status === 'loaded').length);
