@@ -92,6 +92,15 @@ ${s.scope.map((l, i) => `<div class="a h" style="left:90px;top:${512 + i * 92}px
 <div class="a" style="left:96px;top:766px;font-weight:800;letter-spacing:-0.035em;line-height:84px">${fitText(esc(s.basis), 68, 900)}</div>
 <div class="a" style="left:92px;top:908px;width:908px;height:190px;background:var(--box2);padding:0 36px;display:flex;flex-direction:column;justify-content:center;white-space:nowrap">
 ${s.box.map((l) => `<div style="font-weight:700;letter-spacing:-0.03em;line-height:64px">${fitText(esc(l), 54, 836)}</div>`).join('')}</div>`,
+  // 팔로우 유도(마지막 장): 제목 2줄 + 번호 목록 3개 + 계정 배너 + 안내 문구
+  follow: (s) => s.lines.map((l, i) => title(l, 184 + i * 128, 110, 124)).join('') +
+    `<div class="a" style="left:92px;top:474px;width:908px;height:2px;background:var(--gray)"></div>` +
+    s.items.map((t, i) => `
+<div class="a h" style="left:92px;top:${492 + i * 108}px;height:108px;display:flex;align-items:center;color:var(--blue);font-size:50px;letter-spacing:-0.02em">${String(i + 1).padStart(2, '0')}</div>
+<div class="a" style="left:190px;top:${492 + i * 108}px;height:108px;display:flex;align-items:center;font-weight:800;letter-spacing:-0.035em">${fitText(hl(t), 58, 810)}</div>
+<div class="a" style="left:92px;top:${492 + (i + 1) * 108}px;width:908px;height:2px;background:var(--gray)"></div>`).join('') +
+    banner(s.banner, 880, 162, 120) +
+    `<div class="a" style="left:124px;top:1078px;font-weight:800;letter-spacing:-0.03em;line-height:60px">${fitText(hl(s.note), 52, 876)}</div>`,
 };
 
 (async () => {
