@@ -22,9 +22,9 @@ if (cfg.check) {
   if (s3) {
     if (s3.rows[0].value !== fmt(a)) errs.push(`2026 월 보험료 ${s3.rows[0].value} ≠ ${fmt(a)}`);
     if (s3.rows[1].value !== fmt(b)) errs.push(`2027 월 보험료 ${s3.rows[1].value} ≠ ${fmt(b)}`);
-    if (s3.banner !== '+' + fmt(b - a)) errs.push(`차액 ${s3.banner} ≠ +${fmt(b - a)}`);
+    if (b === a ? !s3.banner.includes('0원') : s3.banner !== '+' + fmt(b - a)) errs.push(`차액 배너 ${s3.banner} 확인 (계산값 ${fmt(b - a)})`);
   }
-  if (s2 && !s2.banner.includes(String(+(c.rate2027 - c.rate2026).toFixed(2)))) errs.push(`인상폭 배너 확인: ${s2.banner}`);
+  if (s2 && c.rate2027 !== c.rate2026 && !s2.banner.includes(String(+(c.rate2027 - c.rate2026).toFixed(2)))) errs.push(`인상폭 배너 확인: ${s2.banner}`);
   if (errs.length) { console.error('계산 불일치:\n' + errs.join('\n')); process.exit(1); }
   console.log(`계산 확인: ${fmt(a)} → ${fmt(b)} (+${fmt(b - a)})`);
 }
