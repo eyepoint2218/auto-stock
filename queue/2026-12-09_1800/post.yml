@@ -1,0 +1,32 @@
+# 후킹: 결과 먼저
+publish_at: "2026-12-09 18:00"
+format: carousel
+label: MOOD
+theme: dark
+title: "야근한 날 보면\n잠 다 깨는 영화"
+subtitle: "한 공간, 한 밤에 끝나는 스릴러 3편"
+bubble: "잠 다 깸"
+items:
+  - title: 더 길티
+    ott: 넷플릭스
+    genre: 스릴러
+    tmdb: "movie:The Guilty"
+    desc: 911 상담원이 걸려온 전화 한 통으로 납치 사건을 쫓습니다. 거의 한 공간에서 벌어지는데도 숨이 막혀요. 제이크 질렌할 주연.
+    bubble: "전화 한 통"
+  - title: 프랙처드
+    ott: 넷플릭스
+    genre: 스릴러
+    tmdb: "movie:Fractured"
+    desc: 응급실에 함께 간 아내와 딸이 사라졌는데, 병원은 그런 사람들은 온 적이 없다고 합니다. 샘 워싱턴 주연.
+  - title: 나의 마더
+    ott: 넷플릭스
+    genre: SF · 스릴러
+    tmdb: "movie:I Am Mother"
+    desc: 인류가 사라진 뒤 벙커에서 로봇 '마더'가 키운 소녀 앞에 낯선 여자가 나타납니다.
+caption: |
+  피곤한데 잠은 안 오는 밤, 이 영화들은 끝까지 눈을 못 떼게 해요
+  한 공간, 한 밤에 끝나는 넷플릭스 스릴러 3편이에요.
+
+  저장해두고 잠 안 오는 날 꺼내 보세요
+hashtags: [스릴러영화, 더길티, 넷플릭스영화]
+credits: "이미지 출처: 넷플릭스 공식 포스터·스틸 (via TMDB). 모든 이미지의 저작권은 각 제작사에 있습니다."
