@@ -1,5 +1,5 @@
 ep: 16
-status: draft   # draft → images → done
+status: done
 
 badge: 문무 특집
 
@@ -21,6 +21,8 @@ slides:
   4:
     lines: ["하지만 불붙은 [연]에", "별이 다시 오르자", "반란은 무너졌어요."]
     note: 재구성 연출
+    pos: bottom
+    shade: 210
   5:
     intro: 그의 이름은
     name: 비담
