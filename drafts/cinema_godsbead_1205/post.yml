@@ -31,26 +31,26 @@ photo_pages:
   - http://www.breaknews.com/1247645
 
 # 01 배우 중심 후킹: 안보현·이성민이 함께 나온 공식 스틸/홍보 사진
-cover_image: img/01.jpg
-cover_focus: "0.5,0.3"
+cover_image: img/tmdb_still_06.jpg    # 안보현(백결) + 이성민(최구) 뒷모습, TMDB 공식 스틸
+cover_focus: "0.33,0.5"
 title: "안보현 첫 사극,\n이성민과 함께해요"
 
 items:
   # 02 이야기 후킹: 전쟁·원정·위기감 공식 스틸
   - type: cinema
     title: "전쟁 한복판 고려,\n나라를 구할 성물은\n어디에 있을까요?"
-    image: img/02.jpg
-    focus: "0.5,0.3"
+    image: img/tmdb_poster_04.jpg       # 글자 없는 공식 포스터 (전쟁 행렬)
+    focus: "0.5,0"
   # 03 작품 공개 정보: 공식 메인 포스터 또는 대표 스틸
   - type: cinema
     title: "신의 구슬"
     desc: "12월 5일 첫 방송"
     ott: "매주 토 밤 10시 40분 · 일 밤 10시 30분\nJTBC · 쿠팡플레이 다시 보기"
-    image: img/03.jpg
+    image: img/tmdb_still_05.jpg        # 수현(황녀 왕희), TMDB 공식 스틸
     focus: "0.5,0.3"
 
 # 04 팔로우: 분위기를 이어 가는 공식 스틸 (차분하게 흐림·어둡게 자동 처리)
-outro_image: img/04.jpg
+outro_image: img/cand_10_09.jpg        # 호송대 공식 스틸 (뉴스버즈 기사, 흐리게 깔림)
 outro_title: "다음 화제작도\n저희가 먼저\n알려드릴게요"
 outro_cta: "팔로우하고 새 작품 소식 받아보세요"
 
@@ -67,5 +67,5 @@ caption: |
 
   첫 방송 날 잊지 않게 저장해 두세요.
   다음 화제작 소식도 @screendaily.mag 에서 먼저 전해 드릴게요.
-credits: "이미지 출처: JTBC (공식 스틸·포스터) / 정보 출처: JTBC, 언론 보도"
+credits: "이미지 출처: JTBC·SLL 공식 스틸 및 포스터 (via TMDB, 뉴스버즈) / 정보 출처: JTBC, 언론 보도"
 hashtags: [신의구슬, 안보현, 이성민, 수현]
