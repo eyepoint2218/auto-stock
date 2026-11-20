@@ -8,6 +8,33 @@
       "image": "img/ce2e69_still.jpg",
       "layout": "cover",
       "poster": "img/ce2e69_poster.jpg"
+    },
+    "원피스": {
+      "source": "tmdb",
+      "tmdb": "tv/111110",
+      "tmdb_name": "원피스",
+      "page_url": "https://www.themoviedb.org/tv/111110",
+      "image": "img/d1c988_still.jpg",
+      "layout": "cover",
+      "poster": "img/d1c988_poster.jpg"
+    },
+    "유유백서": {
+      "source": "tmdb",
+      "tmdb": "tv/121659",
+      "tmdb_name": "유유백서",
+      "page_url": "https://www.themoviedb.org/tv/121659",
+      "image": "img/558d4b_still.jpg",
+      "layout": "cover",
+      "poster": "img/558d4b_poster.jpg"
+    },
+    "카우보이 비밥": {
+      "source": "tmdb",
+      "tmdb": "tv/84469",
+      "tmdb_name": "카우보이 비밥",
+      "page_url": "https://www.themoviedb.org/tv/84469",
+      "image": "img/c52f21_still.jpg",
+      "layout": "cover",
+      "poster": "img/c52f21_poster.jpg"
     }
   }
 }
