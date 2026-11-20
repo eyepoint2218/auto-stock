@@ -1,6 +1,6 @@
 # 인스타툰 시안: 새벽 2시 "딱 한 편만" (draft: true, 자동 업로드 안 됨)
 # 그림: ChatGPT 이미지 생성 (채널 캐릭터, 기준 이미지 img/character_sheet.jpg)
-# 6장 그림(윙크)은 아직 없음. 작품명은 확정 후 1장 subtitle·caption 에 넣기
+# 작품명은 확정 후 1장 subtitle·caption 에 넣기
 publish_at: "2026-12-31 18:00"
 format: carousel
 draft: true
@@ -35,6 +35,12 @@ items:
     image: img/p5.jpg
     bubble: "행복해"
     bubble_pos: right-top
+  - type: toon
+    title: "여러분은 몇 화까지 버텼나요?"
+    desc: "댓글로 알려주세요"
+    image: img/p6.jpg
+    bubble: "너는?"
+    bubble_pos: left-top
 outro_question: "여러분은 몇 화까지 버텼나요?"
 caption: |
   새벽 2시, 딱 한 편만 보고 자려고 했어요.
