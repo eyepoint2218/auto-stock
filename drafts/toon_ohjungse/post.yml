@@ -1,0 +1,49 @@
+# 인스타툰 형식 시안 (type: toon, cover_style: toon). draft: true 라 자동 업로드되지 않습니다.
+# 구성: 흰 바탕 + 위 상자(title, 이어지는 내레이션) + 가운데 그림 + 아래 상자(desc, 결론) + 말풍선(bubble)
+# 내용 출처: examples/actor_story_ohjungse (tvN 〈유 퀴즈 온 더 블럭〉 2023, 인터뷰·기사)
+# 사진: TMDB (배우 프로필·작품 스틸). 직접 그린 캐릭터 그림을 img/ 에 넣고 image: 만 바꿔도 됩니다.
+publish_at: "2026-12-31 18:00"
+format: carousel
+draft: true
+label: ACTOR
+cover_style: toon
+title: "오정세, 오디션만\n1,000번 넘게 봤다"
+subtitle: "‘손님2’에서 백상 2년 연속까지"
+bubble: "1,000번..."
+cover_image: img/actor_28fef1.jpg
+cover_focus: "0.5,0.25"
+items:
+  - type: toon
+    title: "1997년, 첫 배역 이름은"
+    desc: "이름도 없는 ‘손님2’였어요"
+    image: img/actor_28fef1.jpg
+    bubble: "손님...2?"
+  - type: toon
+    title: "그 뒤로 본 오디션만"
+    desc: "1,000번이 넘었대요"
+    image: img/actor_28fef1.jpg
+  - type: toon
+    title: "경력 칸에 쓸 게 없어서"
+    desc: "〈살인의 추억〉 3차 오디션을\n프로필에 적었대요"
+    bubble: "3차..."
+  - type: toon
+    title: "그러다 2017년 〈조작된 도시〉로"
+    desc: "‘저 배우 누구지?’ 소리를 듣기 시작"
+    image: img/a3836c_still.jpg
+  - type: toon
+    title: "2019년 〈동백꽃 필 무렵〉 노규태"
+    desc: "다음 해 백상 조연상,\n그다음 해에도 또 받았어요"
+    image: img/253ba3_still.jpg
+  - type: toon
+    title: "그리고 2025년에는"
+    desc: "〈폭싹 속았수다〉까지"
+    image: img/01d9b4_still.jpg
+outro_question: "다음엔 누구 이야기가 궁금하세요?"
+caption: |
+  이름도 없는 ‘손님2’로 시작해 오디션만 1,000번 넘게 본 배우, 오정세
+  〈조작된 도시〉로 얼굴을 알리고 〈동백꽃 필 무렵〉 노규태로 백상 조연상 2년 연속.
+  버틴 시간은 헛되지 않았어요.
+
+  다음엔 어떤 배우의 이야기가 궁금한지 댓글로 남겨주세요.
+hashtags: [오정세, 동백꽃필무렵, 폭싹속았수다, 조작된도시]
+credits: "사진 출처: TMDB. 이야기 출처: tvN 〈유 퀴즈 온 더 블럭〉(2023), 인터뷰·기사."

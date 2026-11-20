@@ -194,7 +194,7 @@ def wiki_lookup(titles: list[str]) -> dict[str, dict]:
 
 
 # 작품(영화·드라마)이 아닌 카드: TMDB 검색 안 함, 위키 사진은 썸네일 + 작가·라이선스 표기
-NON_WORK = ("story", "quote", "deal", "coupon", "steps", "note", "photo", "list")
+NON_WORK = ("story", "quote", "deal", "coupon", "steps", "note", "photo", "list", "toon")
 
 
 def _shrink(path: Path, max_side: int):
@@ -399,9 +399,10 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
     # 1) TMDB
     for it in items:
         title = str(it["title"])
+        toon_still = str(it.get("type") or "") == "toon" and "/" in str(it.get("tmdb") or "")
         if it.get("image") or not tmdb or str(it.get("tmdb") or "").lower() == "none" \
-                or str(it.get("type") or "") in NON_WORK:
-            continue
+                or (str(it.get("type") or "") in NON_WORK and not toon_still):
+            continue  # 인스타툰 칸은 tmdb: "movie/ID" 를 적었을 때만 그 작품 스틸을 가져옴
         cur = by_title.get(title, {})
         override = str(it.get("tmdb") or "")
         if not override and credit_titles:

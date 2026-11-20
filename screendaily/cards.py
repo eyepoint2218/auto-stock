@@ -1362,6 +1362,113 @@ def render_follow_card(post: Post, config: dict) -> Image.Image:
     return canvas.convert("RGB")
 
 
+# ── 인스타툰 (흰 바탕 + 위·아래 크림색 내레이션 상자 + 가운데 그림 + 손글씨 말풍선) ──
+TOON_BG, TOON_BOX, TOON_INK = (255, 255, 255), (253, 243, 199), (17, 17, 17)
+TOON_FONT = "Pretendard-Black.otf"
+
+
+def _toon_box_layout(text: str, size: int, max_lines: int, minimum: int):
+    f, lines = fit(text, TOON_FONT, W - M * 2 - 90, max_lines, size, minimum)
+    tw = max(_tw(f, ln) for ln in lines)
+    bw, bh = int(tw + 90), int(block_h(f, lines) + 52)
+    return f, lines, bw, bh
+
+
+def _toon_box(d: ImageDraw.ImageDraw, layout, y: int):
+    f, lines, bw, bh = layout
+    x0 = (W - bw) // 2
+    d.rectangle((x0, y, x0 + bw, y + bh), fill=TOON_BOX, outline=TOON_INK, width=10)
+    draw_lines(d, lines, f, W // 2, y + 26, TOON_INK, anchor_center=True)
+    return y + bh
+
+
+def toon_bubble(text: str, size: int = 40, tail: str = "left") -> Image.Image:
+    """흰 타원 + 검은 테두리 + 꼬리. 웹툰 말풍선."""
+    f = font(B, size)
+    lines = wrap(text, f, 380)
+    tw = max(_tw(f, ln) for ln in lines)
+    th = block_h(f, lines)
+    ew, eh = int(tw * 1.42 + 70), int(th * 1.5 + 70)
+    pad = 50
+    layer = Image.new("RGBA", (ew + pad * 2, eh + pad * 2), (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    box = (pad, pad, pad + ew, pad + eh)
+    bx = pad + ew * (0.22 if tail == "left" else 0.78)
+    tip = (bx + (-34 if tail == "left" else 34), pad + eh + 44)
+    tri = [(bx - 22, pad + eh - 26), (bx + 22, pad + eh - 26), tip]
+    d.polygon(tri, fill=TOON_INK)
+    d.ellipse(box, fill=TOON_INK)
+    d.ellipse((box[0] + 5, box[1] + 5, box[2] - 5, box[3] - 5), fill=(255, 255, 255))
+    d.polygon([(bx - 15, pad + eh - 30), (bx + 15, pad + eh - 30), (tip[0] * 0.92 + bx * 0.08, tip[1] - 9)],
+              fill=(255, 255, 255))
+    y = pad + (eh - th) / 2
+    for ln in lines:
+        d.text((pad + ew / 2, y), ln, font=f, fill=TOON_INK, anchor="ma")
+        y += line_h(f)
+    return layer
+
+
+def _toon_card(top: str, bottom: str, im: Image.Image | None, bubble: str, idx: int, config: dict,
+               top_size: int = 50, top_lines: int = 2, focus=(0.5, 0.4)) -> Image.Image:
+    canvas = Image.new("RGBA", (W, H), TOON_BG + (255,))
+    d = ImageDraw.Draw(canvas)
+    big = im is None  # 그림 없는 칸은 글자를 크게
+    tl = _toon_box_layout(top, top_size + (14 if big else 0), top_lines, 40) if top else None
+    bl = _toon_box_layout(bottom, 58 if big else 44, 3, 34) if bottom else None
+    foot = H - 92
+    if im is None:  # 그림 없는 칸: 상자 두 개를 가운데에
+        h = (tl[3] if tl else 0) + (bl[3] if bl else 0) + (60 if tl and bl else 0)
+        y = (foot - h) // 2 + 20
+        if tl:
+            y = _toon_box(d, tl, y) + 60
+        if bl:
+            _toon_box(d, bl, y)
+        img_box = None
+    else:
+        y_top = 96
+        y1 = _toon_box(d, tl, y_top) if tl else y_top
+        y_bot = foot - 24 - (bl[3] if bl else 0)
+        if bl:
+            _toon_box(d, bl, y_bot)
+        # 그림은 상자 사이를 꽉 채움 (상자에 살짝 겹쳐 그림 위에 글이 얹힌 느낌)
+        overlap = 26
+        ix0, iy0, ix1, iy1 = M - 10, y1 - overlap, W - M + 10, (y_bot + overlap if bl else foot - 30)
+        art = cover_crop(im, (ix1 - ix0, iy1 - iy0), focus).convert("RGBA")
+        canvas.alpha_composite(art, (ix0, iy0))
+        d.rectangle((ix0, iy0, ix1, iy1), outline=TOON_INK, width=6)
+        if tl:  # 그림 위로 상자 다시 그려 겹침 처리
+            _toon_box(d, tl, y_top)
+        if bl:
+            _toon_box(d, bl, y_bot)
+        img_box = (ix0, iy0, ix1, iy1)
+    if bubble:
+        right = idx % 2 == 0
+        b = toon_bubble(bubble, tail="left" if right else "right")
+        if img_box:
+            cx = img_box[2] - b.width // 2 + 10 if right else img_box[0] + b.width // 2 - 10
+            cy = img_box[1] + (img_box[3] - img_box[1]) * 0.38
+        else:
+            first = (W - (tl or bl)[2]) // 2 + 60  # 첫 상자 바로 위, 상자 모서리에 걸치게
+            h = (tl[3] if tl else 0) + (bl[3] if bl else 0) + (60 if tl and bl else 0)
+            cy = (foot - h) // 2 + 20 - b.height // 2 + 30
+            cx = W - first - b.width // 3 if right else first + b.width // 3
+        paste_center(canvas, b, int(cx), int(cy))
+    d.text((W / 2, H - 62), config.get("brand", "SCREEN DAILY"), font=font(B, 24), fill=(150, 150, 150), anchor="ma")
+    return canvas.convert("RGB")
+
+
+def render_toon(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
+    return _toon_card(item.title, item.desc, open_img(post.asset(item.image)), item.bubble, idx, config)
+
+
+def render_toon_cover(post: Post, config: dict) -> Image.Image:
+    im = open_img(post.asset(post.cover_image or post.actor_image))
+    if im is None:
+        im = next((open_img(post.asset(it.image)) for it in post.items if it.image), None)
+    return _toon_card(post.title, post.subtitle, im, post.bubble, 0, config, top_size=64, top_lines=3,
+                      focus=_focus(post))
+
+
 def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.images:
         out = []
@@ -1374,7 +1481,8 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             out.append(im)
         return out
     total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)
-    covers = {"deal": render_deal_cover, "alarm": render_alarm_cover, "photo": render_photo_cover}
+    covers = {"deal": render_deal_cover, "alarm": render_alarm_cover, "photo": render_photo_cover,
+              "toon": render_toon_cover}
     if post.cover_slide:  # 직접 만든 완성 표지를 그대로 01장으로
         slides = [cover_crop(open_img(post.asset(post.cover_slide)), (W, H), (0.5, 0.5)).convert("RGB")]
     else:
@@ -1390,6 +1498,8 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             slides.append(render_coupon(post, it, i, total, config))
         elif it.type == "photo":  # 직접 넣은 이미지를 그대로 한 장 (공식 이벤트 이미지 등)
             slides.append(cover_crop(open_img(post.asset(it.image)), (W, H), (0.5, 0.5)).convert("RGB"))
+        elif it.type == "toon":
+            slides.append(render_toon(post, it, i, total, config))
         elif it.type in ("story", "quote"):
             slides.append(render_story(post, it, i, total, config))
         else:

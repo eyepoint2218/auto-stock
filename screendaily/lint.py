@@ -58,6 +58,11 @@ def lint_post(p: Post, config: dict | None = None) -> list[str]:
             for k in ("title", "desc"):
                 if _len(getattr(it, k)) > 12:
                     w.append(f"items[{i}].{k} 가 {_len(getattr(it, k))}자예요. 할인 카드는 줄마다 12자 이하로 짧게.")
+        if it.type == "toon":
+            if _len(it.bubble) > BUBBLE_MAX:
+                w.append(f"items[{i}].bubble 이 {_len(it.bubble)}자예요. {BUBBLE_MAX}자 이하, 감정 하나만.")
+            if _len(it.title) > 22 or _len(it.desc) > 30:
+                w.append(f"items[{i}] 인스타툰 상자 글이 길어요. 위 상자 22자·아래 상자 30자 이하로 한눈에 읽히게.")
     steps = [it for it in p.items if it.type == "steps"]
     if p.channel == "deals" and steps and not any(
             "~" in (it.desc or "") or re.search(r"\d{1,2}/\d{1,2}\s*(오늘\s*)?하루", it.desc or "") for it in steps):
