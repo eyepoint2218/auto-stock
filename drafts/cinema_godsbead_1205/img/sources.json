@@ -10,10 +10,6 @@
     "https://enews.imbc.com/News/ViewAmp/522551": [],
     "https://isplus.com/article/view/isp202609070081": [
       {
-        "image": "img/cand_3_02.png",
-        "src": "https://isp.edailystatic.com/data/isp/image/2026/11/17/isp20261117000262.230.0.png"
-      },
-      {
         "image": "img/cand_3_05.jpg",
         "src": "https://isp.edailystatic.com/data/isp/image/2026/09/07/isp20260907000104.1280x.0.jpg"
       }
@@ -26,19 +22,11 @@
     ],
     "https://isplus.com/article/view/isp202610270025": [
       {
-        "image": "img/cand_5_02.png",
-        "src": "https://isp.edailystatic.com/data/isp/image/2026/11/17/isp20261117000262.230.0.png"
-      },
-      {
         "image": "img/cand_5_05.jpg",
         "src": "https://isp.edailystatic.com/data/isp/image/2026/10/27/isp20261027000058.1280x.0.jpg"
       }
     ],
     "https://isplus.com/article/view/isp202611090075": [
-      {
-        "image": "img/cand_6_02.png",
-        "src": "https://isp.edailystatic.com/data/isp/image/2026/11/17/isp20261117000262.230.0.png"
-      },
       {
         "image": "img/cand_6_05.jpg",
         "src": "https://isp.edailystatic.com/data/isp/image/2026/11/09/isp20261109000099.1200x.0.jpg"
