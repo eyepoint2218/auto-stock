@@ -1,6 +1,7 @@
 # 인스타툰 캐러셀: 새벽 2시 "딱 한 편만" (그림: 채널 캐릭터, ChatGPT 이미지 생성)
 publish_at: "2026-11-21 07:35"   # 지금 바로 업로드 (사용자 요청)
 format: carousel
+draft: true   # 업로드 보류 (사용자 요청: 채널 소개만 올림)
 label: MOOD
 cover_style: toon
 cover_image: img/p1.jpg
