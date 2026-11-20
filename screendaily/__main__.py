@@ -124,6 +124,16 @@ def cmd_new(a, config):
         (d / "post.yml").write_text(tpl.replace("{when}", when).replace("{brand}", brand), encoding="utf-8")
         print(f"만들었습니다: {d.relative_to(ROOT)}/post.yml (표지 이미지를 img/cover.jpg 로 넣으세요)")
         return
+    if a.cinema is not None:  # 시네마틱 매거진 4장 템플릿 → drafts/ 에 초안으로
+        work = a.cinema or "작품명"
+        d = DRAFTS_DIR / f"cinema_{a.date}_{a.time.replace(':', '')}_{work}"
+        if d.exists():
+            sys.exit(f"이미 있습니다: {d}")
+        (d / "img").mkdir(parents=True)
+        tpl = (ROOT / "examples" / "cinema_template" / "post.yml").read_text(encoding="utf-8")
+        (d / "post.yml").write_text(tpl.replace("{when}", when).replace("{work}", work), encoding="utf-8")
+        print(f"만들었습니다: {d.relative_to(ROOT)}/post.yml (공식 사진을 img/01.jpg ~ 04.jpg 로 넣으세요)")
+        return
     d = QUEUE_DIR / f"{a.date}_{a.time.replace(':', '')}"
     if d.exists():
         sys.exit(f"이미 있습니다: {d}")
@@ -144,12 +154,13 @@ def cmd_lint(a, config):
     from .lint import lint_post
     gha = bool(os.environ.get("GITHUB_ACTIONS"))
     n = 0
-    for p in list_posts(QUEUE_DIR, config):
+    base = DRAFTS_DIR if getattr(a, "drafts", False) else QUEUE_DIR
+    for p in list_posts(base, config):
         if a.slots and p.name not in a.slots:
             continue
         for msg in lint_post(p, config):
             n += 1
-            print(f"::warning file=queue/{p.name}/post.yml::{msg}" if gha else f"[{p.name}] {msg}")
+            print(f"::warning file={base.name}/{p.name}/post.yml::{msg}" if gha else f"[{p.name}] {msg}")
     print(f"후킹 규칙 경고 {n}개" if n else "후킹 규칙: 모두 통과")
 
 
@@ -310,11 +321,14 @@ def main(argv=None):
     s.add_argument("time", help="19:00")
     s.add_argument("--reel", action="store_true", help="릴스 영상으로 만들기")
     s.add_argument("--deal", nargs="?", const="", default=None, metavar="브랜드", help="혜택알람 3장 템플릿 (drafts/ 에 생성)")
+    s.add_argument("--cinema", nargs="?", const="", default=None, metavar="작품명",
+                   help="시네마틱 매거진 4장 템플릿 (drafts/ 에 생성)")
 
     sub.add_parser("list", help="예약 목록")
 
     s = sub.add_parser("lint", help="후킹 규칙 검사 (경고만)")
     s.add_argument("slots", nargs="*")
+    s.add_argument("--drafts", action="store_true", help="queue 대신 drafts 폴더")
 
     s = sub.add_parser("fetch-images", help="wiki 항목의 작품 이미지 내려받기")
     s.add_argument("slots", nargs="*")

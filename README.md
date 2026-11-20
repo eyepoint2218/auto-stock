@@ -147,6 +147,16 @@ git add queue && git commit -m "다음 주 예약" && git push
 - 마지막 장: 채널 설정 `outro.style: toggle` → '혜택 알람' 스위치가 켜진 장
 - 예시: `drafts/deal_touslesjours_1118/`
 
+## 시네마틱 매거진 4장 (스크린데일리)
+실제 작품 사진을 화면 가득 + 하단 검정 그라데이션 + 좌측 하단 큰 흰 고딕(Pretendard Black) 2~3줄. 사진 80% · 글자 20%.
+- **새로 만들기:** `python -m screendaily new 2026-12-03 18:00 --cinema 작품명` → `drafts/cinema_…/` (템플릿 `examples/cinema_template/post.yml`)
+- 01 표지 `cover_style: cinema` (`title`, 선택 `subtitle`) · 02~03 `type: cinema` 카드 (`title` 크게, `desc` 중간 한 줄, `ott` 작게) · 04 `outro_style: cinema` (`outro_title` + 채널 주소, 사진은 `outro_image`)
+- 공식 포스터·스틸만 `img/01.jpg ~ 04.jpg` 로 넣는다 (AI 생성·대체 금지). 없으면 미리보기에 '공식 사진 자리' 가 나오고 lint 가 경고
+- 얼굴이 글자에 가리면 표지 `cover_focus`, 카드 `focus` 를 `"가로,세로"` (0~1) 로 조정
+- 노란 글씨·강조 띠·아이콘·버튼·색보정 없음. 하단 가운데 작은 채널 주소만
+- 검사: `python -m screendaily lint --drafts` (한 줄 12자·3줄 이내, 사진·출처 누락 경고)
+- 예시: `drafts/cinema_godsbead_1205/` (신의 구슬)
+
 ## 3. 릴스(영상)
 - `format: reel` 이면 같은 카드들을 **9:16 영상**으로 만듭니다: 흐린 배경 + 천천히 확대 + 장면 전환.
 - 장당 시간·전환 속도는 `config.yml` 의 `reel:` 에서 조절.

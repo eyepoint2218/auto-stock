@@ -79,6 +79,23 @@ def lint_post(p: Post, config: dict | None = None) -> list[str]:
         if dropped:
             w.append(f"해시태그는 최대 {config.get('hashtag_limit', 5)}개라 빠지는 태그: "
                      + " ".join("#" + t for t in dropped) + " (중요한 태그를 hashtags 앞쪽에)")
+    if p.cover_style == "cinema":  # 시네마틱 매거진: 사진 80% · 글자 20%
+        cards = [("표지", p.title)] + [(f"items[{i}]", it.title) for i, it in enumerate(p.items, 1) if it.type == "cinema"]
+        cards.append(("outro_title", p.outro_title))
+        for name, t in cards:
+            lines = [x for x in (t or "").splitlines() if x.strip()]
+            if len(lines) > 3:
+                w.append(f"{name} 글자가 {len(lines)}줄이에요. 시네마틱 카드는 2~3줄까지.")
+            for x in lines:
+                if _len(x) > 12:
+                    w.append(f"{name} '{x}' 이 {_len(x)}자예요. 한 줄 12자 이하라야 크게 들어가요.")
+        missing = [r for r in [p.cover_image, p.outro_image] + [it.image for it in p.items if it.type == "cinema"]
+                   if not r or not (p.dir / r).is_file()]
+        if missing:
+            w.append("공식 사진이 아직 없어요: " + ", ".join(m or "(비어 있음)" for m in missing)
+                     + " (사진 자리 그대로 올리지 마세요)")
+        if not p.credits:
+            w.append("시네마틱 게시물은 credits 에 이미지·정보 출처를 적어 주세요.")
     if p.reveal and not p.reveal_text:
         w.append("reveal: true 인데 reveal_text 가 없어요. 마지막 정답 카드로 약속을 지켜 주세요.")
     return w

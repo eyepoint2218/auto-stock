@@ -13,7 +13,7 @@ import yaml
 
 from . import ROOT
 
-GENERATOR_VERSION = "11"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
+GENERATOR_VERSION = "12"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
 
 
 def channel_config(config: dict, post: "Post | str | None") -> dict:
@@ -53,6 +53,7 @@ class Item:
     stage: str = ""   # 배우 스토리: 단계 표시 (예: 데뷔, 첫 주연, 전환점)
     type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음), deal = 사진 + 두 줄 할인 카드, coupon = 쿠폰 티켓 정보 카드, steps = 혜택 받는 법(STEP), list = 분야별 혜택 모음(사진 + 목록)
     note: str = ""    # list 카드 맨 아래 작은 안내 (줄바꿈으로 여러 줄)
+    focus: str = ""   # type: cinema 사진에서 가운데로 올 위치 "가로,세로" (0~1, 얼굴이 글자에 가리지 않게)
     brand: str = ""   # 이야기 카드 색을 config.yml brands: 의 브랜드 색으로 (예: SKT, KT, LGU)
 
 
@@ -105,6 +106,8 @@ class Post:
     recommend: list[Item] = field(default_factory=list)  # 정답 뒤 추천작 카드 (최대 4편)
     recommend_title: str = ""  # 추천작 카드 제목
     layout: str = ""           # letterbox = 위쪽 검은 칸 릴스 (format: reel 전용)
+    outro_style: str = ""      # cinema = 사진 위 흰 글씨 팔로우 장 (시네마틱 매거진). 비우면 config outro.style
+    outro_image: str = ""      # outro_style: cinema 배경 사진 (비우면 마지막 카드 사진)
 
     @property
     def name(self) -> str:
@@ -154,7 +157,7 @@ class Post:
         """인스타 검색 노출용 키워드 한 줄: 이 게시물 작품명 + 채널 키워드 (config search_keywords)."""
         words: list[str] = []
         for it in self.items:
-            if it.type not in ("deal", "coupon", "steps", "note", "photo", "list", "story", "quote") and it.title:
+            if it.type not in ("deal", "coupon", "steps", "note", "photo", "list", "story", "quote", "cinema") and it.title:
                 words.append(it.title.replace("\n", " ").strip())
         words += [str(k).strip() for k in (config.get("search_keywords") or []) if str(k).strip()]
         seen, out = set(), []
@@ -300,6 +303,8 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         recommend=recommend,
         recommend_title=str(raw.get("recommend_title", "") or ""),
         layout=str(raw.get("layout", "") or "").lower(),
+        outro_style=str(raw.get("outro_style", "") or "").lower(),
+        outro_image=str(raw.get("outro_image", "") or ""),
     )
 
     act = sources.get("actor", {})

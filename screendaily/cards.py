@@ -1362,6 +1362,102 @@ def render_follow_card(post: Post, config: dict) -> Image.Image:
     return canvas.convert("RGB")
 
 
+# ---------------------------------------------------------------- 시네마틱 매거진 (스크린데일리)
+# 실제 작품 사진을 화면 가득 + 하단 검정 그라데이션 + 좌측 하단 큰 흰 고딕(Pretendard Black) 2~3줄.
+# 색보정·장식·노란 글씨·강조 띠 없음. 원본 사진 색감 그대로. 브랜드는 하단 작은 주소 한 줄만.
+
+CINE_BOTTOM = H - 118          # 글자 블록 아래 끝 (그 아래 작은 채널 주소)
+CINE_MAXW = W - 2 * M - 40     # 오른쪽은 조금 더 비워 얼굴·여백 확보
+
+
+def _cine_photo(post: Post, rel: str, focus=(0.5, 0.35), calm: bool = False) -> tuple[Image.Image, bool]:
+    """작품 사진을 4:5 로 꽉 채움 (보정 없음). 파일이 아직 없으면 '사진 자리' 안내 (시안용, 가짜 사진 아님)."""
+    p = (post.dir / rel).resolve() if rel else None
+    if p and p.is_file():
+        im = cover_crop(open_img(p), (W, H), focus).convert("RGBA")
+        if calm:  # 팔로우 장: 같은 사진을 살짝 흐리고 어둡게 → 차분한 배경
+            im = im.filter(ImageFilter.GaussianBlur(6))
+            im.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, 95)))
+        return im, True
+    canvas = Image.new("RGBA", (W, H), (38, 38, 42, 255))
+    canvas.alpha_composite(vgrad((W, H), (20, 20, 22), 0, H, 0, 255))
+    d = ImageDraw.Draw(canvas)
+    d.rectangle((24, 24, W - 25, H - 25), outline=(90, 90, 96), width=2)
+    d.text((W / 2, H * .36), "공식 사진 자리", font=font(PT_BOLD, 52), fill=(150, 150, 158), anchor="mm")
+    d.text((W / 2, H * .36 + 70), rel or "(image 를 적어 주세요)", font=font(PT_BOLD, 34), fill=(110, 110, 118), anchor="mm")
+    return canvas, False
+
+
+def _cine_fit(text: str, start: int, minimum: int, maxw: float = CINE_MAXW):
+    lines = [t.strip() for t in text.split("\n") if t.strip()]
+    size = start
+    while lines and max(_tracked_w(font(PT_BLACK, size), t) for t in lines) > maxw and size > minimum:
+        size -= 2
+    return lines, font(PT_BLACK, size)
+
+
+def _cine_text(canvas: Image.Image, blocks: list[tuple], config: dict, watermark: bool = True) -> Image.Image:
+    """blocks = [(lines, font, rgba, 줄간격 배수, 블록 뒤 여백)] 를 아래에서 위로 쌓아 좌측 하단에 조판."""
+    heights = [int(f.size * lh) * len(ls) + gap for ls, f, _, lh, gap in blocks]
+    y0 = CINE_BOTTOM - sum(heights)
+    # 글자 뒤 자연스러운 검정 그라데이션 (사진 위쪽·얼굴은 그대로)
+    canvas.alpha_composite(vgrad((W, H), (0, 0, 0), max(H * .38, y0 - 330), H, 0, 225))
+    d = ImageDraw.Draw(canvas)
+    y = y0
+    for ls, f, fill, lh, gap in blocks:
+        for t in ls:
+            _draw_tracked(d, (M, y), t, f, fill)
+            y += int(f.size * lh)
+        y += gap
+    if watermark:
+        d.text((W / 2, H - 46), config.get("handle", ""), font=font(PT_BOLD, 24),
+               fill=(255, 255, 255, 150), anchor="mm")
+    return canvas.convert("RGB")
+
+
+WHITE = (255, 255, 255, 255)
+
+
+def render_cinema_cover(post: Post, config: dict) -> Image.Image:
+    """01 배우·작품 후킹: title 2~3줄 크게 (+ subtitle 작은 한 줄)."""
+    canvas, _ = _cine_photo(post, post.cover_image, _focus(post, (0.5, 0.3)))
+    lines, f = _cine_fit(post.title, 124, 72)
+    blocks = [(lines, f, WHITE, 1.14, 0)]
+    if post.subtitle:
+        blocks[-1] = (lines, f, WHITE, 1.14, 22)
+        blocks.append(([post.subtitle], font(PT_BOLD, 40), (255, 255, 255, 215), 1.3, 0))
+    return _cine_text(canvas, blocks, config)
+
+
+def render_cinema(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
+    """type: cinema — title(큰 2~3줄) · desc(중간 한 줄, 예: 12월 5일 첫 방송) · ott(작은 한 줄, 예: JTBC · 쿠팡플레이).
+    작품 공개 정보 카드는 title 에 작품명, desc 에 날짜, ott 에 플랫폼."""
+    try:
+        x, y = (min(max(float(v), 0), 1) for v in item.focus.split(","))
+    except ValueError:
+        x, y = 0.5, 0.3
+    canvas, _ = _cine_photo(post, item.image, (x, y))
+    info = bool(item.desc or item.ott)
+    lines, f = _cine_fit(item.title, 150 if info and len(item.title.split("\n")) == 1 else 124, 72)
+    blocks = [(lines, f, WHITE, 1.14, 26 if info else 0)]
+    if item.desc:
+        dl, df = _cine_fit(item.desc, 76, 48)
+        blocks.append((dl, df, WHITE, 1.2, 20 if item.ott else 0))
+    if item.ott:
+        blocks.append(([item.ott], font(PT_BOLD, 40), (255, 255, 255, 210), 1.3, 0))
+    return _cine_text(canvas, blocks, config)
+
+
+def render_cinema_outro(post: Post, config: dict) -> Image.Image:
+    """마지막 장: 차분한 작품 사진 + outro_title + 채널 주소. 버튼·광고 문구 없음."""
+    rel = post.outro_image or next((it.image for it in reversed(post.items) if it.image), "") or post.cover_image
+    canvas, _ = _cine_photo(post, rel, (0.5, 0.35), calm=True)
+    lines, f = _cine_fit(post.outro_title or "다음 화제작도\n놓치지 마세요.", 104, 64)
+    blocks = [(lines, f, WHITE, 1.16, 34),
+              ([config.get("handle", "")], font(PT_BOLD, 44), (255, 255, 255, 235), 1.3, 0)]
+    return _cine_text(canvas, blocks, config, watermark=False)
+
+
 def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.images:
         out = []
@@ -1374,7 +1470,8 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             out.append(im)
         return out
     total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)
-    covers = {"deal": render_deal_cover, "alarm": render_alarm_cover, "photo": render_photo_cover}
+    covers = {"deal": render_deal_cover, "alarm": render_alarm_cover, "photo": render_photo_cover,
+              "cinema": render_cinema_cover}
     if post.cover_slide:  # 직접 만든 완성 표지를 그대로 01장으로
         slides = [cover_crop(open_img(post.asset(post.cover_slide)), (W, H), (0.5, 0.5)).convert("RGB")]
     else:
@@ -1382,6 +1479,8 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
     for i, it in enumerate(post.items, 1):
         if it.type == "deal":
             slides.append(render_deal(post, it, i, total, config))
+        elif it.type == "cinema":
+            slides.append(render_cinema(post, it, i, total, config))
         elif it.type == "steps":
             slides.append(render_steps(post, it, i, total, config))
         elif it.type == "list":
@@ -1399,6 +1498,7 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.recommend:
         slides.append(render_recommend(post, len(slides), total, config))
     if post.outro:
-        style = (config.get("outro") or {}).get("style")
-        slides.append({"toggle": render_toggle_outro, "follow_card": render_follow_card}.get(style, render_outro)(post, config))
+        style = post.outro_style or (config.get("outro") or {}).get("style")
+        slides.append({"toggle": render_toggle_outro, "follow_card": render_follow_card,
+                       "cinema": render_cinema_outro}.get(style, render_outro)(post, config))
     return slides
