@@ -2,7 +2,8 @@
   python -m screendaily new 2026-11-17 19:00 [--reel]   # 예약 게시물 폴더 만들기
   python -m screendaily preview [폴더명 ...]             # 미리보기 이미지/영상 생성 (queue/*/out)
   python -m screendaily list                            # 예약 목록
-  python -m screendaily lint [폴더명 ...]                # 후킹 규칙 검사 (경고만)
+  python -m screendaily lint [폴더명 ...] [--drafts]     # 후킹 규칙 검사 (경고만)
+  python -m screendaily toon-split 시트.png 폴더명 [--drafts]  # 인스타툰 6컷 한 장 → img/p1~p6
   python -m screendaily publish-due [--dry-run] [--no-git]  # 시간이 된 게시물 업로드
   python -m screendaily check                           # 토큰/계정 확인
   python -m screendaily refresh-token                   # 토큰 60일 연장
@@ -144,13 +145,24 @@ def cmd_lint(a, config):
     from .lint import lint_post
     gha = bool(os.environ.get("GITHUB_ACTIONS"))
     n = 0
-    for p in list_posts(QUEUE_DIR, config):
+    base = DRAFTS_DIR if getattr(a, "drafts", False) else QUEUE_DIR
+    for p in list_posts(base, config):
         if a.slots and p.name not in a.slots:
             continue
         for msg in lint_post(p, config):
             n += 1
-            print(f"::warning file=queue/{p.name}/post.yml::{msg}" if gha else f"[{p.name}] {msg}")
+            print(f"::warning file={base.name}/{p.name}/post.yml::{msg}" if gha else f"[{p.name}] {msg}")
     print(f"후킹 규칙 경고 {n}개" if n else "후킹 규칙: 모두 통과")
+
+
+def cmd_toon_split(a, config):
+    """인스타툰 6컷 한 장(2열 x 3행)을 img/p1~p6.jpg 로 자르기."""
+    from pathlib import Path
+    from .toonsplit import split_sheet
+    base = DRAFTS_DIR if a.drafts else QUEUE_DIR
+    files = split_sheet(Path(a.sheet), base / a.slot / "img")
+    for f in files:
+        print(f.relative_to(ROOT))
 
 
 def cmd_fetch_images(a, config):
@@ -315,6 +327,12 @@ def main(argv=None):
 
     s = sub.add_parser("lint", help="후킹 규칙 검사 (경고만)")
     s.add_argument("slots", nargs="*")
+    s.add_argument("--drafts", action="store_true", help="queue 대신 drafts 폴더")
+
+    s = sub.add_parser("toon-split", help="인스타툰 6컷 한 장 → img/p1~p6")
+    s.add_argument("sheet", help="6컷 한 장 이미지 (2열 x 3행)")
+    s.add_argument("slot", help="게시물 폴더 이름")
+    s.add_argument("--drafts", action="store_true", help="queue 대신 drafts 폴더")
 
     s = sub.add_parser("fetch-images", help="wiki 항목의 작품 이미지 내려받기")
     s.add_argument("slots", nargs="*")
@@ -339,7 +357,7 @@ def main(argv=None):
     config = load_config()
     handler = {
         "new": cmd_new, "list": cmd_list, "due": cmd_due, "preview": cmd_preview, "check": cmd_check,
-        "refresh-token": cmd_refresh, "fetch-images": cmd_fetch_images, "lint": cmd_lint, "publish-due": cmd_publish_due,
+        "refresh-token": cmd_refresh, "fetch-images": cmd_fetch_images, "lint": cmd_lint, "toon-split": cmd_toon_split, "publish-due": cmd_publish_due,
     }[a.cmd]
     sys.exit(handler(a, config) or 0)
 
