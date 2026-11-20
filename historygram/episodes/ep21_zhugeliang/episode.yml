@@ -1,5 +1,5 @@
 ep: 21
-status: draft   # draft → images → done
+status: done
 
 reveal_badge: 삼국지
 
@@ -20,6 +20,8 @@ slides:
   4:
     lines: ["끝까지 북쪽으로", "나아가다 [오장원]", "진중에서 눈을 감았어요."]
     note: 재구성 연출
+    pos: bottom
+    shade: 210
   5:
     intro: 그의 이름은
     name: 제갈량
