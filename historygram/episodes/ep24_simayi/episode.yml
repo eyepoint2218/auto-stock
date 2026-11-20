@@ -1,5 +1,5 @@
 ep: 24
-status: draft   # draft → images → done
+status: done
 
 reveal_badge: 삼국지
 
@@ -20,6 +20,8 @@ slides:
   4:
     lines: ["그의 손자는 [진나라]를", "세워 삼국을", "하나로 만들었어요."]
     note: 재구성 연출
+    pos: bottom
+    shade: 220
   5:
     intro: 그의 이름은
     name: 사마의
