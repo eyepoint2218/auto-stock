@@ -153,7 +153,7 @@ def badge(img: Image.Image, text: str, y0: float = 150) -> None:
     f = font(BLACK_F, 44)
     tw = f.getlength(text)
     x0 = (W - tw) / 2 - 36
-    d.rounded_rectangle((x0, y0, x0 + tw + 72, y0 + 80), radius=40, outline=YELLOW, width=4)
+    d.rounded_rectangle((x0, y0, x0 + tw + 72, y0 + 80), radius=40, fill=(0, 0, 0), outline=YELLOW, width=4)
     d.text((W / 2, y0 + 40), text, font=f, fill=YELLOW, anchor="mm")
 
 
