@@ -469,6 +469,55 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
         except Exception as e:  # noqa: BLE001
             print(f"  ⚠ 배우 사진 가져오기 실패: {e}")
 
+    # 1-4) 사진 후보 모으기 (시네마틱 게시물 등): photo_pages = 기사·공식 페이지 주소 목록, tmdb_stills = 작품명 또는 tv/ID
+    #      → img/cand_<페이지번호>_<NN>, img/tmdb_<NN> 로 받아 두고, 고른 파일을 cover_image / image 에 적는다
+    pages = [str(u).strip() for u in (raw.get("photo_pages") or []) if str(u).strip()]
+    got_pages = sources.setdefault("photo_pages", {})
+    for pi, url in enumerate(pages, 1):
+        if url in got_pages and not refresh:
+            continue
+        files = []
+        try:
+            for i, src in enumerate(page_images(url, 25), 1):
+                try:
+                    r = _get(src)
+                    if not r.headers.get("content-type", "").startswith("image/") or len(r.content) < 40_000:
+                        continue
+                    ext = Path(urllib.parse.urlparse(src).path).suffix.lower()
+                    rel = f"img/cand_{pi}_{i:02d}{ext if ext in ('.jpg', '.jpeg', '.png', '.webp') else '.jpg'}"
+                    img_dir.mkdir(exist_ok=True)
+                    (slot_dir / rel).write_bytes(r.content)
+                    _shrink(slot_dir / rel, 2000)
+                    files.append({"image": rel, "src": src})
+                except Exception as e:  # noqa: BLE001
+                    print(f"  ⚠ 후보 이미지 실패: {src[:80]} ({e})")
+            got_pages[url] = files
+            saved.extend(f["image"] for f in files)
+            print(f"  ✓ 사진 후보 {len(files)}장 ← {url}")
+        except Exception as e:  # noqa: BLE001
+            print(f"  ⚠ 사진 후보 페이지 실패: {url}: {e}")
+    stills = str(raw.get("tmdb_stills") or "").strip()
+    if stills and tmdb and (sources.get("tmdb_stills", {}).get("query") != stills or refresh):
+        try:
+            found = tmdb.find(stills, stills if "/" in stills else "tv")
+            if not found:
+                print(f"  ⚠ TMDB 검색 결과 없음: {stills}")
+            else:
+                kind, tid, name = found
+                d = tmdb.get(f"{kind}/{tid}/images", include_image_language="ko,null,en")
+                files = []
+                for i, b in enumerate((d.get("backdrops") or [])[:10], 1):
+                    rel = save(f"{TMDB_IMG}/original{b['file_path']}", f"tmdb_still_{i:02d}")
+                    _shrink(slot_dir / rel, 2000)
+                    files.append(rel)
+                for i, b in enumerate((d.get("posters") or [])[:4], 1):
+                    files.append(save(f"{TMDB_IMG}/w1280{b['file_path']}", f"tmdb_poster_{i:02d}"))
+                sources["tmdb_stills"] = {"query": stills, "tmdb": f"{kind}/{tid}", "name": name, "files": files,
+                                          "page_url": f"https://www.themoviedb.org/{kind}/{tid}"}
+                print(f"  ✓ TMDB {name} ({kind}/{tid}) 사진 후보 {len(files)}장")
+        except Exception as e:  # noqa: BLE001
+            print(f"  ⚠ TMDB 사진 후보 실패: {stills}: {e}")
+
     # 1-5) 표지 이미지 (cover_url / cover_wiki)
     if raw.get("cover_candidates") and raw.get("cover_url"):
         try:
@@ -518,7 +567,8 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
             print(f"  ✓ 위키 {it['title']} → {rel}")
             time.sleep(1)
 
-    if saved or by_title or sources.get("actor") or sources.get("cover"):
+    if saved or by_title or sources.get("actor") or sources.get("cover") or sources.get("photo_pages") \
+            or sources.get("tmdb_stills"):
         img_dir.mkdir(exist_ok=True)
         (img_dir / "sources.json").write_text(json.dumps(sources, ensure_ascii=False, indent=2), encoding="utf-8")
     # 더 이상 안 쓰는 이미지 정리
@@ -529,6 +579,13 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
         used.add(sources["cover"]["image"])
     if raw.get("cover_candidates"):
         used.update(f["image"] for f in sources.get("cover_candidates", {}).get("files", []))
+    if raw.get("photo_pages"):  # 사진 후보는 고를 때까지 보관
+        used.update(f["image"] for fs in sources.get("photo_pages", {}).values() for f in fs)
+    if raw.get("tmdb_stills"):
+        used.update(sources.get("tmdb_stills", {}).get("files", []))
+    for k in ("outro_image", "reveal_image"):
+        if raw.get(k):
+            used.add(str(raw[k]))
     if raw.get("cover_slide"):  # 직접 만든 완성 표지도 지우지 않음
         used.add(str(raw["cover_slide"]))
     if raw.get("cover_image"):  # 직접 넣은 표지 이미지는 절대 지우지 않음
