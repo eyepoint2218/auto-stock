@@ -147,12 +147,12 @@ def slide1(ep: dict) -> Image.Image:
     return img
 
 
-def badge(img: Image.Image, text: str) -> None:
-    """표지(1장) 위쪽 가운데 특집 표시: 노란 테두리 알약 + 노란 글자."""
+def badge(img: Image.Image, text: str, y0: float = 150) -> None:
+    """특집 표시: 노란 테두리 알약 + 노란 글자 (기본은 표지 위쪽 가운데)."""
     d = ImageDraw.Draw(img)
     f = font(BLACK_F, 44)
     tw = f.getlength(text)
-    x0, y0 = (W - tw) / 2 - 36, 150
+    x0 = (W - tw) / 2 - 36
     d.rounded_rectangle((x0, y0, x0 + tw + 72, y0 + 80), radius=40, outline=YELLOW, width=4)
     d.text((W / 2, y0 + 40), text, font=f, fill=YELLOW, anchor="mm")
 
@@ -198,7 +198,10 @@ def slide5(ep: dict, folder: Path) -> tuple[Image.Image, bool]:
             (f"[{name}]", fit_size([name], BLACK_F, 168), BLACK_F),
             (f"{name} ({cfg['years']})", 44, BOLD_F),
             (cfg["desc"], fit_size([cfg["desc"]], BOLD_F, 44, 32), BOLD_F)]
-    img = draw_block(img, rows, H - 140 - block_height(rows))
+    top = H - 140 - block_height(rows)
+    img = draw_block(img, rows, top)
+    if ep.get("reveal_badge"):  # 인물 공개 장 이름 위 배지 (예: 삼국지)
+        badge(img, ep["reveal_badge"], top - 104)
     if cfg.get("note", "상상화"):
         corner_note(img, cfg.get("note", "상상화"))
     stamp(img)

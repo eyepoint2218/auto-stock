@@ -1,6 +1,8 @@
 ep: 20
 status: draft   # draft → images → done
 
+reveal_badge: 삼국지
+
 quiz: ["그는", "[누구]일까요?"]
 
 slides:
