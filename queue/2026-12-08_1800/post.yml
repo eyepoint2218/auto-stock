@@ -1,0 +1,32 @@
+# 후킹: 숨은 작품 + 숫자 약속
+publish_at: "2026-12-08 18:00"
+format: carousel
+label: HIDDEN
+theme: dark
+title: "아무도 안 알려준\n소름 다큐 3편"
+subtitle: "실화라서 더 무서운 넷플릭스 다큐멘터리"
+bubble: "실화라니"
+items:
+  - title: 틴더 사기꾼
+    ott: 넷플릭스
+    genre: 실화 다큐멘터리
+    tmdb: "movie:The Tinder Swindler"
+    desc: 데이팅 앱에서 억만장자 행세를 하며 여성들을 속인 남자. 피해자들이 직접 그를 추적하는 과정을 담았어요.
+    bubble: "끝까지 소름"
+  - title: 소셜 딜레마
+    ott: 넷플릭스
+    genre: 다큐멘터리
+    tmdb: "movie:The Social Dilemma"
+    desc: SNS를 만든 실리콘밸리 사람들이 직접 말하는 알고리즘의 위험. 보고 나면 휴대폰을 내려놓게 돼요.
+  - title: 메이킹 어 머더러
+    ott: 넷플릭스
+    genre: 실화 범죄 다큐
+    tmdb: "tv:Making a Murderer"
+    desc: 억울한 옥살이 끝에 풀려난 남자가 다시 살인 혐의로 기소됩니다. 미국 사법 제도를 뒤흔든 실화.
+caption: |
+  드라마보다 더 드라마 같은 실화
+  잘 알려지지 않았지만 한번 보면 잊히지 않는 넷플릭스 다큐 3편이에요.
+
+  저장해두고 주말에 하나씩 보세요
+hashtags: [넷플릭스다큐, 틴더사기꾼, 소셜딜레마]
+credits: "이미지 출처: 넷플릭스 공식 포스터·스틸 (via TMDB). 모든 이미지의 저작권은 각 제작사에 있습니다."
