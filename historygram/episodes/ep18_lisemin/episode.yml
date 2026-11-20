@@ -1,5 +1,5 @@
 ep: 18
-status: draft   # draft → images → done
+status: done
 
 badge: 문무 특집
 
@@ -21,6 +21,8 @@ slides:
   4:
     lines: ["하지만 [안시성]을", "끝내 넘지 못하고", "돌아서야 했어요."]
     note: 재구성 연출
+    pos: bottom
+    shade: 210
   5:
     intro: 그의 이름은
     name: 이세민
