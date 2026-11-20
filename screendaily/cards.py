@@ -1409,7 +1409,7 @@ def toon_bubble(text: str, size: int = 40, tail: str = "left") -> Image.Image:
 
 
 def _toon_card(top: str, bottom: str, im: Image.Image | None, bubble: str, idx: int, config: dict,
-               top_size: int = 50, top_lines: int = 2, focus=(0.5, 0.4)) -> Image.Image:
+               top_size: int = 50, top_lines: int = 2, focus=(0.5, 0.4), pos: str = "") -> Image.Image:
     canvas = Image.new("RGBA", (W, H), TOON_BG + (255,))
     d = ImageDraw.Draw(canvas)
     big = im is None  # 그림 없는 칸은 글자를 크게
@@ -1442,11 +1442,13 @@ def _toon_card(top: str, bottom: str, im: Image.Image | None, bubble: str, idx: 
             _toon_box(d, bl, y_bot)
         img_box = (ix0, iy0, ix1, iy1)
     if bubble:
-        right = idx % 2 == 0
+        pos = (pos or "").lower()
+        right = "right" in pos if ("right" in pos or "left" in pos) else idx % 2 == 0
         b = toon_bubble(bubble, tail="left" if right else "right")
         if img_box:
             cx = img_box[2] - b.width // 2 + 10 if right else img_box[0] + b.width // 2 - 10
-            cy = img_box[1] + (img_box[3] - img_box[1]) * 0.38
+            ry = 0.2 if "top" in pos else 0.62 if "bottom" in pos else 0.38
+            cy = max(img_box[1] + b.height // 2 + 20, img_box[1] + (img_box[3] - img_box[1]) * ry)
         else:
             first = (W - (tl or bl)[2]) // 2 + 60  # 첫 상자 바로 위, 상자 모서리에 걸치게
             h = (tl[3] if tl else 0) + (bl[3] if bl else 0) + (60 if tl and bl else 0)
@@ -1458,7 +1460,8 @@ def _toon_card(top: str, bottom: str, im: Image.Image | None, bubble: str, idx: 
 
 
 def render_toon(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
-    return _toon_card(item.title, item.desc, open_img(post.asset(item.image)), item.bubble, idx, config)
+    return _toon_card(item.title, item.desc, open_img(post.asset(item.image)), item.bubble, idx, config,
+                      pos=item.bubble_pos)
 
 
 def render_toon_cover(post: Post, config: dict) -> Image.Image:
@@ -1466,7 +1469,7 @@ def render_toon_cover(post: Post, config: dict) -> Image.Image:
     if im is None:
         im = next((open_img(post.asset(it.image)) for it in post.items if it.image), None)
     return _toon_card(post.title, post.subtitle, im, post.bubble, 0, config, top_size=64, top_lines=3,
-                      focus=_focus(post))
+                      focus=_focus(post), pos=post.bubble_pos)
 
 
 def render_all(post: Post, config: dict) -> list[Image.Image]:

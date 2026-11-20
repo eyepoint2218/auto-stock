@@ -53,6 +53,7 @@ class Item:
     stage: str = ""   # 배우 스토리: 단계 표시 (예: 데뷔, 첫 주연, 전환점)
     type: str = ""    # story = 글 중심 이야기 카드, quote = 인용 카드 (작품 사진 없음), deal = 사진 + 두 줄 할인 카드, coupon = 쿠폰 티켓 정보 카드, steps = 혜택 받는 법(STEP), list = 분야별 혜택 모음(사진 + 목록), toon = 인스타툰 칸(위 상자 title + 가운데 그림 + 아래 상자 desc)
     note: str = ""    # list 카드 맨 아래 작은 안내 (줄바꿈으로 여러 줄)
+    bubble_pos: str = ""  # 인스타툰 말풍선 위치: left / right + top / bottom (예: "left-top"). 비우면 장마다 번갈아
     brand: str = ""   # 이야기 카드 색을 config.yml brands: 의 브랜드 색으로 (예: SKT, KT, LGU)
 
 
@@ -65,6 +66,7 @@ class Post:
     label: str = "MOOD"
     subtitle: str = ""
     bubble: str = ""
+    bubble_pos: str = ""       # 인스타툰 표지 말풍선 위치 (items 의 bubble_pos 와 같음)
     theme: str = "dark"
     cover_image: str = ""
     items: list[Item] = field(default_factory=list)
@@ -280,6 +282,7 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         brand=str(raw.get("brand", "") or ""),
         channel=str(raw.get("channel", "") or ""),
         cover_style=str(raw.get("cover_style", "") or ""),
+        bubble_pos=str(raw.get("bubble_pos", "") or ""),
         alarm=str(raw.get("alarm", "") or ""),
         cover_focus=str(raw.get("cover_focus", "") or ""),
         cover_fit=str(raw.get("cover_fit", "") or ""),

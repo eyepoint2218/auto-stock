@@ -1,6 +1,6 @@
 # 인스타툰 시안: 새벽 2시 "딱 한 편만" (draft: true, 자동 업로드 안 됨)
 # 그림: ChatGPT 이미지 생성 (채널 캐릭터, 기준 이미지 img/character_sheet.jpg)
-# 5·6장 그림(지하철, 윙크)은 아직 없음. 작품명은 확정 후 1장 subtitle·caption 에 넣기
+# 6장 그림(윙크)은 아직 없음. 작품명은 확정 후 1장 subtitle·caption 에 넣기
 publish_at: "2026-12-31 18:00"
 format: carousel
 draft: true
@@ -11,6 +11,7 @@ cover_focus: "0.5,0.45"
 title: "새벽 2시,\n“딱 한 편만”"
 subtitle: "이 드라마 틀면 안 됐어요"
 bubble: "한 편만!"
+bubble_pos: right-top
 items:
   - type: toon
     title: "분명 1화만 보려고 했는데"
@@ -27,6 +28,13 @@ items:
     desc: "해가 떴어요"
     image: img/p4.jpg
     bubble: "출근 어떡해ㅠ"
+    bubble_pos: left-top
+  - type: toon
+    title: "그런데 후회는 없어요"
+    desc: "지하철에서 다음 화 보는 중"
+    image: img/p5.jpg
+    bubble: "행복해"
+    bubble_pos: right-top
 outro_question: "여러분은 몇 화까지 버텼나요?"
 caption: |
   새벽 2시, 딱 한 편만 보고 자려고 했어요.
