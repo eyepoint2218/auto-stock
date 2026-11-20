@@ -1,0 +1,44 @@
+# 인스타툰 릴스: AI 부정행위 - 시험 커닝 (AI만 믿고 갔다가 시험장에서 기기 제출)
+# 그림: 채널 캐릭터, ChatGPT 6컷 한 장 → python -m screendaily toon-split 그림 toon_ai_exam --drafts
+publish_at: "2026-12-15 18:00"
+format: reel
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "AI만 믿고 간\n시험, 결과는?"
+subtitle: "시험 전날 밤의 선택"
+bubble: "AI 있잖아"
+items:
+  - type: toon
+    title: "공부 대신 영화 보면서"
+    desc: "모르면 AI한테 물으면 된다 생각했죠"
+    image: img/p2.jpg
+    bubble: "여유롭다"
+  - type: toon
+    title: "그런데 시험장에 가니"
+    desc: "휴대폰·스마트워치 전부 제출"
+    image: img/p3.jpg
+    bubble: "잠깐만?"
+  - type: toon
+    title: "시험지를 받는 순간"
+    desc: "머릿속이 하얘졌어요"
+    image: img/p4.jpg
+    bubble: "망했다ㅠ"
+  - type: toon
+    title: "그날 이후로"
+    desc: "벼락치기는 내 머리로 해요"
+    image: img/p5.jpg
+    bubble: "외우자"
+  - type: toon
+    title: "시험 전날 밤, 뭐 했나요?"
+    desc: "댓글로 알려주세요"
+    image: img/p6.jpg
+    bubble: "너는?"
+outro_question: "시험 전날 밤, 뭐 했나요?"
+caption: |
+  모르면 AI한테 물으면 된다고 믿고 영화만 보다 시험장에 갔어요.
+  휴대폰도 스마트워치도 다 내고 나니 남은 건 빈 머리뿐이었죠.
+
+  시험 전날 밤, 뭐 했나요? 댓글로 알려주세요.
+hashtags: [인스타툰, 시험기간, 대학생공감]
