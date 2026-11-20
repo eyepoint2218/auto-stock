@@ -1,6 +1,7 @@
 # 인스타툰 릴스: 스크린데일리 채널 소개 (그림: 채널 캐릭터, ChatGPT 이미지 생성 / 프롬프트는 PROMPTS.md)
 publish_at: "2026-11-21 07:46"   # 지금 바로 업로드 (사용자 요청)
 format: reel
+draft: true   # 업로드 중지 (사용자 요청, 11/21)
 label: MOOD
 cover_style: toon
 cover_image: img/p1.jpg

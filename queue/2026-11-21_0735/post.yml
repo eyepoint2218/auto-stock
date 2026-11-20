@@ -1,6 +1,7 @@
 # 인스타툰 릴스: 새벽 2시 "딱 한 편만" (그림: 채널 캐릭터, ChatGPT 이미지 생성)
 publish_at: "2026-11-21 07:35"   # 지금 바로 업로드 (사용자 요청)
 format: reel
+draft: true   # 업로드 중지 (사용자 요청, 11/21)
 label: MOOD
 cover_style: toon
 cover_image: img/p1.jpg
