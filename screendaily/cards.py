@@ -1443,8 +1443,9 @@ def render_cinema(post: Post, item: Item, idx: int, total: int, config: dict) ->
     if item.desc:
         dl, df = _cine_fit(item.desc, 76, 48)
         blocks.append((dl, df, WHITE, 1.2, 20 if item.ott else 0))
-    if item.ott:
-        blocks.append(([item.ott], font(PT_BOLD, 40), (255, 255, 255, 210), 1.3, 0))
+    if item.ott:  # 작은 정보 줄 (\n 으로 여러 줄, 예: 방송 시간 / 채널·OTT)
+        ol, of = _cine_fit(item.ott, 40, 30)
+        blocks.append((ol, font(PT_BOLD, of.size), (255, 255, 255, 215), 1.35, 0))
     return _cine_text(canvas, blocks, config)
 
 
