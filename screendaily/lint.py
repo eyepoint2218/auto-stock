@@ -8,6 +8,7 @@ from .post import Post, channel_config
 TITLE_MAX = 20      # 표지 제목 글자 수 (공백·줄바꿈 제외)
 BUBBLE_MAX = 10     # 말풍선 글자 수 (공백 제외)
 REEL_ITEMS_MAX = 4  # 릴스 작품 수 (표지·마지막 장 포함 약 15~18초)
+TOON_REEL_MAX = 5  # 인스타툰 릴스 칸 수 (표지 + 5칸 + 팔로우 카드 = 약 18초)
 
 # 카드 폰트(나눔스퀘어)에 없는 이모지·기호
 EMOJI = re.compile("[\U0001F000-\U0001FAFF☀-➿️‍]")
@@ -69,8 +70,11 @@ def lint_post(p: Post, config: dict | None = None) -> list[str]:
         w.append("혜택알람 2장 STEP 에 기간이 없어요. STEP 안에 '11/19~11/30' 처럼 시작~마감 날짜를 (하루 행사는 '11/19 하루') 넣으세요.")
     if EMOJI.search(p.caption or ""):
         w.append("게시글(caption)에는 이모지를 넣지 않아요.")
-    if p.format == "reel" and len(p.items) > REEL_ITEMS_MAX:
-        w.append(f"릴스 작품이 {len(p.items)}개예요. {REEL_ITEMS_MAX}개 이하면 15~18초 안에 끝나요.")
+    toon = bool(p.items) and all(it.type == "toon" for it in p.items)
+    reel_max = TOON_REEL_MAX if toon else REEL_ITEMS_MAX
+    if p.format == "reel" and len(p.items) > reel_max:
+        what = "인스타툰 칸" if toon else "릴스 작품"
+        w.append(f"{what}이 {len(p.items)}개예요. {reel_max}개 이하면 15~18초 안에 끝나요.")
     if p.layout == "letterbox":
         if len(p.title.splitlines()) > 2:
             w.append("letterbox 후킹 문구는 2줄 이하가 좋아요 (영상 내내 위에 고정됨).")
