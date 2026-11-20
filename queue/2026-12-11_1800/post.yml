@@ -8,7 +8,7 @@ title: "만화가 실사로 나오면\n생기는 일"
 items:
   - title: 원피스
     ott: 넷플릭스
-    tmdb: tv
+    tmdb: tv/111110   # 2023 실사판 (1999 애니 아님)
     desc: "해적왕을 꿈꾸는 루피, 드디어 실사로"
   - title: "아바타: 아앙의 전설"
     ott: 넷플릭스
@@ -16,11 +16,11 @@ items:
     desc: "물·흙·불·공기를 다루는 마지막 아바타"
   - title: 유유백서
     ott: 넷플릭스
-    tmdb: tv
+    tmdb: tv/121659   # 2023 실사판
     desc: "사고로 죽은 소년이 영계 탐정으로 부활"
   - title: 카우보이 비밥
     ott: 넷플릭스
-    tmdb: tv
+    tmdb: tv/84469   # 2021 실사판
     desc: "우주를 떠도는 현상금 사냥꾼들"
 outro_question: "실사로 나왔으면 하는 만화는?"
 caption: |
