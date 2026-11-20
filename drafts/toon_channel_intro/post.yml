@@ -1,0 +1,46 @@
+# 인스타툰 릴스: 스크린데일리 채널 소개 (그림: 채널 캐릭터, ChatGPT 이미지 생성 / 프롬프트는 PROMPTS.md)
+# 그림 6장을 img/p1.jpg ~ p6.jpg 로 넣으면 완성
+publish_at: "2026-12-31 18:00"
+format: reel
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "OTT만 30분 넘기다\n잠든 적 있죠?"
+subtitle: "볼 건 많은데 볼 게 없을 때"
+bubble: "뭐 보지..."
+items:
+  - type: toon
+    title: "구독은 4개나 하는데"
+    desc: "막상 틀 게 없어요"
+    image: img/p2.jpg
+    bubble: "다 본 것 같아"
+  - type: toon
+    title: "고르고 또 고르다가"
+    desc: "결국 아무것도 못 봤어요"
+    image: img/p3.jpg
+    bubble: "벌써 1시..."
+  - type: toon
+    title: "그날 밤 다짐했어요"
+    desc: "고르는 건 제가 대신 할게요"
+    image: img/p4.jpg
+    bubble: "내가 할게!"
+  - type: toon
+    title: "그래서 평일 저녁 6시마다"
+    desc: "오늘 볼 한 편을 골라드려요"
+    image: img/p5.jpg
+    bubble: "오늘은 이거!"
+  - type: toon
+    title: "오늘 뭐 볼지 고민될 땐"
+    desc: "스크린데일리 팔로우"
+    image: img/p6.jpg
+    bubble: "같이 보자!"
+outro_title: "평일 저녁 6시,\n오늘 뭐 볼지\n고민 끝"
+outro_cta: "팔로우하고 저녁 6시 추천 받기"
+outro_question: "넷플릭스·OTT 영화·드라마·예능 추천"
+caption: |
+  OTT 앱만 30분 넘기다 결국 아무것도 못 본 날, 있으시죠?
+  스크린데일리는 평일 저녁 6시, 오늘 볼 한 편을 골라드려요.
+
+  오늘 뭐 볼지 고민될 땐 팔로우해 두세요.
+hashtags: [인스타툰, 스크린데일리, 오늘뭐보지]
