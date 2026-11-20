@@ -44,7 +44,9 @@ def lint_post(p: Post, config: dict | None = None) -> list[str]:
 
     fields = [("title", p.title), ("subtitle", p.subtitle), ("bubble", p.bubble),
               ("outro_question", p.outro_question), ("reveal_text", p.reveal_text),
+              ("reveal_name", p.reveal_name), ("reveal_hint", p.reveal_hint),
               ("outro_title", p.outro_title), ("outro_cta", p.outro_cta), ("outro_save", p.outro_save)]
+    fields += [(f"reveal_info[{i}]", v) for i, v in enumerate(p.reveal_info, 1)]
     for i, it in enumerate(p.items, 1):
         fields += [(f"items[{i}].{k}", getattr(it, k)) for k in ("title", "genre", "desc", "bubble", "year", "stage")]
     for name, val in fields:

@@ -97,6 +97,11 @@ class Post:
     brand: str = ""            # 캐러셀 전체 색 (config.yml brands: 의 splash). 표지·마지막 장·brand 없는 이야기 카드에 적용
     reveal: bool = False       # 배우 맞히기: 이름을 숨기고 마지막에 정답 공개
     reveal_text: str = ""      # 정답 카드의 한 줄 소개
+    reveal_name: str = ""      # 정답 카드 큰 이름 (작품 맞히기면 작품 제목, 비우면 배우 이름)
+    reveal_image: str = ""     # 정답·이야기 카드 사진 (작품 맞히기용, 비우면 배우 사진)
+    reveal_credit: str = ""    # reveal_image 출처 (정답 카드 오른쪽 위에 작게)
+    reveal_hint: str = ""      # 이야기 카드 오른쪽 위 문구 (비우면 "이 배우는 누구?")
+    reveal_info: list[str] = field(default_factory=list)  # 정답 카드 작품 정보 "항목|내용" (예: "공개|12월 11일")
     recommend: list[Item] = field(default_factory=list)  # 정답 뒤 추천작 카드 (최대 4편)
     recommend_title: str = ""  # 추천작 카드 제목
     layout: str = ""           # letterbox = 위쪽 검은 칸 릴스 (format: reel 전용)
@@ -287,6 +292,11 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         alarm_sub=str(raw.get("alarm_sub", "") or ""),
         reveal=bool(raw.get("reveal", False)),
         reveal_text=str(raw.get("reveal_text", "") or ""),
+        reveal_name=str(raw.get("reveal_name", "") or ""),
+        reveal_image=str(raw.get("reveal_image", "") or ""),
+        reveal_credit=str(raw.get("reveal_credit", "") or ""),
+        reveal_hint=str(raw.get("reveal_hint", "") or ""),
+        reveal_info=[str(x) for x in raw.get("reveal_info") or []],
         recommend=recommend,
         recommend_title=str(raw.get("recommend_title", "") or ""),
         layout=str(raw.get("layout", "") or "").lower(),
@@ -296,6 +306,8 @@ def load_post(slot_dir: Path, config: dict) -> Post:
     if post.actor and act.get("image") and (slot_dir / act["image"]).is_file():
         post.actor_image = act["image"]
         post.actor_name = act.get("name", "")
+    if post.reveal_image and not post.actor:  # 작품 맞히기: 흐린 표지·이야기 배경·정답 사진으로 사용
+        post.actor_image = post.reveal_image
 
     if not post.images:
         if not post.title:

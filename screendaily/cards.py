@@ -585,7 +585,7 @@ def render_story(post: Post, item: Item, idx: int, total: int, config: dict) -> 
     if bcfg:
         d.text((W - M, 64), bcfg.get("name", item.brand), font=font(EB, 28), fill=(255, 255, 255, 235), anchor="ra")
     elif post.reveal:
-        d.text((W - M, 64), "이 배우는 누구?", font=font(B, 26), fill=accent, anchor="ra")
+        d.text((W - M, 64), post.reveal_hint or "이 배우는 누구?", font=font(B, 26), fill=accent, anchor="ra")
     elif post.actor_name or post.actor:
         d.text((W - M, 64), post.actor_name or post.actor, font=font(B, 26), fill=(255, 255, 255, 190), anchor="ra")
 
@@ -644,20 +644,33 @@ def render_reveal(post: Post, idx: int, total: int, config: dict) -> Image.Image
         canvas = placeholder_bg((W, H), accent, theme, idx)
     d = ImageDraw.Draw(canvas)
     d.text((M, 60), brand, font=font(EB, 28), fill=(255, 255, 255, 230))
-    if im:
-        d.text((W - M, 64), "사진 © TMDB", font=font(R, 22), fill=(255, 255, 255, 200), anchor="ra",
+    credit = post.reveal_credit if post.reveal_image else "사진 © TMDB"
+    if im and credit:
+        d.text((W - M, 64), credit, font=font(R, 22), fill=(255, 255, 255, 200), anchor="ra",
                stroke_width=2, stroke_fill=(0, 0, 0, 120))
-    name = post.actor_name or post.actor
-    nf, nl = fit(name, EB, W - M * 2, 1, 150, 90)
+    name = post.reveal_name or post.actor_name or post.actor
+    nf, nl = fit(name, EB, W - M * 2, 2 if post.reveal_name else 1, 150, 90)
     sub_f = font(B, 38)
     sub = wrap(post.reveal_text, sub_f, W - M * 2) if post.reveal_text else []
-    y = H - 150 - block_h(sub_f, sub) - (24 if sub else 0) - block_h(nf, nl)
+    info = [(k.strip(), v.strip()) for k, v in (ln.split("|", 1) for ln in post.reveal_info if "|" in ln)]
+    kf, vf, row_h = font(B, 30), font(EB, 36), 62
+    key_w = max((_tw(kf, k) for k, _ in info), default=0) + 36
+    info_h = (44 + len(info) * row_h) if info else 0
+    y = H - 150 - info_h - block_h(sub_f, sub) - (24 if sub else 0) - block_h(nf, nl)
     pill(d, M, y - 80, "정답은", font(EB, 30), accent, (15, 15, 15))
+    bubble_y = y - 200
     y = draw_lines(d, nl, nf, M, y, theme["fg"])
     for i, ln in enumerate(sub):
         d.text((M, y + 24 + i * line_h(sub_f)), ln, font=sub_f, fill=accent)
+    y += (24 + block_h(sub_f, sub)) if sub else 0
+    if info:
+        y += 44
+        d.line((M, y - 22, W - M, y - 22), fill=(255, 255, 255, 70), width=2)
+        for i, (k, v) in enumerate(info):
+            d.text((M, y + i * row_h + 4), k, font=kf, fill=theme["sub"])
+            d.text((M + key_w, y + i * row_h), v, font=vf, fill=theme["fg"])
     b = bubble_layer("맞히셨나요?", size=38, angle=-3)
-    paste_center(canvas, b, W - M - b.width // 2 + 10, y - 200)
+    paste_center(canvas, b, W - M - b.width // 2 + 10, bubble_y)
     footer(canvas, theme, brand, f"{idx + 1} / {total}")
     return canvas.convert("RGB")
 
