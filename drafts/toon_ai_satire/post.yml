@@ -1,0 +1,44 @@
+# 인스타툰 릴스: AI 부정행위 사회 풍자 (모두 AI로 쓰는데 직접 쓴 나만 AI 판정)
+# 그림: 채널 캐릭터, ChatGPT 6컷 한 장 → python -m screendaily toon-split 그림 toon_ai_satire --drafts
+publish_at: "2026-12-16 18:00"
+format: reel
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "과제는 AI가 쓰고\n채점도 AI가 한다"
+subtitle: "요즘 강의실 풍경"
+bubble: "다들 AI야?"
+items:
+  - type: toon
+    title: "다들 AI로 리포트 쓸 때"
+    desc: "나만 사흘 밤새 직접 썼어요"
+    image: img/p2.jpg
+    bubble: "내 손으로!"
+  - type: toon
+    title: "교수님은 AI로 채점하고"
+    desc: "AI 탐지기까지 돌렸죠"
+    image: img/p3.jpg
+    bubble: "떨린다"
+  - type: toon
+    title: "그런데 결과는"
+    desc: "AI 작성 의심, 나만 걸렸어요"
+    image: img/p4.jpg
+    bubble: "내가 썼다고ㅠ"
+  - type: toon
+    title: "AI로 쓴 친구들은"
+    desc: "전부 무사 통과"
+    image: img/p5.jpg
+    bubble: "이게 맞아?"
+  - type: toon
+    title: "사람이 쓴 글, 어떻게 증명하죠?"
+    desc: "댓글로 알려주세요"
+    image: img/p6.jpg
+    bubble: "어떡하죠?"
+outro_question: "사람이 쓴 글, 어떻게 증명하죠?"
+caption: |
+  학생은 AI로 쓰고, 교수님은 AI로 채점하고, 탐지기도 AI가 돌리는 강의실.
+  사흘 밤새 직접 쓴 내 리포트만 AI 작성 의심을 받았어요.
+
+  사람이 쓴 글, 어떻게 증명하죠? 댓글로 알려주세요.
+hashtags: [인스타툰, 대학생공감, AI과제]
