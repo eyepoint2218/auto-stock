@@ -151,6 +151,7 @@ git add queue && git commit -m "다음 주 예약" && git push
 실제 작품 사진을 화면 가득 + 하단 검정 그라데이션 + 좌측 하단 큰 흰 고딕(Pretendard Black) 2~3줄. 사진 80% · 글자 20%.
 - **새로 만들기:** `python -m screendaily new 2026-12-03 18:00 --cinema 작품명` → `drafts/cinema_…/` (템플릿 `examples/cinema_template/post.yml`)
 - 01 표지 `cover_style: cinema` (`title`, 선택 `subtitle`) · 02~03 `type: cinema` 카드 (`title` 크게, `desc` 중간 한 줄, `ott` 작게) · 04 `outro_style: cinema` (`outro_title` + 채널 주소, 사진은 `outro_image`)
+- 04장 팔로우 문구는 `outro_cta` (비우면 config `outro.cta`), 그 아래 채널 주소
 - 공식 포스터·스틸만 `img/01.jpg ~ 04.jpg` 로 넣는다 (AI 생성·대체 금지). 없으면 미리보기에 '공식 사진 자리' 가 나오고 lint 가 경고
 - 얼굴이 글자에 가리면 표지 `cover_focus`, 카드 `focus` 를 `"가로,세로"` (0~1) 로 조정
 - 노란 글씨·강조 띠·아이콘·버튼·색보정 없음. 하단 가운데 작은 채널 주소만

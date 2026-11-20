@@ -1453,8 +1453,12 @@ def render_cinema_outro(post: Post, config: dict) -> Image.Image:
     rel = post.outro_image or next((it.image for it in reversed(post.items) if it.image), "") or post.cover_image
     canvas, _ = _cine_photo(post, rel, (0.5, 0.35), calm=True)
     lines, f = _cine_fit(post.outro_title or "다음 화제작도\n놓치지 마세요.", 104, 64)
-    blocks = [(lines, f, WHITE, 1.16, 34),
-              ([config.get("handle", "")], font(PT_BOLD, 44), (255, 255, 255, 235), 1.3, 0)]
+    blocks = [(lines, f, WHITE, 1.16, 34)]
+    cta = post.outro_cta or (config.get("outro") or {}).get("cta", "")
+    if cta:  # 팔로우 유도 한 줄 (버튼 모양 없이 글자만)
+        cl, cf = _cine_fit(cta, 46, 32)
+        blocks.append((cl, font(PT_BOLD, cf.size), (255, 255, 255, 225), 1.3, 14))
+    blocks.append(([config.get("handle", "")], font(PT_BLACK, 50), WHITE, 1.3, 0))
     return _cine_text(canvas, blocks, config, watermark=False)
 
 

@@ -34,6 +34,7 @@ items:
 # 04 팔로우 (사진을 차분하게 깔고 채널 주소만)
 outro_image: img/04.jpg
 outro_title: "다음 화제작도\n놓치지 마세요."
+outro_cta: "팔로우하고 화제작 소식 먼저 받아보세요"
 
 caption: |
   첫 문장은 배우 이름 또는 강렬한 한 줄.

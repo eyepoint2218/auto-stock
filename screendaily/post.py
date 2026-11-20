@@ -13,7 +13,7 @@ import yaml
 
 from . import ROOT
 
-GENERATOR_VERSION = "12"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
+GENERATOR_VERSION = "13"  # 디자인을 바꾸면 올려서 미리보기를 다시 만들게 함
 
 
 def channel_config(config: dict, post: "Post | str | None") -> dict:
