@@ -141,8 +141,20 @@ def slide1(ep: dict) -> Image.Image:
     img = draw_block(img, [(l, size, BLACK_F) for l in lines], y, shadow=False, leading=1.4)
     if cfg.get("note"):
         corner_note(img, cfg["note"])
+    if ep.get("badge"):
+        badge(img, ep["badge"])
     stamp(img)
     return img
+
+
+def badge(img: Image.Image, text: str) -> None:
+    """표지(1장) 위쪽 가운데 특집 표시: 노란 테두리 알약 + 노란 글자."""
+    d = ImageDraw.Draw(img)
+    f = font(BLACK_F, 44)
+    tw = f.getlength(text)
+    x0, y0 = (W - tw) / 2 - 36, 150
+    d.rounded_rectangle((x0, y0, x0 + tw + 72, y0 + 80), radius=40, outline=YELLOW, width=4)
+    d.text((W / 2, y0 + 40), text, font=f, fill=YELLOW, anchor="mm")
 
 
 def story_keys(ep: dict) -> list:
