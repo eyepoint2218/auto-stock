@@ -10,32 +10,38 @@ cover_image: img/p1.jpg
 title: "오늘 하루가\n너무 길었던 너에게"
 subtitle: "무뚝뚝한 식빵의 위로법"
 bubble: "나 오늘 망했어"
+bubble_pos: left-top
 items:
   - type: toon
     title: "찐빵이 울면서 들어왔는데"
     desc: "식빵은 쳐다보지도 않아요"
     image: img/p2.jpg
     bubble: "흐엉..."
+    bubble_pos: left-top
   - type: toon
     title: "그러다 말없이 일어나더니"
     desc: "찐빵 옆에 털썩 누웠어요"
     image: img/p3.jpg
     bubble: "..."
+    bubble_pos: left-top
   - type: toon
     title: "그리고 딱 한마디"
     desc: "나도 오늘 별로였어"
     image: img/p4.jpg
     bubble: "나도 망함"
+    bubble_pos: left-top
   - type: toon
     title: "그 말 한마디에"
     desc: "찐빵 털이 다시 펑 부풀었어요"
     image: img/p5.jpg
     bubble: "같이 망했다!"
+    bubble_pos: left-top
   - type: toon
     title: "힘든 날, 옆에 있어 줄 친구 있나요?"
     desc: "댓글에 그 친구를 태그해 주세요"
     image: img/p6.jpg
     bubble: "누구 생각나?"
+    bubble_pos: left-top
 outro_question: "힘든 날, 옆에 있어 줄 친구 있나요?"
 caption: |
   힘든 날엔 거창한 말보다
