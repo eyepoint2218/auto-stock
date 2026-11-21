@@ -7,13 +7,14 @@
 #   공식 이벤트 https://nenechicken.com/home_event_detail.asp?uid=461 (접속 불가로 본문 미확인)
 #   확인된 내용: 자사앱 주문 고객 대상, 매주 수·금 7,000원 할인쿠폰(회원 로그인 후 발급, 결제 단계 적용, 치킨 전 메뉴, 발급 당일 1회),
 #   그 외 5,000원·3,000원 할인 상시, 주문 건당 마나도 여행 응모(5팀, 1인 2매 항공권+호텔), 11/30까지
+#   공식 배너(cdn.gpkorea.com/news/photo/202611/148758_316350_154.png)로 재확인: 11.02~11.30, 7천원 할인 매주 수/금, 3/5천원 할인 프로모션 기간 내, 마나도 여행 추첨 주문 후 응모 필수
 # 미확인: 최소 주문금액, 5,000원·3,000원 쿠폰의 정확한 조건, 배달앱 주문 적용 여부 → 카드에 쓰지 않음
 publish_at: "2026-11-21 13:00"
 format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: "https://www.gpkorea.com/news/articleView.html?idxno=148758"
+cover_url: "https://www.fntoday.co.kr/news/articleView.html?idxno=398912"
 cover_candidates: true
 theme: dark
 title: "네네치킨 앱\n수·금 치킨\n7,000원 할인"
@@ -31,7 +32,7 @@ caption: |
   대상: 네네치킨 자사앱 회원
   혜택: 매주 수요일·금요일 치킨 전 메뉴 7,000원 할인쿠폰 (발급 당일 1회 사용), 다른 날에도 5,000원·3,000원 할인
   방법: 자사앱 로그인 후 쿠폰 발급, 결제 단계에서 적용
-  주문할 때마다 인도네시아 마나도 여행 경품 응모 (5팀, 항공권·호텔)
+  주문 후 응모하면 인도네시아 마나도 여행 경품 추첨 (5팀, 항공권·호텔)
 
   세부 조건은 네네치킨 자사앱 이벤트 페이지에서 확인하세요.
 
