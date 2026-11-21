@@ -1,5 +1,5 @@
 ep: 28
-status: draft   # draft → images → done
+status: done
 
 
 quiz: ["그는", "[누구]일까요?"]
@@ -19,6 +19,10 @@ slides:
   4:
     lines: ["서쪽으로는 후연을 꺾고", "[요동]까지", "땅을 넓혔어요."]
     note: 재구성 연출
+    shade: 200
+    size: 84
+    top: 90
+    crop: 0
   5:
     intro: 그의 이름은
     name: 광개토대왕
