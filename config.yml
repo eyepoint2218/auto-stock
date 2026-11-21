@@ -128,7 +128,9 @@ channels:
       - 일상툰
       - 위로
     outro:
-      style: toon_follow          # 크림색 바탕 + 캐릭터 그림 마지막 장
+      style: toon_follow          # 툰 칸과 같은 틀 + 크레파스 배경 + 캐릭터 그림 마지막 장
       image: assets/brand/sikppang_duo.png
-      title: "식빵이랑 찐빵의 하루,\n매일 한 컷씩"
-      cta: "팔로우하고 같이 보기"
+      title: "식빵이랑 찐빵의 하루, 매일 한 컷씩"
+      cta: "팔로우하고 같이 봐요"
+      bubble: "팔로우해 줘!"
+      bubble_pos: right-top

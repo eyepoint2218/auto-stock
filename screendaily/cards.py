@@ -1362,38 +1362,37 @@ def render_follow_card(post: Post, config: dict) -> Image.Image:
     return canvas.convert("RGB")
 
 
+def _crayon_panel(size: tuple[int, int], base=(255, 232, 130), seed: int = 7) -> Image.Image:
+    """크레파스로 쓱쓱 문지른 듯한 단색 배경 (사선 짧은 획 + 종이 틈)."""
+    import random
+    rnd = random.Random(seed)
+    w, h = size
+    im = Image.new("RGB", size, (255, 252, 240))
+    d = ImageDraw.Draw(im)
+    for _ in range(int(w * h / 90)):
+        x, y = rnd.uniform(-40, w), rnd.uniform(-20, h)
+        ln = rnd.uniform(30, 90)
+        k = rnd.uniform(-14, 10)
+        c = tuple(max(0, min(255, int(v + k))) for v in base)
+        d.line((x, y + ln * 0.35, x + ln, y), fill=c, width=rnd.choice((2, 3, 3, 4)))
+    return im.filter(ImageFilter.GaussianBlur(0.6))
+
+
 def render_toon_follow(post: Post, config: dict) -> Image.Image:
-    """인스타툰 채널 마지막 장: 크림색 바탕 + 캐릭터 그림 + 채널 이름·팔로우 버튼 (outro.style: toon_follow)."""
+    """인스타툰 채널 마지막 장: 툰 칸과 같은 틀(위·아래 크림 상자 + 크레파스 칸 + 말풍선) (outro.style: toon_follow)."""
     o = config.get("outro", {})
-    canvas = Image.new("RGBA", (W, H), TOON_BOX + (255,))
-    d = ImageDraw.Draw(canvas)
-    d.text((W / 2, 150), config.get("brand", ""), font=font(TOON_FONT, 104), fill=TOON_INK, anchor="ma")
+    panel = _crayon_panel((1000, 1000))
     art = o.get("image")
-    y = 330
     if art:
         im = Image.open(ROOT / art).convert("RGBA")
-        aw = min(820, W - M * 2)
+        aw = 860
         im = im.resize((aw, int(im.height * aw / im.width)), Image.LANCZOS)
-        canvas.alpha_composite(im, ((W - aw) // 2, y))
-        y += im.height + 60
-    d = ImageDraw.Draw(canvas)
-    for t in o.get("title", "").split("\n"):
-        if t:
-            d.text((W / 2, y), t, font=font(TOON_FONT, 54), fill=TOON_INK, anchor="ma")
-            y += 76
-    y += 30
-    cf = font(TOON_FONT, 42)
-    cta = post.outro_cta or o.get("cta", "팔로우하기")
-    bw = _tw(cf, cta) + 110
-    d.rounded_rectangle(((W - bw) / 2, y, (W + bw) / 2, y + 100), radius=50, fill=TOON_INK)
-    d.text((W / 2, y + 50), cta, font=cf, fill=TOON_BOX, anchor="mm")
-    y += 140
-    d.text((W / 2, y), config.get("handle", ""), font=font(TOON_FONT, 40), fill=TOON_INK, anchor="ma")
-    question = post.outro_question or o.get("question")
-    if question:
-        d.text((W / 2, H - 120), question, font=font(B, 34), fill=(90, 80, 60), anchor="ma")
-    return canvas.convert("RGB")
-
+        pr = panel.convert("RGBA")
+        pr.alpha_composite(im, ((1000 - aw) // 2, 1000 - im.height - 150))
+        panel = pr.convert("RGB")
+    top = o.get("title", config.get("brand", ""))
+    bottom = f"{o.get('cta', '팔로우하기')}\n{config.get('handle', '')}"
+    return _toon_card(top, bottom, panel, o.get("bubble", ""), 99, config, pos=o.get("bubble_pos", "left-top"))
 
 # ── 인스타툰 (흰 바탕 + 위·아래 크림색 내레이션 상자 + 가운데 그림 + 손글씨 말풍선) ──
 TOON_BG, TOON_BOX, TOON_INK = (255, 255, 255), (253, 243, 199), (17, 17, 17)
