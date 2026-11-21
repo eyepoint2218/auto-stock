@@ -1,5 +1,5 @@
 ep: 30
-status: draft
+status: done
 
 quiz: ["그는", "[누구]일까요?"]
 
@@ -19,6 +19,10 @@ slides:
   4:
     lines: ["바다 건너 동진·왜와", "교류하며 백제의", "[전성기]를 열었어요."]
     note: 재구성 연출
+    size: 84
+    top: 80
+    crop: 0
+    shade: 180
   5:
     intro: 그의 이름은
     name: 근초고왕
