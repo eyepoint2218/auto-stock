@@ -114,7 +114,7 @@ channels:
 
   sikppang:                     # 식빵찐빵: 식빵(고양이)·찐빵(강아지) 일상공감·위로 인스타툰 채널
     brand: "식빵찐빵"
-    handle: "@sikppang.jjinppang"   # 임시. 실제 계정 아이디로 바꾸기
+    handle: "@sikppang.jjinppang"
     ig_secret_suffix: SIKPPANG
     channel_intro: |
       식빵찐빵 @sikppang.jjinppang
