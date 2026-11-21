@@ -11,32 +11,38 @@ cover_image: img/p1.jpg
 title: "값싼 밀가루의 추억,\nAI도 똑같을까?"
 subtitle: "1960년대와 지금을 비교해 봤어요"
 bubble: "설마?"
+bubble_pos: left-top
 items:
   - type: toon
     title: "1950~60년대 미국 원조로"
     desc: "값싼 밀가루가 쏟아져 들어왔어요"
     image: img/p2.jpg
     bubble: "밀가루다!"
+    bubble_pos: right-top
   - type: toon
     title: "정부는 분식을 장려했고"
     desc: "쌀 대신 밀가루가 밥상에 올랐죠"
     image: img/p3.jpg
     bubble: "국수 최고"
+    bubble_pos: left-top
   - type: toon
     title: "그런데 국제 곡물값이 뛰자"
     desc: "이미 밀가루에 익숙해진 밥상"
     image: img/p4.jpg
     bubble: "비싸ㅠ"
+    bubble_pos: left-top
   - type: toon
     title: "그리고 지금, AI도"
     desc: "싸게, 무료로 써 보라고 해요"
     image: img/p5.jpg
     bubble: "공짜 좋아"
+    bubble_pos: left-top
   - type: toon
     title: "익숙해진 뒤, 토큰값이 오르면?"
     desc: "댓글로 알려주세요"
     image: img/p6.jpg
     bubble: "그때는?"
+    bubble_pos: left-top
 outro_question: "익숙해진 뒤, 토큰값이 오르면?"
 caption: |
   1955년 한미잉여농산물협정 이후 미국산 밀이 들어오고, 1960~70년대 혼분식 장려운동으로 밀가루가 우리 밥상에 자리 잡았어요.
