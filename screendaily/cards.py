@@ -4,7 +4,7 @@ from __future__ import annotations
 from functools import lru_cache
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 from . import FONT_DIR, ROOT
 from .post import Item, Post
@@ -1566,6 +1566,48 @@ def hand_bubble(text: str, size: int = 96, tail: str = "left", seed: int = 1) ->
     return layer
 
 
+def _hand_line(d, p0, p1, seed: int, width: int = 9, amp: float = 5.5, over: float = 18, fill=TOON_INK):
+    """손으로 그은 선: 천천히 흔들리는 획 + 끝이 살짝 삐져나감 + 덧그은 얇은 선."""
+    import math
+    import random
+    rnd = random.Random(seed)
+    (x0, y0), (x1, y1) = p0, p1
+    L = math.hypot(x1 - x0, y1 - y0) or 1
+    ux, uy = (x1 - x0) / L, (y1 - y0) / L
+    nx, ny = -uy, ux
+    s0, s1 = -rnd.uniform(4, over), L + rnd.uniform(4, over)
+    n = max(8, int(L / 18))
+    for k, (w, a) in enumerate(((width, amp), (max(2, width // 3), amp * 1.6))):
+        ph1, ph2 = rnd.uniform(0, 6.3), rnd.uniform(0, 6.3)
+        f1, f2 = rnd.uniform(1.2, 2.4), rnd.uniform(4, 7)
+        shift = rnd.uniform(-3, 3) if k else 0
+        pts = []
+        for i in range(n + 1):
+            t = s0 + (s1 - s0) * i / n
+            u = t / L
+            off = a * (0.7 * math.sin(u * f1 * math.pi + ph1) + 0.3 * math.sin(u * f2 * math.pi + ph2)) + shift
+            pts.append((x0 + ux * t + nx * off, y0 + uy * t + ny * off))
+        d.line(pts, fill=fill, width=w, joint="curve")
+
+
+def _hand_rect(canvas, box, seed: int, width: int = 13):
+    """크레파스로 그은 듯한 손그림 테두리 (흔들리는 획 + 끝 삐짐 + 거친 결)."""
+    import random
+    x0, y0, x1, y1 = box
+    mask = Image.new("L", canvas.size, 0)
+    md = ImageDraw.Draw(mask)
+    corners = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+    for i in range(4):
+        _hand_line(md, corners[i], corners[(i + 1) % 4], seed * 10 + i, width, fill=255)
+    rnd = random.Random(seed)
+    gw, gh = canvas.size[0] // 3, canvas.size[1] // 3
+    grain = Image.effect_noise((gw, gh), 110).resize(canvas.size, Image.BILINEAR)
+    grain = grain.point(lambda v: 0 if v < 38 else 170 if v < 62 else 255)
+    mask = ImageChops.multiply(mask, grain).filter(ImageFilter.GaussianBlur(0.5))
+    canvas.paste(Image.new("RGBA", canvas.size, TOON_INK + (255,)), (0, 0), mask)
+    _ = rnd
+
+
 def _toon_card_inside(top: str, bottom: str, im, bubble: str, idx: int, config: dict,
                       top_size: int = 84, top_lines: int = 2, focus=(0.5, 0.45), pos: str = "") -> Image.Image:
     canvas = Image.new("RGBA", (W, H), TOON_BG + (255,))
@@ -1575,8 +1617,7 @@ def _toon_card_inside(top: str, bottom: str, im, bubble: str, idx: int, config: 
     art = cover_crop(im, (ix1 - ix0, iy1 - iy0), focus).convert("RGBA")
     canvas.alpha_composite(art, (ix0, iy0))
     d = ImageDraw.Draw(canvas)
-    box = _wobble([(ix0, iy0), (ix1, iy0), (ix1, iy1), (ix0, iy1)], 4, idx + 11)
-    d.line(box + [box[0]], fill=TOON_INK, width=9, joint="curve")
+    _hand_rect(canvas, (ix0, iy0, ix1, iy1), idx + 11)
     y_after_top = iy0
     if top:
         y_after_top = _hand_strip(canvas, top, W // 2, iy0 + 40, top_size, top_lines, idx + 21)
