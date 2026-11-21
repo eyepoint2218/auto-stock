@@ -1,0 +1,48 @@
+# 팝팝툰(@poppop.toon) 인스타툰 캐러셀: 값싼 원조 밀가루(1950~70년대) vs 지금의 값싼 AI - 익숙해진 뒤 토큰값이 오르면?
+# 역사 사실(확인): 1955 한미잉여농산물협정·1956 도입 시작(PL480, 1981 종료) / 1962~ 혼분식 장려운동 / 1972~73 세계 곡물 파동으로 곡물값 급등
+# 그림: 채널 캐릭터, ChatGPT 6컷 한 장 → python -m screendaily toon-split 그림 toon_flour_token --drafts
+publish_at: "2026-12-23 18:00"
+format: carousel
+channel: toon
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "값싼 밀가루의 추억,\nAI도 똑같을까?"
+subtitle: "1960년대와 지금을 비교해 봤어요"
+bubble: "설마?"
+items:
+  - type: toon
+    title: "1950~60년대 미국 원조로"
+    desc: "값싼 밀가루가 쏟아져 들어왔어요"
+    image: img/p2.jpg
+    bubble: "밀가루다!"
+  - type: toon
+    title: "정부는 분식을 장려했고"
+    desc: "쌀 대신 밀가루가 밥상에 올랐죠"
+    image: img/p3.jpg
+    bubble: "국수 최고"
+  - type: toon
+    title: "그런데 국제 곡물값이 뛰자"
+    desc: "이미 밀가루에 익숙해진 밥상"
+    image: img/p4.jpg
+    bubble: "비싸ㅠ"
+  - type: toon
+    title: "그리고 지금, AI도"
+    desc: "싸게, 무료로 써 보라고 해요"
+    image: img/p5.jpg
+    bubble: "공짜 좋아"
+  - type: toon
+    title: "익숙해진 뒤, 토큰값이 오르면?"
+    desc: "댓글로 알려주세요"
+    image: img/p6.jpg
+    bubble: "그때는?"
+outro_question: "익숙해진 뒤, 토큰값이 오르면?"
+caption: |
+  1955년 한미잉여농산물협정 이후 미국산 밀이 들어오고, 1960~70년대 혼분식 장려운동으로 밀가루가 우리 밥상에 자리 잡았어요.
+  1970년대 초 세계 곡물 파동 때는 곡물값이 크게 뛰었죠.
+  지금 AI도 싸게, 때로는 무료로 써 보라고 해요. 모두가 익숙해진 뒤에도 지금 값일까요?
+  (역사를 빗댄 풍자툰이에요)
+
+  익숙해진 뒤, 토큰값이 오르면? 댓글로 알려주세요.
+hashtags: [AI토큰, 분식장려운동, AI시대]
