@@ -1482,6 +1482,8 @@ def _toon_card(top: str, bottom: str, im: Image.Image | None, bubble: str, idx: 
         b = toon_bubble(bubble, tail="left" if right else "right")
         if img_box:
             cx = img_box[2] - b.width // 2 + 10 if right else img_box[0] + b.width // 2 - 10
+            if "center" in pos:  # 가운데 위 (양쪽에 캐릭터가 있을 때)
+                cx = (img_box[0] + img_box[2]) // 2
             ry = 0.2 if "top" in pos else 0.62 if "bottom" in pos else 0.38
             cy = max(img_box[1] + b.height // 2 + 20, img_box[1] + (img_box[3] - img_box[1]) * ry)
         else:

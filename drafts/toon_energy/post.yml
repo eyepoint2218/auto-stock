@@ -9,8 +9,8 @@ cover_style: toon
 cover_image: img/p1.jpg
 title: "나 싫어하는 사람한테\n잘해줄 필요 없다"
 subtitle: "식빵이 알려준 것"
-bubble: "나 미워하나 봐"
-bubble_pos: left-top
+bubble: "또 저러네"
+bubble_pos: center-top
 items:
   - type: toon
     title: "그래서 찐빵은 애를 썼어요"
