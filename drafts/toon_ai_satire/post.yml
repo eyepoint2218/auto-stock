@@ -1,4 +1,4 @@
-# 팝콘툰(@popcorn.toon) 인스타툰 릴스: AI 부정행위 사회 풍자 (모두 AI로 쓰는데 직접 쓴 나만 AI 판정)
+# 팝팝툰(@poppop.toon) 인스타툰 릴스: AI 부정행위 사회 풍자 (모두 AI로 쓰는데 직접 쓴 나만 AI 판정)
 # 그림: 채널 캐릭터, ChatGPT 6컷 한 장 → python -m screendaily toon-split 그림 toon_ai_satire --drafts
 publish_at: "2026-12-16 18:00"
 format: reel
