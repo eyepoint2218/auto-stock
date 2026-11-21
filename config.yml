@@ -111,3 +111,24 @@ channels:
       cta: "팔로우하고 혜택 알람 받기"
       save: "저장해두고 날짜마다 꺼내 보기"
       question: "제일 탐나는 혜택은? 댓글로 알려주세요"
+
+  sikppang:                     # 식빵찐빵: 식빵(고양이)·찐빵(강아지) 일상공감·위로 인스타툰 채널
+    brand: "식빵찐빵"
+    handle: "@sikppang.jjinppang"   # 임시. 실제 계정 아이디로 바꾸기
+    ig_secret_suffix: SIKPPANG
+    channel_intro: |
+      식빵찐빵 @sikppang.jjinppang
+      무뚝뚝한 식빵이랑 오버하는 찐빵의 하루
+      힘든 날 한 컷씩 위로해 드려요
+    search_keywords: [인스타툰, 공감툰, 위로툰, 일상툰, 고양이툰, 강아지툰]
+    default_hashtags:
+      - 식빵찐빵
+      - 인스타툰
+      - 공감툰
+      - 일상툰
+      - 위로
+    outro:
+      style: toon_follow          # 크림색 바탕 + 캐릭터 그림 마지막 장
+      image: assets/brand/sikppang_duo.png
+      title: "식빵이랑 찐빵의 하루,\n매일 한 컷씩"
+      cta: "팔로우하고 같이 보기"

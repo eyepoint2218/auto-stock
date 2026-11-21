@@ -6,7 +6,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
-from . import FONT_DIR
+from . import FONT_DIR, ROOT
 from .post import Item, Post
 
 W, H = 1080, 1350
@@ -1362,6 +1362,39 @@ def render_follow_card(post: Post, config: dict) -> Image.Image:
     return canvas.convert("RGB")
 
 
+def render_toon_follow(post: Post, config: dict) -> Image.Image:
+    """인스타툰 채널 마지막 장: 크림색 바탕 + 캐릭터 그림 + 채널 이름·팔로우 버튼 (outro.style: toon_follow)."""
+    o = config.get("outro", {})
+    canvas = Image.new("RGBA", (W, H), TOON_BOX + (255,))
+    d = ImageDraw.Draw(canvas)
+    d.text((W / 2, 150), config.get("brand", ""), font=font(TOON_FONT, 104), fill=TOON_INK, anchor="ma")
+    art = o.get("image")
+    y = 330
+    if art:
+        im = Image.open(ROOT / art).convert("RGBA")
+        aw = min(820, W - M * 2)
+        im = im.resize((aw, int(im.height * aw / im.width)), Image.LANCZOS)
+        canvas.alpha_composite(im, ((W - aw) // 2, y))
+        y += im.height + 60
+    d = ImageDraw.Draw(canvas)
+    for t in o.get("title", "").split("\n"):
+        if t:
+            d.text((W / 2, y), t, font=font(TOON_FONT, 54), fill=TOON_INK, anchor="ma")
+            y += 76
+    y += 30
+    cf = font(TOON_FONT, 42)
+    cta = post.outro_cta or o.get("cta", "팔로우하기")
+    bw = _tw(cf, cta) + 110
+    d.rounded_rectangle(((W - bw) / 2, y, (W + bw) / 2, y + 100), radius=50, fill=TOON_INK)
+    d.text((W / 2, y + 50), cta, font=cf, fill=TOON_BOX, anchor="mm")
+    y += 140
+    d.text((W / 2, y), config.get("handle", ""), font=font(TOON_FONT, 40), fill=TOON_INK, anchor="ma")
+    question = post.outro_question or o.get("question")
+    if question:
+        d.text((W / 2, H - 120), question, font=font(B, 34), fill=(90, 80, 60), anchor="ma")
+    return canvas.convert("RGB")
+
+
 # ── 인스타툰 (흰 바탕 + 위·아래 크림색 내레이션 상자 + 가운데 그림 + 손글씨 말풍선) ──
 TOON_BG, TOON_BOX, TOON_INK = (255, 255, 255), (253, 243, 199), (17, 17, 17)
 TOON_FONT = "Pretendard-Black.otf"
@@ -1513,5 +1546,5 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
         slides.append(render_recommend(post, len(slides), total, config))
     if post.outro:
         style = (config.get("outro") or {}).get("style")
-        slides.append({"toggle": render_toggle_outro, "follow_card": render_follow_card}.get(style, render_outro)(post, config))
+        slides.append({"toggle": render_toggle_outro, "follow_card": render_follow_card, "toon_follow": render_toon_follow}.get(style, render_outro)(post, config))
     return slides
