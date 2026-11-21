@@ -1566,7 +1566,7 @@ def hand_bubble(text: str, size: int = 96, tail: str = "left", seed: int = 1) ->
     return layer
 
 
-def _hand_line(d, p0, p1, seed: int, width: int = 9, amp: float = 5.5, over: float = 18, fill=TOON_INK):
+def _hand_line(d, p0, p1, seed: int, width: int = 9, amp: float = 5.5, over: float = 18, fill=TOON_INK, double: bool = True):
     """손으로 그은 선: 천천히 흔들리는 획 + 끝이 살짝 삐져나감 + 덧그은 얇은 선."""
     import math
     import random
@@ -1577,7 +1577,8 @@ def _hand_line(d, p0, p1, seed: int, width: int = 9, amp: float = 5.5, over: flo
     nx, ny = -uy, ux
     s0, s1 = -rnd.uniform(4, over), L + rnd.uniform(4, over)
     n = max(8, int(L / 18))
-    for k, (w, a) in enumerate(((width, amp), (max(2, width // 3), amp * 1.6))):
+    strokes = ((width, amp), (max(2, width // 3), amp * 1.6)) if double else ((width, amp),)
+    for k, (w, a) in enumerate(strokes):
         ph1, ph2 = rnd.uniform(0, 6.3), rnd.uniform(0, 6.3)
         f1, f2 = rnd.uniform(1.2, 2.4), rnd.uniform(4, 7)
         shift = rnd.uniform(-3, 3) if k else 0
@@ -1590,15 +1591,15 @@ def _hand_line(d, p0, p1, seed: int, width: int = 9, amp: float = 5.5, over: flo
         d.line(pts, fill=fill, width=w, joint="curve")
 
 
-def _hand_rect(canvas, box, seed: int, width: int = 13):
-    """손으로 그은 듯한 테두리 (흔들리는 획 + 끝 삐짐, 잉크는 꽉 차게)."""
+def _hand_rect(canvas, box, seed: int, width: int = 4):
+    """로트링 0.3mm 펜으로 그은 듯한 테두리: 가늘고 일정한 굵기, 손 떨림만 살짝, 끝은 조금 삐짐."""
     x0, y0, x1, y1 = box
     mask = Image.new("L", canvas.size, 0)
     md = ImageDraw.Draw(mask)
     corners = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
     for i in range(4):
-        _hand_line(md, corners[i], corners[(i + 1) % 4], seed * 10 + i, width, fill=255)
-    mask = mask.filter(ImageFilter.GaussianBlur(0.6))
+        _hand_line(md, corners[i], corners[(i + 1) % 4], seed * 10 + i, width, amp=2.2, over=9, fill=255, double=False)
+    mask = mask.filter(ImageFilter.GaussianBlur(0.4))
     canvas.paste(Image.new("RGBA", canvas.size, TOON_INK + (255,)), (0, 0), mask)
 
 
