@@ -1495,24 +1495,46 @@ def _toon_card(top: str, bottom: str, im: Image.Image | None, bubble: str, idx: 
 
 
 # ── 인스타툰: 대사를 그림 안에 손글씨로 (config toon_text: inside) ──
-HAND = "NanumPenScript-Regular.ttf"
+HAND = "Gaegu-Bold.ttf"       # 내레이션 (사인펜)
+HAND_PEN = "Gaegu-Regular.ttf"  # 말풍선 대사 (로트링 0.3mm)
+TRACK = 0.86                    # 글자 사이를 좁혀 손으로 쓴 간격처럼
 
 
-def _hand_lines(text: str, size: int, max_w: int, max_lines: int, minimum: int = 52):
+def _hw_len(f, text: str) -> float:
+    return sum(f.getlength(ch) for ch in text) * TRACK
+
+
+def _hand_lines(text: str, size: int, max_w: int, max_lines: int, minimum: int = 52, face: str = HAND):
     lines = []
     while size >= minimum:
-        f = font(HAND, size)
-        lines = [ln for part in text.split("\n") for ln in wrap(part, f, max_w)]
+        f = font(face, size)
+        lines = [ln for part in text.split("\n") for ln in wrap(part, f, max_w / TRACK)]
         if len(lines) <= max_lines:
             return f, lines
         size -= 4
-    return font(HAND, minimum), lines
+    return font(face, minimum), lines
 
 
-def _hand_text(d, lines, f, cx, y, stroke: int = 2):
-    lh = int(f.size * 1.08)
+def _hand_text(d, lines, f, cx, y, seed: int = 0):
+    """직접 쓴 글씨처럼: 글자마다 크기·기울기·높이를 조금씩 다르게, 간격은 좁게."""
+    import random
+    rnd = random.Random(seed * 131 + len("".join(lines)))
+    img = d._image
+    lh = int(f.size * 1.12)
     for ln in lines:
-        d.text((cx, y), ln, font=f, fill=TOON_INK, anchor="ma", stroke_width=stroke, stroke_fill=TOON_INK)
+        x = cx - _hw_len(f, ln) / 2
+        for ch in ln:
+            adv = f.getlength(ch) * TRACK
+            if ch.strip():
+                sz = max(10, int(f.size * rnd.uniform(0.94, 1.06)))
+                ff = font(f.path.split("/")[-1], sz)
+                t = Image.new("RGBA", (int(sz * 1.8), int(sz * 1.8)), (0, 0, 0, 0))
+                ImageDraw.Draw(t).text((t.width / 2, t.height / 2), ch, font=ff, fill=TOON_INK, anchor="mm")
+                t = t.rotate(rnd.uniform(-4, 4), resample=Image.BICUBIC)
+                px = int(x + adv / 2 - t.width / 2 + rnd.uniform(-1.5, 1.5))
+                py = int(y + f.size * 0.55 - t.height / 2 + rnd.uniform(-3, 3))
+                img.alpha_composite(t, (px, py)) if img.mode == "RGBA" else img.paste(t, (px, py), t)
+            x += adv
         y += lh
     return y
 
@@ -1526,22 +1548,22 @@ def _wobble(pts, amp, seed):
 def _hand_strip(canvas, text: str, cx: int, y: int, size: int, max_lines: int, seed: int, max_w: int = 820) -> int:
     """그림 위에 붙인 흰 종이 띠 + 손글씨 (내레이션)."""
     f, lines = _hand_lines(text, size, max_w, max_lines)
-    lh = int(f.size * 1.08)
-    tw = max(_tw(f, ln) for ln in lines)
-    bw, bh = tw + 70, lh * len(lines) + 34
+    lh = int(f.size * 1.12)
+    tw = max(_hw_len(f, ln) for ln in lines)
+    bw, bh = tw + 80, lh * len(lines) + 34
     x0, x1 = cx - bw / 2, cx + bw / 2
     d = ImageDraw.Draw(canvas)
     d.polygon(_wobble([(x0, y), (x1, y), (x1, y + bh), (x0, y + bh)], 5, seed), fill=(255, 255, 255, 235))
-    _hand_text(d, lines, f, cx, y + 14)
+    _hand_text(d, lines, f, cx, y + 12, seed)
     return int(y + bh)
 
 
 def hand_bubble(text: str, size: int = 96, tail: str = "left", seed: int = 1) -> Image.Image:
     """손으로 그린 듯한 말풍선 (삐뚤한 타원 + 굵은 선 + 꼬리)."""
     import math
-    f, lines = _hand_lines(text, size, 560, 3)
-    lh = int(f.size * 1.08)
-    tw = max(_tw(f, ln) for ln in lines)
+    f, lines = _hand_lines(text, size, 430, 3, face=HAND_PEN)
+    lh = int(f.size * 1.12)
+    tw = max(_hw_len(f, ln) for ln in lines)
     th = lh * len(lines)
     ew, eh = int(tw * 1.25 + 90), int(th * 1.35 + 80)
     pad = 70
@@ -1566,7 +1588,7 @@ def hand_bubble(text: str, size: int = 96, tail: str = "left", seed: int = 1) ->
     d.polygon(outline, fill=(255, 255, 255))
     d.line(outline + [outline[0]], fill=TOON_INK, width=4, joint="curve")
     _ = base_y
-    _hand_text(d, lines, f, cx, cy - th / 2 + 4, stroke=0)
+    _hand_text(d, lines, f, cx, cy - th / 2 + 2, seed)
     return layer
 
 
@@ -1622,7 +1644,7 @@ def _toon_card_inside(top: str, bottom: str, im, bubble: str, idx: int, config: 
         y_after_top = _hand_strip(canvas, top, W // 2, iy0 + 40, top_size, top_lines, idx + 21)
     if bottom:
         f, lines = _hand_lines(bottom, 70, 820, 2)
-        bh = int(f.size * 1.08) * len(lines) + 34
+        bh = int(f.size * 1.12) * len(lines) + 34
         _hand_strip(canvas, bottom, W // 2, iy1 - 40 - bh, 70, 2, idx + 31)
     if bubble:
         pos = (pos or "").lower()

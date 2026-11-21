@@ -37,7 +37,7 @@ items:
     bubble: "같이 망했다!"
     bubble_pos: left-top
   - type: toon
-    title: "힘든 날, 옆에 있어 줄 친구 있나요?"
+    title: "힘든 날,\n옆에 있어 줄 친구 있나요?"
     desc: "댓글에 그 친구를 태그해 주세요"
     image: img/p6.jpg
     bubble: "누구 생각나?"
