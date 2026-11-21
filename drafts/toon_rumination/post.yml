@@ -16,13 +16,11 @@ items:
     title: "잊으려고 할수록"
     desc: "먹구름이 점점 커져요"
     image: img/p2.jpg
-    bubble: "왜 자꾸 떠올라"
-    bubble_pos: left-top
   - type: toon
     title: "1단계, 종이에 다 적기"
     desc: "머릿속에서 꺼내기만 해도 가벼워요"
     image: img/p3.jpg
-    bubble: "다 써"
+    bubble: "다 써버릴 거야"
     bubble_pos: left-top
   - type: toon
     title: "2단계, 꾸깃꾸깃 버리기"
