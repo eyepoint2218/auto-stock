@@ -1,0 +1,59 @@
+# 인스타툰 캐러셀 시안: 나를 싫어하는 사람에게 쓰는 에너지 (식빵찐빵 채널)
+# 기준 그림: assets/brand/toon_duo_sheet.jpg, 그림 6컷: PROMPTS.md
+publish_at: "2026-12-31 21:00"
+format: carousel
+channel: sikppang
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "나 싫어하는 사람한테\n잘해줄 필요 없다"
+subtitle: "식빵이 알려준 것"
+bubble: "나 미워하나 봐"
+bubble_pos: left-top
+items:
+  - type: toon
+    title: "그래서 찐빵은 애를 썼어요"
+    desc: "잘 보이려고, 증명하려고"
+    image: img/p2.jpg
+    bubble: "이번엔 좋아해 줄까?"
+    bubble_pos: left-top
+  - type: toon
+    title: "그걸 본 식빵이 한마디"
+    desc: "그냥 그런 사람인가 보다 해"
+    image: img/p3.jpg
+    bubble: "그냥 둬"
+    bubble_pos: left-top
+  - type: toon
+    title: "예의는 지키되"
+    desc: "마음까지 줄 필요는 없대요"
+    image: img/p4.jpg
+    bubble: "인사만 하면 돼"
+    bubble_pos: left-top
+  - type: toon
+    title: "남은 에너지는"
+    desc: "나를 위해 쓰기로 했어요"
+    image: img/p5.jpg
+    bubble: "간식 먹자!"
+    bubble_pos: left-top
+  - type: toon
+    title: "요즘 누구한테 에너지 쓰고 있나요?"
+    desc: "댓글로 이야기해 주세요"
+    image: img/p6.jpg
+    bubble: "나한테 쓰자!"
+    bubble_pos: left-top
+outro_question: "요즘 누구한테 에너지 쓰고 있나요?"
+caption: |
+  나를 싫어하는 사람들에게
+  굳이 나를 증명할 필요는 없다.
+
+  좋아해 달라고 애쓸 이유도,
+  잘 보이려고 노력할 이유도,
+  억지로 잘해줄 필요도 없다.
+
+  그냥 그런 사람인가 보다 하면 된다.
+  예의는 지키되, 마음까지 줄 필요는 없다.
+  내 에너지는 나를 위해 쓰면 된다.
+
+  요즘 누구한테 에너지 쓰고 있나요? 댓글로 이야기해 주세요.
+hashtags: [식빵찐빵, 위로글]
