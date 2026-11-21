@@ -42,7 +42,9 @@ def caption_of(ep: dict) -> str:
     intro = (PKG / "channel_intro.txt").read_text(encoding="utf-8").strip()
     kw = " ".join(ep.get("search_keywords", []))
     kw = f"\n\n{kw}" if kw else ""
-    return f"{ep['caption'].strip()}\n\n{intro}{kw}\n\n{tags}\n"
+    exam = ep.get("exam_keywords")
+    exam = f"\n\n[시험에 나오는 키워드] {' · '.join(exam)}" if exam else ""
+    return f"{ep['caption'].strip()}{exam}\n\n{intro}{kw}\n\n{tags}\n"
 
 
 def check(ep: dict) -> list[str]:
