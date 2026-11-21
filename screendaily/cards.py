@@ -1509,10 +1509,10 @@ def _hand_lines(text: str, size: int, max_w: int, max_lines: int, minimum: int =
     return font(HAND, minimum), lines
 
 
-def _hand_text(d, lines, f, cx, y):
+def _hand_text(d, lines, f, cx, y, stroke: int = 2):
     lh = int(f.size * 1.08)
     for ln in lines:
-        d.text((cx, y), ln, font=f, fill=TOON_INK, anchor="ma", stroke_width=2, stroke_fill=TOON_INK)
+        d.text((cx, y), ln, font=f, fill=TOON_INK, anchor="ma", stroke_width=stroke, stroke_fill=TOON_INK)
         y += lh
     return y
 
@@ -1549,20 +1549,24 @@ def hand_bubble(text: str, size: int = 96, tail: str = "left", seed: int = 1) ->
     d = ImageDraw.Draw(layer)
     cx, cy = pad + ew / 2, pad + eh / 2
     pts = []
-    for i in range(72):
-        a = 2 * math.pi * i / 72
+    for i in range(180):
+        a = 2 * math.pi * i / 180
         r = 1 + 0.025 * math.sin(a * 3 + seed) + 0.015 * math.sin(a * 7 + seed * 2)
         pts.append((cx + ew / 2 * r * math.cos(a), cy + eh / 2 * r * math.sin(a)))
     sgn = -1 if tail == "left" else 1
     bx = cx + sgn * ew * 0.22
     tip = (bx + sgn * 40, pad + eh + 58)
-    tri = [(bx - 30, cy + eh * 0.38), tip, (bx + 30, cy + eh * 0.38)]
-    d.polygon(pts, fill=(255, 255, 255))
-    d.line(pts + [pts[0]], fill=TOON_INK, width=8, joint="curve")
-    d.polygon(tri, fill=(255, 255, 255))
-    d.line([tri[0], tri[1], tri[2]], fill=TOON_INK, width=8, joint="curve")
-    d.polygon([(bx - 24, cy + eh * 0.36), (bx + 24, cy + eh * 0.36), (bx, cy + eh * 0.47)], fill=(255, 255, 255))
-    _hand_text(d, lines, f, cx, cy - th / 2 + 4)
+    # 꼬리가 붙는 자리(타원 아래쪽 두 점)를 찾아 그 사이를 꼬리로 바꿔 한 획으로 그림 (로트링 0.3mm 느낌)
+    base_y = cy + eh * 0.40
+    def near(x):
+        return min(range(len(pts)), key=lambda i: (pts[i][0] - x) ** 2 + (pts[i][1] - (cy + eh / 2)) ** 2 * 0.2
+                   if pts[i][1] > cy else 1e18)
+    i0, i1 = sorted((near(bx - 26), near(bx + 26)))
+    outline = pts[:i0 + 1] + [tip] + pts[i1:]
+    d.polygon(outline, fill=(255, 255, 255))
+    d.line(outline + [outline[0]], fill=TOON_INK, width=4, joint="curve")
+    _ = base_y
+    _hand_text(d, lines, f, cx, cy - th / 2 + 4, stroke=0)
     return layer
 
 
