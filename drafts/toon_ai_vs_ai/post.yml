@@ -10,32 +10,38 @@ cover_image: img/p1.jpg
 title: "AI 커닝 잡는 것도\n결국 AI"
 subtitle: "AI끼리 싸우는 시험장"
 bubble: "AI 대 AI?"
+bubble_pos: left-top
 items:
   - type: toon
     title: "학생은 AI로 커닝하고"
     desc: "학교는 AI 탐지기를 들였어요"
     image: img/p2.jpg
     bubble: "이제 안심"
+    bubble_pos: right-top
   - type: toon
     title: "그러자 커닝 AI는"
     desc: "탐지기를 피하는 AI로 변신"
     image: img/p3.jpg
     bubble: "어라?"
+    bubble_pos: right-top
   - type: toon
     title: "탐지기도 질 수 없죠"
     desc: "끝없는 AI 대 AI 전쟁"
     image: img/p4.jpg
     bubble: "끝이 없네"
+    bubble_pos: left-bottom
   - type: toon
     title: "그런데 알고 보니"
     desc: "두 AI는 같은 회사 제품"
     image: img/p5.jpg
     bubble: "이게 뭐야ㅠ"
+    bubble_pos: left-top
   - type: toon
     title: "AI 부정행위, 누가 잡아야 할까요?"
     desc: "댓글로 알려주세요"
     image: img/p6.jpg
     bubble: "누가 잡지?"
+    bubble_pos: left-top
 outro_question: "AI 부정행위, 누가 잡아야 할까요?"
 caption: |
   AI로 커닝하면 AI 탐지기가 잡고, 탐지기를 피하는 AI가 또 나오는 시험장을 상상해 봤어요.
