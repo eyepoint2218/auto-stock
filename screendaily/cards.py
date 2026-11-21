@@ -1591,21 +1591,15 @@ def _hand_line(d, p0, p1, seed: int, width: int = 9, amp: float = 5.5, over: flo
 
 
 def _hand_rect(canvas, box, seed: int, width: int = 13):
-    """크레파스로 그은 듯한 손그림 테두리 (흔들리는 획 + 끝 삐짐 + 거친 결)."""
-    import random
+    """손으로 그은 듯한 테두리 (흔들리는 획 + 끝 삐짐, 잉크는 꽉 차게)."""
     x0, y0, x1, y1 = box
     mask = Image.new("L", canvas.size, 0)
     md = ImageDraw.Draw(mask)
     corners = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
     for i in range(4):
         _hand_line(md, corners[i], corners[(i + 1) % 4], seed * 10 + i, width, fill=255)
-    rnd = random.Random(seed)
-    gw, gh = canvas.size[0] // 3, canvas.size[1] // 3
-    grain = Image.effect_noise((gw, gh), 110).resize(canvas.size, Image.BILINEAR)
-    grain = grain.point(lambda v: 0 if v < 38 else 170 if v < 62 else 255)
-    mask = ImageChops.multiply(mask, grain).filter(ImageFilter.GaussianBlur(0.5))
+    mask = mask.filter(ImageFilter.GaussianBlur(0.6))
     canvas.paste(Image.new("RGBA", canvas.size, TOON_INK + (255,)), (0, 0), mask)
-    _ = rnd
 
 
 def _toon_card_inside(top: str, bottom: str, im, bubble: str, idx: int, config: dict,
