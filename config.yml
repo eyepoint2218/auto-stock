@@ -116,7 +116,7 @@ channels:
     brand: "식빵찐빵"
     handle: "@sikppang.jjinppang"
     ig_secret_suffix: SIKPPANG
-    toon_text: inside           # 대사·내레이션을 그림 안에 손글씨로 (나눔손글씨 펜)
+    # 툰 템플릿 고정: 위·아래 크림 상자 + 가운데 그림 + 말풍선 (toon_text: inside 는 쓰지 않음)
     channel_intro: |
       식빵찐빵 @sikppang.jjinppang
       무뚝뚝한 식빵이랑 오버하는 찐빵의 하루
@@ -131,7 +131,7 @@ channels:
     outro:
       style: toon_follow          # 툰 칸과 같은 틀 + 크레파스 배경 + 캐릭터 그림 마지막 장
       image: assets/brand/sikppang_duo.png
-      title: "식빵이랑 찐빵의 하루,\n매일 한 컷씩"
+      title: "식빵이랑 찐빵의 하루, 매일 한 컷씩"
       cta: "팔로우하고 같이 봐요"
       bubble: "팔로우해 줘!"
       bubble_pos: right-top
