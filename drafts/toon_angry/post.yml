@@ -10,32 +10,38 @@ cover_image: img/p1.jpg
 title: "빡칠 때\n바로 답장하면 안 되는 이유"
 subtitle: "식빵의 분노 처리법"
 bubble: "아 진짜 빡쳐!!"
+bubble_pos: left-top
 items:
   - type: toon
     title: "찐빵이 답장을 쓰기 시작했는데"
     desc: "손이 멈추질 않아요"
     image: img/p2.jpg
     bubble: "다 말해버릴 거야"
+    bubble_pos: left-top
   - type: toon
     title: "그때 식빵이 폰 위에"
     desc: "털썩 앉아 버렸어요"
     image: img/p3.jpg
     bubble: "..."
+    bubble_pos: center-top
   - type: toon
     title: "식빵의 처방은"
     desc: "일단 자고, 내일 보내기"
     image: img/p4.jpg
     bubble: "일단 자"
+    bubble_pos: left-top
   - type: toon
     title: "다음 날 아침"
     desc: "안 보내길 정말 잘했어요"
     image: img/p5.jpg
     bubble: "휴, 살았다"
+    bubble_pos: left-top
   - type: toon
     title: "빡칠 때 여러분만의 방법은?"
     desc: "댓글로 알려주세요"
     image: img/p6.jpg
     bubble: "너는 어떻게 해?"
+    bubble_pos: left-top
 outro_question: "빡칠 때 여러분만의 방법은?"
 caption: |
   화날 때 쓴 답장은
