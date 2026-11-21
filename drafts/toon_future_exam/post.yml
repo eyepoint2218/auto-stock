@@ -1,0 +1,45 @@
+# 팝팝툰(@poppop.toon) 인스타툰 캐러셀: 상상툰 - AI 시대에 시험은 의미가 있을까 (수능 AI 부정행위 사태에서 출발한 상상)
+# 그림: 채널 캐릭터, ChatGPT 6컷 한 장 → python -m screendaily toon-split 그림 toon_future_exam --drafts
+publish_at: "2026-12-17 18:00"
+format: carousel
+channel: toon
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "AI가 다 푸는 시대,\n시험은 의미 있을까?"
+subtitle: "10년 뒤 시험장을 상상해 봤어요"
+bubble: "시험 왜 봐?"
+items:
+  - type: toon
+    title: "10년 뒤 시험장 입구"
+    desc: "안경·단추·귀걸이까지 전부 검사"
+    image: img/p2.jpg
+    bubble: "단추도?"
+  - type: toon
+    title: "그래도 AI를 못 막자"
+    desc: "아예 AI 써도 되는 시험이 생겼어요"
+    image: img/p3.jpg
+    bubble: "진짜?"
+  - type: toon
+    title: "그런데 모두 AI를 쓰니"
+    desc: "전원 만점, 아무도 못 떨어뜨려요"
+    image: img/p4.jpg
+    bubble: "다 만점?"
+  - type: toon
+    title: "결국 마지막 시험은"
+    desc: "AI 없이 내 생각 말하기"
+    image: img/p5.jpg
+    bubble: "떨려ㅠ"
+  - type: toon
+    title: "앞으로 시험, 의미 있을까요?"
+    desc: "댓글로 알려주세요"
+    image: img/p6.jpg
+    bubble: "너는?"
+outro_question: "앞으로 시험, 의미 있을까요?"
+caption: |
+  AI가 수능 문제를 몇 분 만에 푸는 시대, 10년 뒤 시험장을 상상해 봤어요.
+  막고, 허용하고, 결국 남는 건 AI 없이 내 생각을 말하는 시험 아닐까요?
+
+  앞으로 시험, 의미 있을까요? 댓글로 알려주세요.
+hashtags: [수능, AI시대, 미래시험]
