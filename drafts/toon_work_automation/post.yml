@@ -1,0 +1,45 @@
+# 팝팝툰(@poppop.toon) 인스타툰 캐러셀: 업무 자동화 딜레마 (내가 제일 잘하는 일을 자동화하면 내 무덤을 파는 것)
+# 그림: 채널 캐릭터, ChatGPT 6컷 한 장 → python -m screendaily toon-split 그림 toon_work_automation --drafts
+publish_at: "2026-12-18 18:00"
+format: carousel
+channel: toon
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "내 업무 자동화하면\n칭찬받고 잘린다?"
+subtitle: "직장인의 자동화 딜레마"
+bubble: "이거 맞아?"
+items:
+  - type: toon
+    title: "회사는 매일 외쳐요"
+    desc: "\"모든 업무를 자동화하세요!\""
+    image: img/p2.jpg
+    bubble: "또 시작이다"
+  - type: toon
+    title: "그래서 제일 잘하는 업무를"
+    desc: "10년 노하우까지 AI에게 가르쳤죠"
+    image: img/p3.jpg
+    bubble: "이렇게 하는 거야"
+  - type: toon
+    title: "자동화 성공, 박수갈채"
+    desc: "그리고 내 자리가 사라졌어요"
+    image: img/p4.jpg
+    bubble: "어...?"
+  - type: toon
+    title: "그제야 알았어요"
+    desc: "내 손으로 내 무덤을 팠다는 걸"
+    image: img/p5.jpg
+    bubble: "내가 팠네ㅠ"
+  - type: toon
+    title: "내 일, 자동화할 건가요?"
+    desc: "댓글로 알려주세요"
+    image: img/p6.jpg
+    bubble: "너라면?"
+outro_question: "내 일, 자동화할 건가요?"
+caption: |
+  회사는 모든 업무를 자동화하라고 하고, 자동화에 성공하면 내 자리가 사라져요.
+  내가 제일 잘하는 일을 자동화하는 건 스스로 무덤을 파는 걸까요, 다음 일로 넘어가는 걸까요?
+
+  내 일, 자동화할 건가요? 댓글로 알려주세요.
+hashtags: [직장인공감, 업무자동화, AI시대]
