@@ -1,5 +1,5 @@
 ep: 29
-status: draft   # draft → images → done
+status: done
 
 quiz: ["그는", "[누구]일까요?"]
 
@@ -19,6 +19,10 @@ slides:
   4:
     lines: ["475년, 그는 백제의", "도읍 [한성]을 함락하고", "한강을 차지했어요."]
     note: 재구성 연출
+    size: 80
+    top: 80
+    crop: 0
+    shade: 170
   5:
     intro: 그의 이름은
     name: 장수왕
