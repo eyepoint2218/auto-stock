@@ -1,8 +1,8 @@
-# 인스타툰 릴스 시안: 힘든 날 위로 (새 채널용, 캐릭터 식빵·찐빵)
+# 인스타툰 캐러셀 시안: 힘든 날 위로 (새 채널용, 캐릭터 식빵·찐빵)
 # 기준 그림: assets/brand/toon_duo_sheet.jpg
 # 새 채널 설정 전이라 지금은 스크린데일리 이름으로 렌더됨. 채널 정해지면 channel: 추가
 publish_at: "2026-12-31 21:00"
-format: reel
+format: carousel
 draft: true
 label: MOOD
 cover_style: toon
