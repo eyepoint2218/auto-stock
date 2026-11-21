@@ -1381,18 +1381,21 @@ def _crayon_panel(size: tuple[int, int], base=(255, 232, 130), seed: int = 7) ->
 def render_toon_follow(post: Post, config: dict) -> Image.Image:
     """인스타툰 채널 마지막 장: 툰 칸과 같은 틀(위·아래 크림 상자 + 크레파스 칸 + 말풍선) (outro.style: toon_follow)."""
     o = config.get("outro", {})
-    panel = _crayon_panel((1000, 1000))
+    inside = config.get("toon_text") == "inside"
+    pw, ph = (W - 80, H - 190) if inside else (1000, 1000)
+    panel = _crayon_panel((pw, ph))
     art = o.get("image")
     if art:
         im = Image.open(ROOT / art).convert("RGBA")
         aw = 860
         im = im.resize((aw, int(im.height * aw / im.width)), Image.LANCZOS)
         pr = panel.convert("RGBA")
-        pr.alpha_composite(im, ((1000 - aw) // 2, 1000 - im.height - 150))
+        y = int(ph * 0.62 - im.height / 2) if inside else 1000 - im.height - 150
+        pr.alpha_composite(im, ((pw - aw) // 2, y))
         panel = pr.convert("RGB")
     top = o.get("title", config.get("brand", ""))
     bottom = f"{o.get('cta', '팔로우하기')}\n{config.get('handle', '')}"
-    return _toon_card(top, bottom, panel, o.get("bubble", ""), 99, config, pos=o.get("bubble_pos", "left-top"))
+    return _toon_impl(config)(top, bottom, panel, o.get("bubble", ""), 99, config, pos=o.get("bubble_pos", "left-top"))
 
 # ── 인스타툰 (흰 바탕 + 위·아래 크림색 내레이션 상자 + 가운데 그림 + 손글씨 말풍선) ──
 TOON_BG, TOON_BOX, TOON_INK = (255, 255, 255), (253, 243, 199), (17, 17, 17)
@@ -1491,8 +1494,116 @@ def _toon_card(top: str, bottom: str, im: Image.Image | None, bubble: str, idx: 
     return canvas.convert("RGB")
 
 
+# ── 인스타툰: 대사를 그림 안에 손글씨로 (config toon_text: inside) ──
+HAND = "NanumPenScript-Regular.ttf"
+
+
+def _hand_lines(text: str, size: int, max_w: int, max_lines: int, minimum: int = 52):
+    lines = []
+    while size >= minimum:
+        f = font(HAND, size)
+        lines = [ln for part in text.split("\n") for ln in wrap(part, f, max_w)]
+        if len(lines) <= max_lines:
+            return f, lines
+        size -= 4
+    return font(HAND, minimum), lines
+
+
+def _hand_text(d, lines, f, cx, y):
+    lh = int(f.size * 1.08)
+    for ln in lines:
+        d.text((cx, y), ln, font=f, fill=TOON_INK, anchor="ma", stroke_width=2, stroke_fill=TOON_INK)
+        y += lh
+    return y
+
+
+def _wobble(pts, amp, seed):
+    import random
+    rnd = random.Random(seed)
+    return [(x + rnd.uniform(-amp, amp), y + rnd.uniform(-amp, amp)) for x, y in pts]
+
+
+def _hand_strip(canvas, text: str, cx: int, y: int, size: int, max_lines: int, seed: int, max_w: int = 820) -> int:
+    """그림 위에 붙인 흰 종이 띠 + 손글씨 (내레이션)."""
+    f, lines = _hand_lines(text, size, max_w, max_lines)
+    lh = int(f.size * 1.08)
+    tw = max(_tw(f, ln) for ln in lines)
+    bw, bh = tw + 70, lh * len(lines) + 34
+    x0, x1 = cx - bw / 2, cx + bw / 2
+    d = ImageDraw.Draw(canvas)
+    d.polygon(_wobble([(x0, y), (x1, y), (x1, y + bh), (x0, y + bh)], 5, seed), fill=(255, 255, 255, 235))
+    _hand_text(d, lines, f, cx, y + 14)
+    return int(y + bh)
+
+
+def hand_bubble(text: str, size: int = 96, tail: str = "left", seed: int = 1) -> Image.Image:
+    """손으로 그린 듯한 말풍선 (삐뚤한 타원 + 굵은 선 + 꼬리)."""
+    import math
+    f, lines = _hand_lines(text, size, 560, 3)
+    lh = int(f.size * 1.08)
+    tw = max(_tw(f, ln) for ln in lines)
+    th = lh * len(lines)
+    ew, eh = int(tw * 1.25 + 90), int(th * 1.35 + 80)
+    pad = 70
+    layer = Image.new("RGBA", (ew + pad * 2, eh + pad * 2), (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    cx, cy = pad + ew / 2, pad + eh / 2
+    pts = []
+    for i in range(72):
+        a = 2 * math.pi * i / 72
+        r = 1 + 0.025 * math.sin(a * 3 + seed) + 0.015 * math.sin(a * 7 + seed * 2)
+        pts.append((cx + ew / 2 * r * math.cos(a), cy + eh / 2 * r * math.sin(a)))
+    sgn = -1 if tail == "left" else 1
+    bx = cx + sgn * ew * 0.22
+    tip = (bx + sgn * 40, pad + eh + 58)
+    tri = [(bx - 30, cy + eh * 0.38), tip, (bx + 30, cy + eh * 0.38)]
+    d.polygon(pts, fill=(255, 255, 255))
+    d.line(pts + [pts[0]], fill=TOON_INK, width=8, joint="curve")
+    d.polygon(tri, fill=(255, 255, 255))
+    d.line([tri[0], tri[1], tri[2]], fill=TOON_INK, width=8, joint="curve")
+    d.polygon([(bx - 24, cy + eh * 0.36), (bx + 24, cy + eh * 0.36), (bx, cy + eh * 0.47)], fill=(255, 255, 255))
+    _hand_text(d, lines, f, cx, cy - th / 2 + 4)
+    return layer
+
+
+def _toon_card_inside(top: str, bottom: str, im, bubble: str, idx: int, config: dict,
+                      top_size: int = 84, top_lines: int = 2, focus=(0.5, 0.45), pos: str = "") -> Image.Image:
+    canvas = Image.new("RGBA", (W, H), TOON_BG + (255,))
+    ix0, iy0, ix1, iy1 = 40, 70, W - 40, H - 120
+    if im is None:
+        im = _crayon_panel((ix1 - ix0, iy1 - iy0), base=(255, 236, 150), seed=idx + 3)
+    art = cover_crop(im, (ix1 - ix0, iy1 - iy0), focus).convert("RGBA")
+    canvas.alpha_composite(art, (ix0, iy0))
+    d = ImageDraw.Draw(canvas)
+    box = _wobble([(ix0, iy0), (ix1, iy0), (ix1, iy1), (ix0, iy1)], 4, idx + 11)
+    d.line(box + [box[0]], fill=TOON_INK, width=9, joint="curve")
+    y_after_top = iy0
+    if top:
+        y_after_top = _hand_strip(canvas, top, W // 2, iy0 + 40, top_size, top_lines, idx + 21)
+    if bottom:
+        f, lines = _hand_lines(bottom, 70, 820, 2)
+        bh = int(f.size * 1.08) * len(lines) + 34
+        _hand_strip(canvas, bottom, W // 2, iy1 - 40 - bh, 70, 2, idx + 31)
+    if bubble:
+        pos = (pos or "").lower()
+        right = "right" in pos if ("right" in pos or "left" in pos) else idx % 2 == 0
+        b = hand_bubble(bubble, tail="left" if right else "right", seed=idx + 1)
+        cx = ix1 - b.width // 2 + 30 if right else ix0 + b.width // 2 - 30
+        cy = y_after_top + b.height // 2 - 30
+        if "bottom" in pos:
+            cy = iy0 + (iy1 - iy0) * 0.6
+        paste_center(canvas, b, int(cx), int(cy))
+    d = ImageDraw.Draw(canvas)
+    d.text((W / 2, H - 80), config.get("handle") or config.get("brand", ""), font=font(B, 26), fill=(150, 150, 150), anchor="ma")
+    return canvas.convert("RGB")
+
+
+def _toon_impl(config: dict):
+    return _toon_card_inside if config.get("toon_text") == "inside" else _toon_card
+
+
 def render_toon(post: Post, item: Item, idx: int, total: int, config: dict) -> Image.Image:
-    return _toon_card(item.title, item.desc, open_img(post.asset(item.image)), item.bubble, idx, config,
+    return _toon_impl(config)(item.title, item.desc, open_img(post.asset(item.image)), item.bubble, idx, config,
                       pos=item.bubble_pos)
 
 
@@ -1500,6 +1611,9 @@ def render_toon_cover(post: Post, config: dict) -> Image.Image:
     im = open_img(post.asset(post.cover_image or post.actor_image))
     if im is None:
         im = next((open_img(post.asset(it.image)) for it in post.items if it.image), None)
+    if config.get("toon_text") == "inside":
+        return _toon_card_inside(post.title, post.subtitle, im, post.bubble, 0, config, top_size=100, top_lines=3,
+                                 focus=_focus(post), pos=post.bubble_pos)
     return _toon_card(post.title, post.subtitle, im, post.bubble, 0, config, top_size=64, top_lines=3,
                       focus=_focus(post), pos=post.bubble_pos)
 

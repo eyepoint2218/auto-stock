@@ -16,7 +16,7 @@ items:
     title: "찐빵이 울면서 들어왔는데"
     desc: "식빵은 쳐다보지도 않아요"
     image: img/p2.jpg
-    bubble: "흐엉..."
+    bubble: "엉엉..."
     bubble_pos: left-top
   - type: toon
     title: "그러다 말없이 일어나더니"
