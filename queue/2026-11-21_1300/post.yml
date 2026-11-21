@@ -14,8 +14,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: "https://www.fntoday.co.kr/news/articleView.html?idxno=398912"
-cover_candidates: true
+cover_wiki: "Korean fried chicken"   # 기사 이미지는 글자 많은 공식 배너뿐이라 위키 대표 사진 사용
 theme: dark
 title: "네네치킨 앱\n수·금 치킨\n7,000원 할인"
 items:
