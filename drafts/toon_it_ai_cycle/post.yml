@@ -34,8 +34,6 @@ items:
     title: "AI는 신나게 북 치고 장구 치고"
     desc: "죽어나는 건 사람뿐"
     image: img/p5.jpg
-    bubble: "살려줘ㅠ"
-    bubble_pos: left-top
   - type: toon
     title: "AI 시대, 왜 사람만 더 바빠질까요?"
     desc: "댓글로 알려주세요"
