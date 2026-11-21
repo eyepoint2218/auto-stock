@@ -10,9 +10,10 @@
     ]
   },
   "cover": {
-    "key": "https://www.fntoday.co.kr/news/articleView.html?idxno=398912",
-    "page_url": "https://www.fntoday.co.kr/news/articleView.html?idxno=398912",
+    "key": "wiki:Korean fried chicken",
+    "page_url": "https://en.wikipedia.org/wiki/Korean_fried_chicken",
+    "credit": "사진 출처 · KOREA.NET · CC BY-SA 2.0 · Wikimedia Commons",
     "image": "img/cover_web.jpg",
-    "src": "https://cdn.fntoday.co.kr/news/thumbnail/202611/398912_323668_342_v150.jpg"
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Iksan_City_48_Korean_Style_Fried_chicken.jpg/1280px-Iksan_City_48_Korean_Style_Fried_chicken.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
   }
 }
