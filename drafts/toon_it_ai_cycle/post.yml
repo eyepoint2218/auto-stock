@@ -10,32 +10,38 @@ cover_image: img/p1.jpg
 title: "AI는 북 치고 장구 치고\n사람만 죽어난다"
 subtitle: "요즘 IT 회사 풍경"
 bubble: "또 업데이트?"
+bubble_pos: left-top
 items:
   - type: toon
     title: "AI 업데이트가 뜨면"
     desc: "신기능 파악하고 적용하느라 밤샘"
     image: img/p2.jpg
     bubble: "또 바뀌었어?"
+    bubble_pos: left-top
   - type: toon
     title: "겨우 한숨 돌리면"
     desc: "AI 때문에 보안 이슈가 빵 터져요"
     image: img/p3.jpg
     bubble: "비상이다ㅠ"
+    bubble_pos: left-top
   - type: toon
     title: "막고 나면 또 업데이트"
     desc: "업데이트, 사고, 업데이트, 사고..."
     image: img/p4.jpg
     bubble: "무한 반복"
+    bubble_pos: left-top
   - type: toon
     title: "AI는 신나게 북 치고 장구 치고"
-    desc: "죽어나는 건 사람뿐"
+    desc: "사람은 영혼 털린 채 커피만"
     image: img/p5.jpg
     bubble: "살려줘ㅠ"
+    bubble_pos: left-top
   - type: toon
     title: "AI 시대, 왜 사람만 더 바빠질까요?"
     desc: "댓글로 알려주세요"
     image: img/p6.jpg
     bubble: "뭐 하지?"
+    bubble_pos: left-top
 outro_question: "AI 시대, 왜 사람만 더 바빠질까요?"
 caption: |
   AI 업데이트가 뜨면 신기능 따라가느라 밤새고, 한숨 돌리면 AI 때문에 보안 이슈가 터지는 요즘 IT 회사.
