@@ -10,32 +10,38 @@ cover_image: img/p1.jpg
 title: "10년 뒤, 시험 대신\n성능검사 받는다"
 subtitle: "시험이 사라진 미래를 상상해 봤어요"
 bubble: "성능검사?"
+bubble_pos: right-top
 items:
   - type: toon
     title: "시험이 없어진 대신"
     desc: "AI가 매일 내 하루를 기록해요"
     image: img/p2.jpg
     bubble: "다 보고 있어?"
+    bubble_pos: left-top
   - type: toon
     title: "그리고 1년에 한 번"
     desc: "자동차처럼 사람도 성능검사"
     image: img/p3.jpg
     bubble: "나 기계야?"
+    bubble_pos: right-top
   - type: toon
     title: "검사 결과는 한 줄"
     desc: "집중력 부족, 재검사 대상"
     image: img/p4.jpg
-    bubble: "영화 탓이야ㅠ"
+    bubble: "영화 탓ㅠ"
+    bubble_pos: right-top
   - type: toon
     title: "그런데 AI가 못 재는 것"
     desc: "우는 친구 옆에 있어 주는 능력"
     image: img/p5.jpg
     bubble: "이건 몇 점?"
+    bubble_pos: right-top
   - type: toon
     title: "AI가 내 능력을 판단해도 될까요?"
     desc: "댓글로 알려주세요"
     image: img/p6.jpg
     bubble: "너는?"
+    bubble_pos: left-top
 outro_question: "AI가 내 능력을 판단해도 될까요?"
 caption: |
   시험이 사라진 10년 뒤, AI가 매일 기록하고 1년에 한 번 사람을 성능검사한다면?
