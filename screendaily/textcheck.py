@@ -1,5 +1,5 @@
 """공감툰 그림 속 글귀(흰 글씨)의 크기·위치를 기준 이미지와 비교.
-기준: assets/brand/siblings_style_ref.jpg (글자 높이 세로의 2.0%, 첫 줄 위에서 19%, 한 줄 폭 가로의 21~24%)."""
+기준: siblings_style_ref.jpg 실측(글자 높이 2.0%, 위에서 19%)에서 연재는 글자 20% 작게 → 1.6%."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-REF = {"height": 2.0, "top": 19.0, "width": 22.5}   # % (기준 이미지 실측)
+REF = {"height": 1.6, "top": 19.0, "width": 18.0}   # % (연재 기준: 기준 이미지 실측 2.0% 보다 20% 작게)
 TOL = 0.25                                         # ±25%
 
 
@@ -56,5 +56,5 @@ def report(path: Path) -> bool:
         ok &= good
         print(f"  {'OK ' if good else '다시'} {label}: {v:.1f}%  (기준 {ref:.1f}%)")
     if not ok:
-        print("  → 기준과 달라요. docs/gongam_guide.md 3장 6번 문구로 글귀 크기·위치만 다시 요청하세요.")
+        print("  → 기준과 달라요. docs/gongam_guide.md 3장 "글자가 크거나 굵게 나오면" 문구로 글귀만 다시 요청하세요.")
     return ok
