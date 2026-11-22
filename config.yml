@@ -115,6 +115,7 @@ channels:
   gongam:                       # 오누이 공감툰: 오빠·동생 캐릭터 + 실사 배경 한 장 (월·수·금 21시)
     brand: "온이봄이"
     handle: "@onibomi.toon"
+    image_watermark: "온이봄이 @onibomi.toon"   # 그림 하단 가운데에 프로그램이 넣는 채널명 (GPT 그림에는 넣지 않음)
     ig_secret_suffix: GONGAM    # GitHub Secrets: IG_ACCESS_TOKEN_GONGAM, IG_USER_ID_GONGAM
     schedule:                   # 연재 요일·시간 (lint 경고, next-slot 이 이 값으로 빈자리 계산)
       days: [0, 2, 4]           # 월=0, 수=2, 금=4

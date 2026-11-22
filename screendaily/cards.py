@@ -1064,6 +1064,19 @@ def _watermark(canvas: Image.Image, config: dict, color=(255, 255, 255, 170), sh
     d.text((W / 2, H - 38), config.get("handle", ""), font=font(B, 24), fill=color, anchor="mm", **kw)
 
 
+def _image_watermark(im: Image.Image, text: str) -> Image.Image:
+    """완성 이미지(images:) 하단 가운데에 작은 채널명. 크기는 이미지 폭에 비례, 옅은 그림자로 어떤 배경에서도 읽히게."""
+    im = im.convert("RGBA")
+    w, h = im.size
+    f = font(PT_BOLD, max(14, round(w * 0.024)))
+    y = h - round(h * 0.035)
+    sh = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    ImageDraw.Draw(sh).text((w / 2, y + 2), text, font=f, fill=(0, 0, 0, 120), anchor="mm")
+    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(3)))
+    ImageDraw.Draw(im).text((w / 2, y), text, font=f, fill=(255, 255, 255, 225), anchor="mm")
+    return im.convert("RGB")
+
+
 def _shadow_text(canvas: Image.Image, xy, text: str, f, fill, blur: int = 10, alpha: int = 170):
     """그림자 깔린 글자 (사진 위 가독성)."""
     sh = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
@@ -1481,6 +1494,8 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             ratio = im.width / im.height
             if ratio < 0.8 or ratio > 1.91:
                 im = cover_crop(im, (W, H), _focus(post, (0.5, 0.5)))  # 위치는 cover_focus 로 조정
+            if config.get("image_watermark"):  # 채널명 (예: 공감툰 하단 가운데)
+                im = _image_watermark(im, str(config["image_watermark"]))
             out.append(im)
         return out
     total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)
