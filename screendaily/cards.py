@@ -1480,7 +1480,7 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             # 인스타 피드 비율(4:5 ~ 1.91:1) 밖이면 4:5 로 맞춤
             ratio = im.width / im.height
             if ratio < 0.8 or ratio > 1.91:
-                im = cover_crop(im, (W, H), (0.5, 0.5))
+                im = cover_crop(im, (W, H), _focus(post, (0.5, 0.5)))  # 위치는 cover_focus 로 조정
             out.append(im)
         return out
     total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)

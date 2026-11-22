@@ -4,6 +4,7 @@
   python -m screendaily list                            # 예약 목록
   python -m screendaily lint [폴더명 ...]                # 후킹 규칙 검사 (경고만)
   python -m screendaily publish-due [--dry-run] [--no-git]  # 시간이 된 게시물 업로드
+  python -m screendaily next-slot --channel gongam      # 그 채널 연재일 중 비어 있는 다음 예약 시간
   python -m screendaily check                           # 토큰/계정 확인
   python -m screendaily refresh-token                   # 토큰 60일 연장
 """
@@ -130,6 +131,29 @@ def cmd_new(a, config):
     d.mkdir(parents=True)
     (d / "post.yml").write_text(TEMPLATE.format(when=when, fmt="reel" if a.reel else "carousel"), encoding="utf-8")
     print(f"만들었습니다: {d.relative_to(ROOT)}/post.yml")
+
+
+def cmd_next_slot(a, config):
+    """config channels.<채널>.schedule 의 요일·시간 중 queue/ 에 그 채널 게시물이 없는 가장 가까운 시간."""
+    from datetime import timedelta
+    from .post import channel_config
+    sched = channel_config(config, a.channel).get("schedule") or {}
+    if not sched.get("days") or not sched.get("time"):
+        sys.exit(f"config.yml channels.{a.channel} 에 schedule(days, time)이 없습니다")
+    days = [int(x) for x in sched["days"]]
+    hh, mm = (int(x) for x in str(sched["time"]).split(":"))
+    taken = {p.publish_at.strftime("%Y-%m-%d %H:%M") for p in list_posts(QUEUE_DIR, config) if p.channel == a.channel}
+    taken |= {p.publish_at.strftime("%Y-%m-%d %H:%M") for p in list_posts(PUBLISHED_DIR, config)
+              if p.channel == a.channel} if PUBLISHED_DIR.exists() else set()
+    now = datetime.now(tz(config))
+    found = []
+    t = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
+    while len(found) < a.count:
+        if t > now and t.weekday() in days and t.strftime("%Y-%m-%d %H:%M") not in taken:
+            found.append(t)
+        t += timedelta(days=1)
+    for t in found:
+        print(f"{t:%Y-%m-%d %H:%M} ({'월화수목금토일'[t.weekday()]})")
 
 
 def cmd_list(a, config):
@@ -329,6 +353,10 @@ def main(argv=None):
 
     sub.add_parser("list", help="예약 목록")
 
+    s = sub.add_parser("next-slot", help="채널 연재일 중 비어 있는 다음 예약 시간")
+    s.add_argument("--channel", required=True, help="config.yml channels 이름 (예: gongam)")
+    s.add_argument("--count", type=int, default=1, help="몇 개 보여줄지")
+
     s = sub.add_parser("lint", help="후킹 규칙 검사 (경고만)")
     s.add_argument("slots", nargs="*")
 
@@ -359,7 +387,7 @@ def main(argv=None):
     handler = {
         "new": cmd_new, "list": cmd_list, "due": cmd_due, "preview": cmd_preview, "check": cmd_check,
         "refresh-token": cmd_refresh, "fetch-images": cmd_fetch_images, "lint": cmd_lint, "publish-due": cmd_publish_due,
-        "trending": cmd_trending,
+        "trending": cmd_trending, "next-slot": cmd_next_slot,
     }[a.cmd]
     sys.exit(handler(a, config) or 0)
 

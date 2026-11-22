@@ -111,3 +111,22 @@ channels:
       cta: "팔로우하고 혜택 알람 받기"
       save: "저장해두고 날짜마다 꺼내 보기"
       question: "제일 탐나는 혜택은? 댓글로 알려주세요"
+
+  gongam:                       # 오누이 공감툰: 오빠·동생 캐릭터 + 실사 배경 한 장 (월·수·금 21시)
+    # TODO: 실제 계정 이름·아이디로 바꾸기
+    brand: "오누이 공감툰"
+    handle: "@gongam_todo"
+    ig_secret_suffix: GONGAM    # GitHub Secrets: IG_ACCESS_TOKEN_GONGAM, IG_USER_ID_GONGAM
+    schedule:                   # 연재 요일·시간 (lint 경고, next-slot 이 이 값으로 빈자리 계산)
+      days: [0, 2, 4]           # 월=0, 수=2, 금=4
+      time: "21:00"
+    channel_intro: |
+      오빠와 동생의 하루, 마음 한 칸 쉬어 가는 공감툰
+      월·수·금 밤 9시 연재
+    search_keywords: [공감툰, 위로 글귀, 공감 글, 힐링 그림, 오늘의 위로]
+    default_hashtags:
+      - 공감툰
+      - 위로
+      - 공감글귀
+      - 오늘의위로
+      - 힐링

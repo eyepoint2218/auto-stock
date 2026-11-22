@@ -23,7 +23,18 @@ def lint_post(p: Post, config: dict | None = None) -> list[str]:
     w: list[str] = []
     if config is not None:
         config = channel_config(config, p)
-    if p.images:  # 직접 만든 이미지는 검사하지 않음
+    sched = (config or {}).get("schedule") or {}
+    if sched and not p.draft:  # 연재 요일·시간 (예: 공감툰 월·수·금 21:00)
+        days = [int(x) for x in sched.get("days") or []]
+        if days and p.publish_at.weekday() not in days:
+            names = "월화수목금토일"
+            w.append(f"연재일이 아닌 날이에요: {p.publish_at:%m/%d}({names[p.publish_at.weekday()]}). "
+                     f"연재일: {'·'.join(names[d] for d in days)}")
+        if sched.get("time") and f"{p.publish_at:%H:%M}" != sched["time"]:
+            w.append(f"게시 시간이 {p.publish_at:%H:%M} 이에요. 이 채널 연재 시간은 {sched['time']}.")
+    if p.images:  # 직접 만든 이미지는 글자 검사 생략 (게시글 이모지만 확인)
+        if EMOJI.search(p.caption or ""):
+            w.append("게시글(caption)에는 이모지를 넣지 않아요.")
         return w
     if p.channel == "deals" and p.cover_style == "photo":  # docs/cover_guide.md 표지 고정 지침
         lines = [t for t in p.title.splitlines() if t.strip()]

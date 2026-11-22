@@ -1,0 +1,73 @@
+---
+name: gongamtoon
+description: 오빠·동생 캐릭터(빨간 티 더벅머리 오빠 + 노란 원피스·노란 머리핀 동생)를 실사 배경에 넣은 '오누이 공감툰' 한 장 게시물을 만든다. 주제(또는 '다음 거')를 받으면 글귀·ChatGPT 프롬프트·게시글을 쓰고, 사용자가 그려 온 그림을 받아 월·수·금 21시 빈자리에 예약한다. "공감툰", "오누이", "공감컷", "다음 공감 게시물", "이 그림 올려줘(오빠·동생 그림)" 같은 요청에 사용.
+---
+
+# 오누이 공감툰 (월·수·금 21:00, 한 장)
+
+이 환경에서는 그림을 직접 만들 수 없다. **그림과 그림 속 글귀는 사용자가 ChatGPT로 만든다.**
+이 스킬은 주제 선정 → 글귀 → 프롬프트 → 게시글 → 그림 확인 → 예약을 맡는다.
+
+```
+주제 → [1단계] 글귀 + 프롬프트 + post.yml 초안 → (사용자: ChatGPT로 그림 1장) → [2단계] 그림 확인 → [3단계] 예약
+```
+
+반드시 먼저 읽는다: `docs/gongam_guide.md` (캐릭터 고정·프롬프트 틀·글 규칙). 이 지침이 이 스킬보다 우선한다.
+
+## 0. 원칙
+- `channel: gongam` 을 꼭 적는다 (업로드 계정·해시태그·채널 소개가 이 채널 것으로 바뀜).
+- 캐릭터 설명은 `docs/gongam_guide.md` 의 `[캐릭터 고정]` 블록을 **한 글자도 바꾸지 않고** 쓴다. 장면에 맞춰 옷을 바꿔도 오빠=빨강 상의, 동생=노랑 상의.
+- 이모지 금지 (그림 글귀·게시글 모두). 인사로 시작 금지. CTA 하나.
+- 실존 인물·브랜드 로고·간판은 넣지 않는다. 다른 계정의 캐릭터·글귀를 베끼지 않는다.
+- 초안은 `drafts/gongam_<영문슬러그>/` 에 `draft: true`. `queue/` 에는 그림이 확인된 뒤에만 옮긴다.
+
+## 1단계. 주제 → 글귀·프롬프트
+
+1. **날짜 정하기**: `python -m screendaily next-slot --channel gongam --count 3` 으로 다음 빈자리를 본다. 그 요일이 결을 정한다 (월 위로·응원 / 수 일상 공감·웃음 / 금 관계·고마움).
+2. **주제**: 사용자가 주제를 주면 그걸로, "다음 거"면 `data/gongam_topics.md` 에서 그 요일 결의 안 쓴 주제를 고른다. 계절·날씨·기념일(첫눈, 수능, 크리스마스, 새해)을 우선한다. `queue/` 에서 최근 gongam 게시물 2개와 장소·날씨·관계가 겹치지 않게 한다.
+3. **글귀 두 줄**: 줄당 15자 이하(공백 제외). 앞줄 상황, 뒷줄 위로·반전. 후보 3개를 만들고 가장 구체적인 것을 고른다. 나머지 2개는 채팅에서 대안으로 보여준다.
+4. **프롬프트**: `docs/gongam_guide.md` 2장의 틀을 통째로 쓰고 `[장면]`(4문장), `[글귀]` 두 줄만 채운다. 장면은 실사 한국 일상 장소 + 시간대·날씨·빛 + 두 캐릭터의 관계가 보이는 자세 + 시트에 있는 표정.
+5. **결과물**
+   - `drafts/gongam_<slug>/post.yml` (아래 템플릿)
+   - `drafts/gongam_<slug>/PROMPT.md`: 글귀·대안 2개·프롬프트 전문·확인 체크리스트(지침 3장)
+   - `data/gongam_topics.md` 에서 그 주제를 `[x]` 로 표시하고 날짜를 적는다 (새 주제면 해당 요일 칸에 추가)
+   - 채팅에는 **프롬프트 전문을 코드 블록 하나로** 바로 붙여 주고, 첨부할 파일 두 개(`assets/brand/siblings_character.png`, `assets/brand/siblings_style_ref.jpg`)를 알려 준 뒤 "그림을 올려 주세요" 한 줄로 끝낸다.
+
+```yaml
+# 오누이 공감툰: <주제> (그림·글귀: ChatGPT, docs/gongam_guide.md)
+publish_at: "YYYY-MM-DD 21:00"
+format: carousel
+draft: true
+channel: gongam
+images: [img/post.jpg]
+caption: |
+  <글귀 첫째 줄>
+  <글귀 둘째 줄>
+
+  <상황을 풀어 쓴 2~3줄, 담백하게>
+
+  <요일별 CTA 하나: 월 저장 / 수 댓글 / 금 공유>
+hashtags: [<장면 키워드 1~2개>]
+```
+
+## 2단계. 그림 받기 → 확인
+1. 그림을 `drafts/gongam_<slug>/img/post.jpg` 로 저장 (PIL RGB 변환, quality 92).
+2. **그림을 직접 보고** 지침 3장 체크리스트를 하나씩 확인한다. 특히:
+   - 캐릭터: 오빠 더벅머리·빨강 상의 / 동생 일자 앞머리·노란 머리핀·노랑 상의 / 세로 타원 눈 / 빗금 볼터치 / 2D 유지
+   - 글귀: 맞춤법·띄어쓰기가 요청과 **글자 단위로** 같은지, 다른 글자가 없는지
+   - 기준 시트(`assets/brand/siblings_character.png`)를 함께 열어 나란히 비교한다
+   틀린 곳이 있으면 지침 3장의 고침 문구를 그 내용에 맞춰 완성해서 주고 다시 받는다.
+3. 미리보기: `python -m screendaily preview --drafts gongam_<slug> --force` → `out/01.jpg` 를 보고 4:5 로 잘리면서 글귀·얼굴이 잘리지 않았는지 확인. 잘리면 `cover_focus: "0.5,0.4"` 처럼 세로 위치를 조정한다.
+4. `out/01.jpg` 를 `SendUserFile` 로 보여주고 `out/caption.txt` 의 게시글 전문도 채팅에 붙인다.
+
+## 3단계. 예약 (그림 확인 후, 사용자가 원하면)
+1. `next-slot` 으로 받은 시간(또는 사용자가 정한 월·수·금)으로 `queue/<YYYY-MM-DD>_2100/` 에 `post.yml` + `img/post.jpg` 를 복사하고, `draft: true` 를 지운다.
+2. `python -m screendaily lint <폴더>` → 연재일·시간·이모지 경고가 없어야 한다.
+3. 자동 업로드는 **main 의 `queue/`만** 본다. 사용자가 원하면 main 반영(PR 또는 지시에 따라)까지 진행한다.
+4. 계정 연결 확인: GitHub Secrets 에 `IG_ACCESS_TOKEN_GONGAM`(+`IG_USER_ID_GONGAM`, 통합 로그인이면 Variables `IG_API_HOST_GONGAM`)이 없으면 업로드가 실패한다고 알려 준다. `config.yml` 의 `channels.gongam.handle` 이 `@gongam_todo` 면 실제 아이디로 바꾸자고 한다.
+5. 미리 여러 편 쌓기: 사용자가 한 번에 여러 장을 주면 `next-slot --count N` 순서대로 배치한다 (월·수·금 결이 맞는 그림을 그 요일에).
+
+## 참고
+- 채널 설정: `config.yml` → `channels.gongam` (이름·아이디·채널 소개·기본 해시태그·연재 요일)
+- 주제 창고: `data/gongam_topics.md`
+- 첫 게시물 예시: `drafts/gongam_rain_umbrella/`

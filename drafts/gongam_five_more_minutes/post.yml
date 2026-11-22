@@ -1,0 +1,15 @@
+# 오누이 공감툰: 겨울 아침 이불 속 "5분만 더" (그림·글귀: ChatGPT, docs/gongam_guide.md)
+publish_at: "2026-11-25 21:00"
+format: carousel
+draft: true
+channel: gongam
+images: [img/post.jpg]    # ChatGPT 완성본을 이 이름으로 넣기
+caption: |
+  5분만 더 누웠는데
+  30분이 지났어.
+
+  겨울 아침 이불 밖은 너무 추워서
+  알람은 늘 두 번째부터 시작이야.
+
+  나만 그래요? 댓글로 알려주세요.
+hashtags: [겨울아침, 오분만더]
