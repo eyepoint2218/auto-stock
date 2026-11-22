@@ -69,6 +69,9 @@ hashtags: [<장면 키워드 1~2개>]
 4. 계정 연결 확인: GitHub Secrets 에 `IG_ACCESS_TOKEN_GONGAM`(+`IG_USER_ID_GONGAM`, 통합 로그인이면 Variables `IG_API_HOST_GONGAM`)이 없으면 업로드가 실패한다고 알려 준다. `config.yml` 의 `channels.gongam.handle` 이 `@gongam_todo` 면 실제 아이디로 바꾸자고 한다.
 5. 미리 여러 편 쌓기: 사용자가 한 번에 여러 장을 주면 `next-slot --count N` 순서대로 배치한다 (월·수·금 결이 맞는 그림을 그 요일에).
 
+## 게시물 구성
+- 프로그램이 자동으로 **캐러셀 2장, 1440×1800**을 만든다: 01 그림(하단 채널명) + 02 고정 팔로우 카드. `out/` 에 JPG·PNG. 미리보기에서 두 장을 이어 붙여 확인하고 사용자에게 보여 준다.
+
 ## 참고
 - 채널 설정: `config.yml` → `channels.gongam` (이름·아이디·채널 소개·기본 해시태그·연재 요일)
 - 주제 창고: `data/gongam_topics.md`

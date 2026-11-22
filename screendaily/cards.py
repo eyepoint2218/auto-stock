@@ -1077,6 +1077,49 @@ def _image_watermark(im: Image.Image, text: str) -> Image.Image:
     return im.convert("RGB")
 
 
+def render_image_follow_card(config: dict, size: tuple[int, int]) -> Image.Image:
+    """완성 이미지 캐러셀(공감툰)의 마지막 장: 크림 배경 + 프로필 원 + 채널 이름·아이디 + 한 줄 + 팔로우 버튼.
+    config image_follow_card: {profile, title, sub, button, bg, ink, accent}. 크기는 첫 장과 같게."""
+    from . import ROOT
+    fc = config.get("image_follow_card") or {}
+    w, h = size
+    k = w / 1080
+    bg = hex2rgb(fc.get("bg", "#FFF6E0"))
+    ink = hex2rgb(fc.get("ink", "#3B2416"))
+    accent = hex2rgb(fc.get("accent", "#C33721"))
+    canvas = Image.new("RGBA", (w, h), bg + (255,))
+    d = ImageDraw.Draw(canvas)
+    # 프로필 원 (가운데 위쪽)
+    r = int(250 * k)
+    cy = int(h * 0.29)
+    prof = fc.get("profile")
+    if prof and (ROOT / prof).is_file():
+        pim = ImageOps.fit(Image.open(ROOT / prof).convert("RGB"), (2 * r, 2 * r), Image.LANCZOS)
+        m = Image.new("L", (2 * r * 4, 2 * r * 4), 0)
+        ImageDraw.Draw(m).ellipse((0, 0, 2 * r * 4 - 1, 2 * r * 4 - 1), fill=255)
+        m = m.resize((2 * r, 2 * r), Image.LANCZOS)
+        ring = int(10 * k)
+        d.ellipse((w / 2 - r - ring, cy - r - ring, w / 2 + r + ring, cy + r + ring), fill=(255, 255, 255))
+        canvas.paste(pim, (int(w / 2 - r), cy - r), m)
+    d = ImageDraw.Draw(canvas)
+    y = cy + r + int(80 * k)
+    d.text((w / 2, y), fc.get("title") or config.get("brand", ""), font=font(PT_BLACK, int(92 * k)), fill=ink, anchor="ma")
+    y += int(130 * k)
+    d.text((w / 2, y), config.get("handle", ""), font=font(PT_BOLD, int(40 * k)), fill=ink + (170,), anchor="ma")
+    y += int(100 * k)
+    for t in str(fc.get("sub", "")).split("\n"):
+        if t.strip():
+            d.text((w / 2, y), t, font=font(PT_BOLD, int(44 * k)), fill=ink, anchor="ma")
+            y += int(66 * k)
+    btn = fc.get("button", "팔로우")
+    bf = font(PT_BLACK, int(46 * k))
+    bw, bh = _tw(bf, btn) + int(150 * k), int(104 * k)
+    by = max(y + int(70 * k), h - int(300 * k))
+    d.rounded_rectangle((w / 2 - bw / 2, by, w / 2 + bw / 2, by + bh), radius=bh // 2, fill=accent)
+    d.text((w / 2, by + bh / 2), btn, font=bf, fill=(255, 255, 255), anchor="mm")
+    return canvas.convert("RGB")
+
+
 def _shadow_text(canvas: Image.Image, xy, text: str, f, fill, blur: int = 10, alpha: int = 170):
     """그림자 깔린 글자 (사진 위 가독성)."""
     sh = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
@@ -1488,15 +1531,19 @@ def render_toon_cover(post: Post, config: dict) -> Image.Image:
 def render_all(post: Post, config: dict) -> list[Image.Image]:
     if post.images:
         out = []
+        size = tuple(config.get("image_size") or ())  # 채널별 고정 크기 (예: 공감툰 1440x1800)
         for rel in post.images:
             im = open_img(post.asset(rel))
-            # 인스타 피드 비율(4:5 ~ 1.91:1) 밖이면 4:5 로 맞춤
             ratio = im.width / im.height
-            if ratio < 0.8 or ratio > 1.91:
+            if size:  # 정확히 그 크기로 (비율이 다르면 cover_focus 기준으로 잘라 맞춤)
+                im = cover_crop(im.convert("RGB"), size, _focus(post, (0.5, 0.5)))
+            elif ratio < 0.8 or ratio > 1.91:  # 인스타 피드 비율(4:5 ~ 1.91:1) 밖이면 4:5 로 맞춤
                 im = cover_crop(im, (W, H), _focus(post, (0.5, 0.5)))  # 위치는 cover_focus 로 조정
             if config.get("image_watermark"):  # 채널명 (예: 공감툰 하단 가운데)
                 im = _image_watermark(im, str(config["image_watermark"]))
             out.append(im)
+        if post.outro and config.get("image_follow_card"):  # 마지막 장 고정 팔로우 카드
+            out.append(render_image_follow_card(config, out[0].size if out else (W, H)))
         return out
     total = 1 + len(post.items) + (1 if post.outro else 0) + (1 if post.reveal else 0) + (1 if post.recommend else 0)
     covers = {"deal": render_deal_cover, "alarm": render_alarm_cover, "photo": render_photo_cover,
