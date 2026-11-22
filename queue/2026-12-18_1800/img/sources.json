@@ -35,6 +35,24 @@
       "image": "img/4616e5_still.jpg",
       "layout": "cover",
       "poster": "img/4616e5_poster.jpg"
+    },
+    "아바타: 불과 재": {
+      "source": "tmdb",
+      "tmdb": "movie/83533",
+      "tmdb_name": "아바타: 불과 재",
+      "page_url": "https://www.themoviedb.org/movie/83533",
+      "image": "img/4f1685_still.jpg",
+      "layout": "cover",
+      "poster": "img/4f1685_poster.jpg"
+    },
+    "만달로리안과 그로구": {
+      "source": "tmdb",
+      "tmdb": "movie/1228710",
+      "tmdb_name": "만달로리안과 그로구",
+      "page_url": "https://www.themoviedb.org/movie/1228710",
+      "image": "img/78b87d_still.jpg",
+      "layout": "cover",
+      "poster": "img/78b87d_poster.jpg"
     }
   }
 }

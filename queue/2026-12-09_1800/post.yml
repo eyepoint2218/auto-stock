@@ -13,11 +13,11 @@ items:
     tmdb: "movie:The Guilty"
     desc: 911 상담원이 걸려온 전화 한 통으로 납치 사건을 쫓습니다. 거의 한 공간에서 벌어지는데도 숨이 막혀요. 제이크 질렌할 주연.
     bubble: "전화 한 통"
-  - title: 프랙처드
+  - title: 짐승들
     ott: 넷플릭스
     genre: 스릴러
-    tmdb: "movie:Fractured"
-    desc: 응급실에 함께 간 아내와 딸이 사라졌는데, 병원은 그런 사람들은 온 적이 없다고 합니다. 샘 워싱턴 주연.
+    tmdb: movie/1236045
+    desc: 선거를 며칠 앞둔 LA 시장 후보의 집에 아들을 납치했다는 전화가 걸려 옵니다. 그날 밤 집은 몸값 협상의 현장이 돼요. 벤 애플렉 주연.
   - title: 나의 마더
     ott: 넷플릭스
     genre: SF · 스릴러

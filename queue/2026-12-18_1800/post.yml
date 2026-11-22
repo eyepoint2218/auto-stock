@@ -4,20 +4,20 @@ format: reel
 layout: letterbox
 label: WEEKEND
 theme: dark
-title: "주말엔 우주로,\n넷플릭스 SF 4편"
+title: "주말엔 우주로,\nSF 영화·시리즈 4편"
 items:
   - title: 고요의 바다
     ott: 넷플릭스
-    tmdb: tv
+    tmdb: tv/96777
     desc: "버려진 달 연구기지로 떠난 대원들"
-  - title: 로스트 인 스페이스
-    ott: 넷플릭스
-    tmdb: tv/75758   # 2018 넷플릭스판 (1965 원작 아님)
-    desc: "낯선 행성에 불시착한 로빈슨 가족"
-  - title: 어웨이
-    ott: 넷플릭스
-    tmdb: "tv:Away"
-    desc: "인류 첫 화성 유인 탐사를 이끄는 우주비행사"
+  - title: "아바타: 불과 재"
+    ott: 디즈니+
+    tmdb: movie/83533
+    desc: "판도라에 나타난 재의 부족"
+  - title: 만달로리안과 그로구
+    ott: 디즈니+
+    tmdb: movie/1228710
+    desc: "현상금 사냥꾼과 그로구의 은하 모험"
   - title: 미드나이트 스카이
     ott: 넷플릭스
     tmdb: "movie:The Midnight Sky"
@@ -25,8 +25,8 @@ items:
 outro_question: "가장 보고 싶은 우주 작품은?"
 caption: |
   이번 주말엔 지구를 잠시 떠나볼까요
-  달 기지부터 화성 탐사까지, 넷플릭스 우주 SF 4편이에요.
+  달 기지부터 판도라, 은하 너머까지 우주 SF 4편이에요.
 
   가장 보고 싶은 작품을 댓글로 알려주세요
-hashtags: [고요의바다, SF추천, 미드나이트스카이]
+hashtags: [고요의바다, 아바타불과재, 만달로리안과그로구]
 credits: "이미지 출처: 넷플릭스 공식 포스터·스틸 (via TMDB). 모든 이미지의 저작권은 각 제작사에 있습니다."

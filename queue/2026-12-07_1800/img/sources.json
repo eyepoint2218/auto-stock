@@ -26,6 +26,24 @@
       "image": "img/161e99_still.jpg",
       "layout": "cover",
       "poster": "img/161e99_poster.jpg"
+    },
+    "꿀알바": {
+      "source": "tmdb",
+      "tmdb": "tv/289517",
+      "tmdb_name": "꿀알바",
+      "page_url": "https://www.themoviedb.org/tv/289517",
+      "image": "img/b69be7_still.jpg",
+      "layout": "cover",
+      "poster": "img/b69be7_poster.jpg"
+    },
+    "참교육": {
+      "source": "tmdb",
+      "tmdb": "tv/276161",
+      "tmdb_name": "참교육",
+      "page_url": "https://www.themoviedb.org/tv/276161",
+      "image": "img/afbd7f_still.jpg",
+      "layout": "cover",
+      "poster": "img/afbd7f_poster.jpg"
     }
   }
 }

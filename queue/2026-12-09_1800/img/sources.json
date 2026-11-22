@@ -26,6 +26,15 @@
       "image": "img/1bde42_still.jpg",
       "layout": "cover",
       "poster": "img/1bde42_poster.jpg"
+    },
+    "짐승들": {
+      "source": "tmdb",
+      "tmdb": "movie/1236045",
+      "tmdb_name": "짐승들",
+      "page_url": "https://www.themoviedb.org/movie/1236045",
+      "image": "img/c7d357_still.jpg",
+      "layout": "cover",
+      "poster": "img/c7d357_poster.jpg"
     }
   }
 }
