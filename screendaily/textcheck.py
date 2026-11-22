@@ -56,5 +56,5 @@ def report(path: Path) -> bool:
         ok &= good
         print(f"  {'OK ' if good else '다시'} {label}: {v:.1f}%  (기준 {ref:.1f}%)")
     if not ok:
-        print("  → 기준과 달라요. docs/gongam_guide.md 3장 "글자가 크거나 굵게 나오면" 문구로 글귀만 다시 요청하세요.")
+        print("  → 기준과 달라요. docs/gongam_guide.md 3장 '글자가 크거나 굵게 나오면' 문구로 글귀만 다시 요청하세요.")
     return ok
