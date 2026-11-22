@@ -50,7 +50,7 @@ jobs:
           IG_ACCESS_TOKEN_DEALS: ${{ secrets.IG_ACCESS_TOKEN_DEALS }}   # 혜택 채널 (config.yml channels.deals)
           IG_USER_ID_DEALS: ${{ secrets.IG_USER_ID_DEALS }}
           IG_API_HOST_DEALS: ${{ vars.IG_API_HOST_DEALS }}
-          IG_ACCESS_TOKEN_GONGAM: ${{ secrets.IG_ACCESS_TOKEN_GONGAM }}   # 커플 공감툰 (config.yml channels.gongam)
+          IG_ACCESS_TOKEN_GONGAM: ${{ secrets.IG_ACCESS_TOKEN_GONGAM }}   # 오누이 공감툰 (config.yml channels.gongam)
           IG_USER_ID_GONGAM: ${{ secrets.IG_USER_ID_GONGAM }}
           IG_API_HOST_GONGAM: ${{ vars.IG_API_HOST_GONGAM }}
           TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
