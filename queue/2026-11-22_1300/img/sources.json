@@ -10,9 +10,10 @@
     ]
   },
   "cover": {
-    "key": "https://www.thefairnews.co.kr/news/articleView.html?idxno=94751",
-    "page_url": "https://www.thefairnews.co.kr/news/articleView.html?idxno=94751",
+    "key": "wiki:Coconut shrimp",
+    "page_url": "https://en.wikipedia.org/wiki/Coconut_shrimp",
+    "credit": "사진 출처 · Elsie Hui · CC BY 2.0 · Wikimedia Commons",
     "image": "img/cover_web.jpg",
-    "src": "https://cdn.thefairnews.co.kr/news/thumbnail/202611/94751_142054_4722_v150.jpg"
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/Coconut_shrimp.jpg/1280px-Coconut_shrimp.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
   }
 }
