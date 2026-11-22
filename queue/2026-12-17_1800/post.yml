@@ -20,6 +20,7 @@ items:
     desc: 층마다 두 명씩 갇힌 수직 감옥. 위층에서 내려오는 음식만으로 버텨야 하는 스페인 영화예요.
   - title: 제럴드의 게임
     ott: 넷플릭스
+    image: img/0ca947_poster.jpg   # 대표 스틸이 노출 장면이라 공식 포스터 사용
     genre: 스릴러 · 공포
     tmdb: "movie:Gerald's Game"
     desc: 외딴 별장에서 침대에 수갑으로 묶인 채 홀로 남겨진 여자. 스티븐 킹 소설이 원작이에요.
