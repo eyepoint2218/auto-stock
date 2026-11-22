@@ -3,7 +3,8 @@ publish_at: "2026-12-09 21:00"
 format: carousel
 draft: true
 channel: gongam
-images: [img/post.jpg]    # ChatGPT 완성본을 이 이름으로 넣기
+cover_focus: "0.5,0.75"  # 4:5로 맞출 때 위를 더 자르고 아래 채널명을 살림
+images: [img/post.jpg]
 caption: |
   따뜻한 햇살 하나에도
   기분이 좋아지는 날.
