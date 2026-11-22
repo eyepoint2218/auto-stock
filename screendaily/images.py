@@ -537,6 +537,7 @@ def fetch_for_post(slot_dir: Path, refresh: bool = False) -> list[str]:
     for it in items:
         if it.get("image"):
             used.add(str(it["image"]))
+    used.update(str(x) for x in raw.get("images") or [])  # 직접 만든 완성 이미지(공감툰 등)는 지우지 않음
     if img_dir.exists():
         for f in img_dir.iterdir():
             if f.name != "sources.json" and f"img/{f.name}" not in used:
