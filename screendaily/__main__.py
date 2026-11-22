@@ -5,6 +5,7 @@
   python -m screendaily lint [폴더명 ...]                # 후킹 규칙 검사 (경고만)
   python -m screendaily publish-due [--dry-run] [--no-git]  # 시간이 된 게시물 업로드
   python -m screendaily next-slot --channel gongam      # 그 채널 연재일 중 비어 있는 다음 예약 시간
+  python -m screendaily textcheck 그림.jpg               # 공감툰 글귀 크기·위치를 기준 이미지와 비교
   python -m screendaily check                           # 토큰/계정 확인
   python -m screendaily refresh-token                   # 토큰 60일 연장
 """
@@ -154,6 +155,12 @@ def cmd_next_slot(a, config):
         t += timedelta(days=1)
     for t in found:
         print(f"{t:%Y-%m-%d %H:%M} ({'월화수목금토일'[t.weekday()]})")
+
+
+def cmd_textcheck(a, config):
+    from pathlib import Path
+    from .textcheck import report
+    return 0 if all([report(Path(f)) for f in a.files]) else 1
 
 
 def cmd_list(a, config):
@@ -353,6 +360,9 @@ def main(argv=None):
 
     sub.add_parser("list", help="예약 목록")
 
+    s = sub.add_parser("textcheck", help="공감툰 글귀 크기·위치 검사")
+    s.add_argument("files", nargs="+")
+
     s = sub.add_parser("next-slot", help="채널 연재일 중 비어 있는 다음 예약 시간")
     s.add_argument("--channel", required=True, help="config.yml channels 이름 (예: gongam)")
     s.add_argument("--count", type=int, default=1, help="몇 개 보여줄지")
@@ -387,7 +397,7 @@ def main(argv=None):
     handler = {
         "new": cmd_new, "list": cmd_list, "due": cmd_due, "preview": cmd_preview, "check": cmd_check,
         "refresh-token": cmd_refresh, "fetch-images": cmd_fetch_images, "lint": cmd_lint, "publish-due": cmd_publish_due,
-        "trending": cmd_trending, "next-slot": cmd_next_slot,
+        "trending": cmd_trending, "next-slot": cmd_next_slot, "textcheck": cmd_textcheck,
     }[a.cmd]
     sys.exit(handler(a, config) or 0)
 
