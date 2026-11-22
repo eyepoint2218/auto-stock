@@ -3,6 +3,7 @@ publish_at: "2026-12-02 21:00"
 format: carousel
 draft: true
 channel: gongam
+cover_focus: "0.5,0.75"  # 4:5로 맞출 때 위를 더 자르고 아래 채널명을 살림
 images: [img/post.jpg]    # ChatGPT 완성본을 이 이름으로 넣기
 caption: |
   빗소리를 듣다 보면
