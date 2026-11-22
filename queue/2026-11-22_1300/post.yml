@@ -11,9 +11,9 @@
 publish_at: "2026-11-22 13:00"
 format: carousel
 channel: deals
-draft: true
+draft: false
 cover_style: photo
-cover_wiki: "Coconut shrimp"   # 기사 이미지는 bhc 수험생 일러스트뿐이라 위키 대표 사진 사용
+cover_image: img/cover.jpg   # 위키 Coconut shrimp 대표 사진 (Elsie Hui, CC BY 2.0, Wikimedia Commons). 기사 이미지는 bhc 수험생 일러스트뿐
 theme: dark
 title: "아웃백 수험생\n코코넛 슈림프\n7조각 무료"
 items:
