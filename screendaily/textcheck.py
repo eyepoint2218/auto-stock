@@ -49,6 +49,9 @@ def report(path: Path) -> bool:
     print(f"{path} ({m['size']}, {m['lines']}줄)")
     for k, label in names.items():
         ref, v = REF[k], m[k]
+        if k == "width":  # 문구 길이에 따라 달라지므로 참고만
+            print(f"  참고 {label}: {v:.1f}%  (8자 줄 기준 {ref:.1f}%)")
+            continue
         good = abs(v - ref) <= ref * TOL
         ok &= good
         print(f"  {'OK ' if good else '다시'} {label}: {v:.1f}%  (기준 {ref:.1f}%)")
