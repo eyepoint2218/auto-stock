@@ -31,7 +31,7 @@ description: 오빠·동생 캐릭터(빨간 티 더벅머리 오빠 + 노란 �
    - `drafts/gongam_<slug>/post.yml` (아래 템플릿)
    - `drafts/gongam_<slug>/PROMPT.md`: 글귀(40선 번호)·프롬프트 전문·확인 체크리스트(지침 3장)
    - `data/gongam_topics.md` 계획표 상태를 `[x] 프롬프트 준비` → 예약하면 `[x] 예약` 으로 바꾼다
-   - 채팅에는 **프롬프트 전문을 코드 블록 하나로** 바로 붙여 주고, 첨부할 파일 두 개(`assets/brand/siblings_character.png`, `assets/brand/siblings_style_ref.jpg`)를 알려 준 뒤 "그림을 올려 주세요" 한 줄로 끝낸다.
+   - 채팅에는 **프롬프트 전문을 코드 블록 하나로** 바로 붙여 주고, 첨부할 파일 두 개를 순서대로(① `assets/brand/siblings_style_ref.jpg` 캐릭터·선 굵기·글귀 기준 ② `assets/brand/siblings_character.png` 각도·표정)를 알려 준 뒤 "그림을 올려 주세요" 한 줄로 끝낸다.
 
 ```yaml
 # 오누이 공감툰: <주제> (그림·글귀: ChatGPT, docs/gongam_guide.md)
@@ -56,7 +56,7 @@ hashtags: [<장면 키워드 1~2개>]
    - 캐릭터: 오빠 더벅머리·빨강 상의 / 동생 일자 앞머리·노란 머리핀·노랑 상의 / 세로 타원 눈 / 빗금 볼터치 / 2D 유지
    - 글귀: 맞춤법·띄어쓰기가 요청과 **글자 단위로** 같은지, 다른 글자가 없는지
    - 글귀 크기·위치: `python -m screendaily textcheck img/post.jpg` → '다시'가 나오면 지침 3장 6번 문구로 글귀만 고쳐 달라고 한다
-   - 기준 시트(`assets/brand/siblings_character.png`)를 함께 열어 나란히 비교한다
+   - 우산 그림(`assets/brand/siblings_style_ref.jpg`)과 나란히 놓고 얼굴·**선 굵기·선 색**·채색을 비교한다 (시트는 각도·표정 확인용)
    틀린 곳이 있으면 지침 3장의 고침 문구를 그 내용에 맞춰 완성해서 주고 다시 받는다.
 3. 미리보기: `python -m screendaily preview --drafts gongam_<slug> --force` → `out/01.jpg` 를 보고 4:5 로 잘리면서 글귀·얼굴이 잘리지 않았는지 확인. 잘리면 `cover_focus: "0.5,0.4"` 처럼 세로 위치를 조정한다.
 4. `out/01.jpg` 를 `SendUserFile` 로 보여주고 `out/caption.txt` 의 게시글 전문도 채팅에 붙인다.
