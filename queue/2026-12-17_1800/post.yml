@@ -1,0 +1,32 @@
+# 후킹: 경고 + 숫자
+publish_at: "2026-12-17 18:00"
+format: carousel
+label: MOOD
+theme: dark
+title: "공포 고수만\n끝까지 보는 영화 3편"
+subtitle: "불 끄고 보면 더 무서운 넷플릭스 공포"
+bubble: "불 켜고 봐요"
+items:
+  - title: 히스 하우스
+    ott: 넷플릭스
+    genre: 공포
+    tmdb: "movie:His House"
+    desc: 남수단을 탈출한 난민 부부가 영국에서 얻은 새 집에서 기묘한 일을 겪기 시작합니다.
+    bubble: "집이 무서워"
+  - title: 더 플랫폼
+    ott: 넷플릭스
+    genre: 스릴러 · 공포
+    tmdb: "movie:The Platform"
+    desc: 층마다 두 명씩 갇힌 수직 감옥. 위층에서 내려오는 음식만으로 버텨야 하는 스페인 영화예요.
+  - title: 제럴드의 게임
+    ott: 넷플릭스
+    genre: 스릴러 · 공포
+    tmdb: "movie:Gerald's Game"
+    desc: 외딴 별장에서 침대에 수갑으로 묶인 채 홀로 남겨진 여자. 스티븐 킹 소설이 원작이에요.
+caption: |
+  공포영화 좀 본다는 사람에게 권하는 넷플릭스 영화
+  끝까지 보면 공포 고수 인정, 3편이에요.
+
+  저장해두고 친구랑 같이 도전해 보세요
+hashtags: [공포영화, 더플랫폼, 히스하우스]
+credits: "이미지 출처: 넷플릭스 공식 포스터·스틸 (via TMDB). 모든 이미지의 저작권은 각 제작사에 있습니다."
