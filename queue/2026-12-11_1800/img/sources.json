@@ -35,6 +35,15 @@
       "image": "img/c52f21_still.jpg",
       "layout": "cover",
       "poster": "img/c52f21_poster.jpg"
+    },
+    "모아나": {
+      "source": "tmdb",
+      "tmdb": "movie/1108427",
+      "tmdb_name": "모아나",
+      "page_url": "https://www.themoviedb.org/movie/1108427",
+      "image": "img/6314c5_still.jpg",
+      "layout": "cover",
+      "poster": "img/6314c5_poster.jpg"
     }
   }
 }

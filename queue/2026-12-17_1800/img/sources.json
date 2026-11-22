@@ -26,6 +26,15 @@
       "image": "img/1_1994_a72e13_still.jpg",
       "layout": "cover",
       "poster": "img/1_1994_a72e13_poster.jpg"
+    },
+    "백룸": {
+      "source": "tmdb",
+      "tmdb": "movie/1083381",
+      "tmdb_name": "백룸",
+      "page_url": "https://www.themoviedb.org/movie/1083381",
+      "image": "img/59b601_still.jpg",
+      "layout": "cover",
+      "poster": "img/59b601_poster.jpg"
     }
   }
 }

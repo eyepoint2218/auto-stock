@@ -26,6 +26,15 @@
       "image": "img/7a64cc_still.jpg",
       "layout": "cover",
       "poster": "img/7a64cc_poster.jpg"
+    },
+    "푸른길": {
+      "source": "tmdb",
+      "tmdb": "tv/300523",
+      "tmdb_name": "푸른길",
+      "page_url": "https://www.themoviedb.org/tv/300523",
+      "image": "img/e7a78e_still.jpg",
+      "layout": "cover",
+      "poster": "img/e7a78e_poster.jpg"
     }
   }
 }

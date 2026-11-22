@@ -26,6 +26,15 @@
       "image": "img/78e691_still.jpg",
       "layout": "cover",
       "poster": "img/78e691_poster.jpg"
+    },
+    "나를 충전해줘": {
+      "source": "tmdb",
+      "tmdb": "tv/289423",
+      "tmdb_name": "나를 충전해줘",
+      "page_url": "https://www.themoviedb.org/tv/289423",
+      "image": "img/9e46da_still.jpg",
+      "layout": "cover",
+      "poster": "img/9e46da_poster.jpg"
     }
   }
 }

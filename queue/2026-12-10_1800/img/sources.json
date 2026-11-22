@@ -26,6 +26,24 @@
       "image": "img/71769f_still.jpg",
       "layout": "cover",
       "poster": "img/71769f_poster.jpg"
+    },
+    "주토피아 2": {
+      "source": "tmdb",
+      "tmdb": "movie/1084242",
+      "tmdb_name": "주토피아 2",
+      "page_url": "https://www.themoviedb.org/movie/1084242",
+      "image": "img/2_e12ee7_still.jpg",
+      "layout": "cover",
+      "poster": "img/2_e12ee7_poster.jpg"
+    },
+    "토이 스토리 5": {
+      "source": "tmdb",
+      "tmdb": "movie/1084244",
+      "tmdb_name": "토이 스토리 5",
+      "page_url": "https://www.themoviedb.org/movie/1084244",
+      "image": "img/5_43dfec_still.jpg",
+      "layout": "cover",
+      "poster": "img/5_43dfec_poster.jpg"
     }
   }
 }
