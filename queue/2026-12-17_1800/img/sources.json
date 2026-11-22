@@ -17,14 +17,6 @@
       "image": "img/29b039_still.jpg",
       "layout": "cover",
       "poster": "img/29b039_poster.jpg"
-    },
-    "더 리추얼": {
-      "source": "tmdb",
-      "tmdb": "movie/212930",
-      "tmdb_name": "The Ritual",
-      "page_url": "https://www.themoviedb.org/movie/212930",
-      "poster": "img/acbaed_poster.jpg",
-      "image": "img/acbaed_poster.jpg"
     }
   }
 }
