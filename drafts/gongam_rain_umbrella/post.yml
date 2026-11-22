@@ -1,5 +1,5 @@
-# 오누이 공감툰 첫 게시물: 비 오는 공원, 우산 (그림·글귀: ChatGPT, docs/gongam_guide.md)
-# 계정 연결(IG_ACCESS_TOKEN_GONGAM) 후 queue/ 로 옮기면 예약 업로드
+# 커플 공감툰 첫 게시물: 비 오는 공원, 우산 하나 (그림·글귀: ChatGPT, PROMPT.md)
+# 커플 그림을 img/post.jpg 로 넣은 뒤, 계정 연결(IG_ACCESS_TOKEN_GONGAM) 후 queue/ 로 옮기면 예약 업로드
 publish_at: "2026-11-23 21:00"
 format: carousel          # 이미지 1장이면 단일 사진 게시물로 올라감
 draft: true
@@ -9,8 +9,8 @@ caption: |
   마음이 아플 때는,
   잠시 멈춰도 괜찮아.
 
-  비가 그칠 때까지 같이 서 있어 줄게.
-  천천히 가도 돼.
+  비가 그칠 때까지 같이 걸어 줄게.
+  우산 하나면 충분하니까, 천천히 가도 돼.
 
   지칠 때 꺼내 보게 저장해 두세요.
 hashtags: [비오는날, 위로글귀]

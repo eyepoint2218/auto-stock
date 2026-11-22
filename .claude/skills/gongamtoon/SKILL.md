@@ -1,9 +1,9 @@
 ---
 name: gongamtoon
-description: 오빠·동생 캐릭터(빨간 티 더벅머리 오빠 + 노란 원피스·노란 머리핀 동생)를 실사 배경에 넣은 '오누이 공감툰' 한 장 게시물을 만든다. 주제(또는 '다음 거')를 받으면 글귀·ChatGPT 프롬프트·게시글을 쓰고, 사용자가 그려 온 그림을 받아 월·수·금 21시 빈자리에 예약한다. "공감툰", "오누이", "공감컷", "다음 공감 게시물", "이 그림 올려줘(오빠·동생 그림)" 같은 요청에 사용.
+description: 20대 연인 커플 캐릭터(빨간 상의 더벅머리 남자 + 노란 상의·노란 머리핀 단발 여자)를 실사 배경에 넣은 '커플 공감툰' 한 장 게시물을 만든다. 날짜(또는 '다음 거')를 받으면 감성 문구 40선 계획표대로 ChatGPT 프롬프트·게시글을 쓰고, 사용자가 그려 온 그림을 확인해 월·수·금 21시에 예약한다. "공감툰", "커플툰", "공감컷", "다음 공감 게시물", "이 그림 올려줘(커플 그림)" 같은 요청에 사용.
 ---
 
-# 오누이 공감툰 (월·수·금 21:00, 한 장)
+# 커플 공감툰 (월·수·금 21:00, 한 장)
 
 이 환경에서는 그림을 직접 만들 수 없다. **그림과 그림 속 글귀는 사용자가 ChatGPT로 만든다.**
 이 스킬은 주제 선정 → 글귀 → 프롬프트 → 게시글 → 그림 확인 → 예약을 맡는다.
@@ -16,7 +16,7 @@ description: 오빠·동생 캐릭터(빨간 티 더벅머리 오빠 + 노란 �
 
 ## 0. 원칙
 - `channel: gongam` 을 꼭 적는다 (업로드 계정·해시태그·채널 소개가 이 채널 것으로 바뀜).
-- 캐릭터 설명은 `docs/gongam_guide.md` 의 `[캐릭터 고정]` 블록을 **한 글자도 바꾸지 않고** 쓴다. 장면에 맞춰 옷을 바꿔도 오빠=빨강 상의, 동생=노랑 상의.
+- 캐릭터 설명은 `docs/gongam_guide.md` 의 `[캐릭터 고정]` 블록을 **한 글자도 바꾸지 않고** 쓴다. 장면에 맞춰 옷을 바꿔도 남자=빨강 상의, 여자=노랑 상의. **두 사람은 반드시 20대 어른 커플**: 책가방·교복·학교 장소·아이 옷은 쓰지 않는다.
 - 이모지 금지 (그림 글귀·게시글 모두). 인사로 시작 금지. CTA 하나.
 - 실존 인물·브랜드 로고·간판은 넣지 않는다. 다른 계정의 캐릭터·글귀를 베끼지 않는다.
 - 초안은 `drafts/gongam_<영문슬러그>/` 에 `draft: true`. `queue/` 에는 그림이 확인된 뒤에만 옮긴다.
@@ -31,10 +31,10 @@ description: 오빠·동생 캐릭터(빨간 티 더벅머리 오빠 + 노란 �
    - `drafts/gongam_<slug>/post.yml` (아래 템플릿)
    - `drafts/gongam_<slug>/PROMPT.md`: 글귀(40선 번호)·프롬프트 전문·확인 체크리스트(지침 3장)
    - `data/gongam_topics.md` 계획표 상태를 `[x] 프롬프트 준비` → 예약하면 `[x] 예약` 으로 바꾼다
-   - 채팅에는 **프롬프트 전문을 코드 블록 하나로** 바로 붙여 주고, 첨부할 파일 두 개(`assets/brand/siblings_character.png`, `assets/brand/siblings_style_ref.jpg`)를 알려 준 뒤 "그림을 올려 주세요" 한 줄로 끝낸다.
+   - 채팅에는 **프롬프트 전문을 코드 블록 하나로** 바로 붙여 주고, 첨부할 파일 두 개(`assets/brand/couple_character.png`(없으면 `siblings_character.png`), `assets/brand/siblings_style_ref.jpg`)를 알려 준 뒤 "그림을 올려 주세요" 한 줄로 끝낸다.
 
 ```yaml
-# 오누이 공감툰: <주제> (그림·글귀: ChatGPT, docs/gongam_guide.md)
+# 커플 공감툰: <주제> (그림·글귀: ChatGPT, docs/gongam_guide.md)
 publish_at: "YYYY-MM-DD 21:00"
 format: carousel
 draft: true
@@ -53,10 +53,10 @@ hashtags: [<장면 키워드 1~2개>]
 ## 2단계. 그림 받기 → 확인
 1. 그림을 `drafts/gongam_<slug>/img/post.jpg` 로 저장 (PIL RGB 변환, quality 92).
 2. **그림을 직접 보고** 지침 3장 체크리스트를 하나씩 확인한다. 특히:
-   - 캐릭터: 오빠 더벅머리·빨강 상의 / 동생 일자 앞머리·노란 머리핀·노랑 상의 / 세로 타원 눈 / 빗금 볼터치 / 2D 유지
+   - 캐릭터: 어른 커플로 보이는지 / 남자 더벅머리·빨강 상의 / 여자 일자 앞머리·노란 머리핀·노랑 상의 / 세로 타원 눈 / 빗금 볼터치 / 2D 유지
    - 글귀: 맞춤법·띄어쓰기가 요청과 **글자 단위로** 같은지, 다른 글자가 없는지
    - 글귀 크기·위치: `python -m screendaily textcheck img/post.jpg` → '다시'가 나오면 지침 3장 6번 문구로 글귀만 고쳐 달라고 한다
-   - 기준 시트(`assets/brand/siblings_character.png`)를 함께 열어 나란히 비교한다
+   - 기준 시트(`assets/brand/couple_character.png`, 없으면 `siblings_character.png`)를 함께 열어 나란히 비교한다
    틀린 곳이 있으면 지침 3장의 고침 문구를 그 내용에 맞춰 완성해서 주고 다시 받는다.
 3. 미리보기: `python -m screendaily preview --drafts gongam_<slug> --force` → `out/01.jpg` 를 보고 4:5 로 잘리면서 글귀·얼굴이 잘리지 않았는지 확인. 잘리면 `cover_focus: "0.5,0.4"` 처럼 세로 위치를 조정한다.
 4. `out/01.jpg` 를 `SendUserFile` 로 보여주고 `out/caption.txt` 의 게시글 전문도 채팅에 붙인다.
@@ -67,6 +67,9 @@ hashtags: [<장면 키워드 1~2개>]
 3. 자동 업로드는 **main 의 `queue/`만** 본다. 사용자가 원하면 main 반영(PR 또는 지시에 따라)까지 진행한다.
 4. 계정 연결 확인: GitHub Secrets 에 `IG_ACCESS_TOKEN_GONGAM`(+`IG_USER_ID_GONGAM`, 통합 로그인이면 Variables `IG_API_HOST_GONGAM`)이 없으면 업로드가 실패한다고 알려 준다. `config.yml` 의 `channels.gongam.handle` 이 `@gongam_todo` 면 실제 아이디로 바꾸자고 한다.
 5. 미리 여러 편 쌓기: 사용자가 한 번에 여러 장을 주면 `next-slot --count N` 순서대로 배치한다 (월·수·금 결이 맞는 그림을 그 요일에).
+
+## 커플 캐릭터 시트
+- `assets/brand/couple_character.png` 이 없으면 먼저 `docs/gongam_guide.md` 0장 프롬프트로 시트를 만들자고 안내한다. 사용자가 시트를 올리면 그 파일로 저장하고 커밋한다.
 
 ## 참고
 - 채널 설정: `config.yml` → `channels.gongam` (이름·아이디·채널 소개·기본 해시태그·연재 요일)
