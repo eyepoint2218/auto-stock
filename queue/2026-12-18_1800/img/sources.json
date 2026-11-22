@@ -26,6 +26,15 @@
       "image": "img/90d5fc_still.jpg",
       "layout": "cover",
       "poster": "img/90d5fc_poster.jpg"
+    },
+    "로스트 인 스페이스": {
+      "source": "tmdb",
+      "tmdb": "tv/75758",
+      "tmdb_name": "로스트 인 스페이스",
+      "page_url": "https://www.themoviedb.org/tv/75758",
+      "image": "img/4616e5_still.jpg",
+      "layout": "cover",
+      "poster": "img/4616e5_poster.jpg"
     }
   }
 }
