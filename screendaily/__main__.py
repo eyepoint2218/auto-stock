@@ -301,6 +301,22 @@ def cmd_publish_due(a, config):
     return 1 if errors else 0
 
 
+def cmd_trending(a, config):
+    """한국 OTT 최근 1년 인기작을 TMDB 에서 받아 data/trending.json·md 로 저장."""
+    from .trending import collect, save
+    items = collect(days=a.days)
+    save(items)
+    print(f"최신작 {len(items)}편 저장 → data/trending.md")
+    if a.commit:
+        subprocess.run(["git", "add", "data"], cwd=ROOT, check=True)
+        if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode:
+            subprocess.run(["git", "commit", "-m", "chore: 최신작 목록 갱신"], cwd=ROOT, check=True)
+            for _ in range(3):
+                if subprocess.run(["git", "pull", "--rebase", "-q"], cwd=ROOT).returncode == 0 and \
+                        subprocess.run(["git", "push", "-q"], cwd=ROOT).returncode == 0:
+                    break
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="screendaily", description="스크린데일리 자동 업로드")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -334,12 +350,16 @@ def main(argv=None):
     s = sub.add_parser("check", help="토큰/계정 확인")
     s.add_argument("--channel", default="", help="다른 채널 계정 확인 (config.yml channels 이름)")
     sub.add_parser("refresh-token", help="토큰 연장")
+    s = sub.add_parser("trending", help="한국 OTT 최신작 목록 (TMDB) 저장")
+    s.add_argument("--days", type=int, default=365)
+    s.add_argument("--commit", action="store_true")
 
     a = ap.parse_args(argv)
     config = load_config()
     handler = {
         "new": cmd_new, "list": cmd_list, "due": cmd_due, "preview": cmd_preview, "check": cmd_check,
         "refresh-token": cmd_refresh, "fetch-images": cmd_fetch_images, "lint": cmd_lint, "publish-due": cmd_publish_due,
+        "trending": cmd_trending,
     }[a.cmd]
     sys.exit(handler(a, config) or 0)
 
