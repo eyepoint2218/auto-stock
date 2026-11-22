@@ -9,15 +9,6 @@
       "layout": "cover",
       "poster": "img/918eb8_poster.jpg"
     },
-    "로스트 인 스페이스": {
-      "source": "tmdb",
-      "tmdb": "tv/3051",
-      "tmdb_name": "Lost in Space",
-      "page_url": "https://www.themoviedb.org/tv/3051",
-      "image": "img/4616e5_still.jpg",
-      "layout": "cover",
-      "poster": "img/4616e5_poster.jpg"
-    },
     "어웨이": {
       "source": "tmdb",
       "tmdb": "tv/89233",
@@ -27,7 +18,7 @@
       "layout": "cover",
       "poster": "img/6b9af3_poster.jpg"
     },
-    "미드나잇 스카이": {
+    "미드나이트 스카이": {
       "source": "tmdb",
       "tmdb": "movie/614911",
       "tmdb_name": "미드나이트 스카이",
