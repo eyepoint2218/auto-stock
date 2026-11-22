@@ -1,22 +1,18 @@
 {
   "by_title": {},
   "cover_candidates": {
-    "page_url": "https://www.e-science.co.kr/news/articleView.html?idxno=140198",
+    "page_url": "https://www.thefairnews.co.kr/news/articleView.html?idxno=94751",
     "files": [
       {
-        "image": "img/cand_01.png",
-        "src": "https://cdn.e-science.co.kr/news/photo/202611/140198_73278_4021.png"
-      },
-      {
-        "image": "img/cand_05.jpg",
-        "src": "https://cdn.e-science.co.kr/news/thumbnail/custom/20261121/140415_73510_276_1795235227_120.jpg"
+        "image": "img/cand_02.png",
+        "src": "https://cdn.thefairnews.co.kr/news/photo/202611/94751_142054_4722.png"
       }
     ]
   },
   "cover": {
-    "key": "https://www.e-science.co.kr/news/articleView.html?idxno=140198",
-    "page_url": "https://www.e-science.co.kr/news/articleView.html?idxno=140198",
-    "image": "img/cover_web.png",
-    "src": "https://cdn.e-science.co.kr/news/photo/202611/140198_73278_4021.png"
+    "key": "https://www.thefairnews.co.kr/news/articleView.html?idxno=94751",
+    "page_url": "https://www.thefairnews.co.kr/news/articleView.html?idxno=94751",
+    "image": "img/cover_web.jpg",
+    "src": "https://cdn.thefairnews.co.kr/news/thumbnail/202611/94751_142054_4722_v150.jpg"
   }
 }
