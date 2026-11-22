@@ -19,3 +19,4 @@
 | 2026-11-15 | 처갓집양념치킨 | 순살 후라이드 반마리 무료 (멤버십 앱, 11/9~11/30) | drafts/deal_cheogajip | 인스타 수동 업로드 완료 (11/15) |
 | 2026-11-18 | 버거킹 | 2FOR6000·2FOR7000 행사 버거 2개 6,000원부터 (11/14~11/29) | published/2026-11-18_1300 | 11/18 13:10 게시 완료, burgerking.co.kr/event/detail/1777 (검색 결과로 확인), 표지 위키 Whopper 사진 |
 | 2026-11-21 | 네네치킨 | 자사앱 수·금 치킨 7,000원 할인쿠폰 (그 외 5,000원·3,000원, 11/2~11/30) | queue/2026-11-21_1300 | 13:00 자동 예약. 기사 idsn.co.kr(11/2)·gpkorea.com(11/18)·gokorea.kr(11/18) + 공식 배너 이미지로 확인, 표지 위키 Korean fried chicken (KOREA.NET, CC BY-SA 2.0) |
+| 2026-11-22 | 아웃백 | 수험생 코코넛 슈림프 7조각 무료 (2027 수험표, 7만원 이상 결제, 테이블당 하루 1회, ~12/11) | queue/2026-11-22_1300 | 13:00 자동 예약. 기사 e-science.co.kr·thefairnews.co.kr·weekly.hankooki.com·slist.kr·news.nate.com(11/19) 검색 결과로 확인(본문 열람 차단), 시작일 미확인이라 카드에 '지금~12/11', 표지 위키 Coconut shrimp (Elsie Hui, CC BY 2.0) |
