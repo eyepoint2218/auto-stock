@@ -1,5 +1,5 @@
 ep: 32
-status: draft
+status: done
 
 quiz: ["그는", "[누구]일까요?"]
 
@@ -19,6 +19,10 @@ slides:
   4:
     lines: ["지쳐 물러나는 적을", "[살수]에서 들이쳐", "크게 이겼어요."]
     note: 재구성 연출
+    size: 84
+    top: 80
+    crop: 0
+    shade: 180
   5:
     intro: 그의 이름은
     name: 을지문덕
