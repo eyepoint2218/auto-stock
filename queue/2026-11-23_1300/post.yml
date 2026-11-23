@@ -1,0 +1,35 @@
+# 혜택알람: KB국민카드 공차 20% 청구할인 (11/23~11/27)
+# 확인 2026-11-17 — 출처: 공차코리아 11월 프로모션 보도 (푸드투데이·싱글리스트·뉴스탭·리뷰타임스, 2026.11)
+#   KB국민카드로 7,000원 이상 결제 시 20% 청구할인, 1인 1회 최대 2,000원
+# 재확인 2026-11-23 (검색 결과): 뉴스탭 https://www.newstap.co.kr/news/articleView.html?idxno=337971
+#   싱글리스트 https://www.slist.kr/news/articleView.html?idxno=782062 · 푸드투데이 https://www.foodtoday.or.kr/news/article.html?no=209750
+#   리뷰타임스 https://www.reviewtimes.co.kr/news/articleView.html?idxno=13400 — 11/23~11/27, 7,000원 이상 20%, 1인 1회 최대 2,000원 일치
+# 미확인(카드에 쓰지 않음): 대상 카드 종류(체크·신용·법인), 사전 응모 필요 여부, 앱 주문 적용 여부
+# 표지: 11/17 공차 게시물과 같은 Wikimedia Commons CC0 버블티 사진
+publish_at: "2026-11-23 13:00"
+format: carousel
+channel: deals
+draft: false
+cover_style: photo
+cover_image: img/cover.jpg
+theme: dark
+title: "KB국민카드\n공차 20% 할인"
+items:
+  - type: steps
+    title: 혜택 받는 법
+    desc: |
+      11/23~11/27 공차 매장 방문
+      KB국민카드로 7,000원 이상 결제
+      20% 청구할인 (1인 1회, 최대 2,000원)
+caption: |
+  KB국민카드 공차 20% 청구할인
+
+  기간: 2026년 11월 23일(월) ~ 27일(금)
+  대상: KB국민카드 결제 고객
+  혜택: 7,000원 이상 결제 시 20% 청구할인 (1인 1회, 최대 2,000원)
+  방법: 공차 매장에서 KB국민카드로 결제
+
+  대상 카드와 세부 조건은 KB국민카드와 공차 공식 채널에서 확인하세요.
+
+  팔로우하고 혜택알람 받아보세요
+hashtags: [공차, KB국민카드, 공차할인, 카드할인]
