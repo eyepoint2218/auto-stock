@@ -1,0 +1,18 @@
+{
+  "by_title": {},
+  "cover_candidates": {
+    "page_url": "https://www.e-science.co.kr/news/articleView.html?idxno=140333",
+    "files": [
+      {
+        "image": "img/cand_01.png",
+        "src": "https://cdn.e-science.co.kr/news/photo/202611/140333_73417_190.png"
+      }
+    ]
+  },
+  "cover": {
+    "key": "https://www.e-science.co.kr/news/articleView.html?idxno=140333",
+    "page_url": "https://www.e-science.co.kr/news/articleView.html?idxno=140333",
+    "image": "img/cover_web.png",
+    "src": "https://cdn.e-science.co.kr/news/photo/202611/140333_73417_190.png"
+  }
+}
