@@ -1076,7 +1076,7 @@ def _font_for_glyph(name: str, glyph_px: float) -> ImageFont.FreeTypeFont:
 
 
 def _soft_text(im: Image.Image, lines: list[str], f, top: float, line_h: float, scrim: float,
-               blank_h: float | None = None) -> Image.Image:
+               blank_h: float | None = None, cx: float = 0.5) -> Image.Image:
     """가운데 정렬 흰 글씨 + 글자 뒤 아주 옅은 반투명 번짐(박스 안 보이게) + 옅은 그림자."""
     im = im.convert("RGBA")
     w, h = im.size
@@ -1092,7 +1092,7 @@ def _soft_text(im: Image.Image, lines: list[str], f, top: float, line_h: float, 
         return im.convert("RGB")
     d0 = ImageDraw.Draw(im)
     widths = [d0.textlength(t, font=f) for t, _ in pos]
-    x0, x1 = w / 2 - max(widths) / 2, w / 2 + max(widths) / 2
+    x0, x1 = w * cx - max(widths) / 2, w * cx + max(widths) / 2
     y0, y1 = pos[0][1], pos[-1][1] + line_h
     if scrim > 0:  # 번짐: 글자 영역보다 넓게, 크게 흐려서 테두리 없이
         pad_x, pad_y = line_h * 1.6, line_h * 1.0
@@ -1106,11 +1106,11 @@ def _soft_text(im: Image.Image, lines: list[str], f, top: float, line_h: float, 
     sh = Image.new("RGBA", im.size, (0, 0, 0, 0))
     ds = ImageDraw.Draw(sh)
     for t, yy in pos:
-        ds.text((w / 2, yy + line_h * 0.04), t, font=f, fill=(0, 0, 0, 110), anchor="ma")
+        ds.text((w * cx, yy + line_h * 0.04), t, font=f, fill=(0, 0, 0, 110), anchor="ma")
     im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(max(1, line_h * 0.05))))
     d = ImageDraw.Draw(im)
     for t, yy in pos:
-        d.text((w / 2, yy), t, font=f, fill=(255, 255, 255, 250), anchor="ma")
+        d.text((w * cx, yy), t, font=f, fill=(255, 255, 255, 250), anchor="ma")
     return im.convert("RGB")
 
 
@@ -1123,7 +1123,7 @@ def _image_copy(im: Image.Image, text: str, cfg: dict) -> Image.Image:
     line_h = glyph * float(cfg.get("line", 1.75))
     n = sum(1 for ln in lines if ln.strip())
     top = h * float(cfg.get("top", 0.19) if n <= 3 else cfg.get("top_long", 0.16))
-    return _soft_text(im, lines, f, top, line_h, float(cfg.get("scrim", 0.30)))
+    return _soft_text(im, lines, f, top, line_h, float(cfg.get("scrim", 0.30)), cx=float(cfg.get("copy_x", 0.5)))
 
 
 def _image_aside(im: Image.Image, text: str, pos: str, cfg: dict) -> Image.Image:
@@ -1576,7 +1576,7 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
                 im = cover_crop(im, (W, H), _focus(post, (0.5, 0.5)))  # 위치는 cover_focus 로 조정
             cs = config.get("copy_style") or {}
             if post.copy and rel == post.images[0]:  # 첫 장 그림 위 글귀
-                im = _image_copy(im, post.copy, cs)
+                im = _image_copy(im, post.copy, dict(cs, copy_x=float(post.copy_x or 0.5)))
             if post.aside and rel == post.images[0]:  # 캐릭터 옆 작은 혼잣말
                 im = _image_aside(im, post.aside, post.aside_pos, cs)
             if config.get("image_watermark"):  # 채널명 (예: 공감툰 하단 가운데)
