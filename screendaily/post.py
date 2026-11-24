@@ -107,6 +107,8 @@ class Post:
     recommend: list[Item] = field(default_factory=list)  # 정답 뒤 추천작 카드 (최대 4편)
     recommend_title: str = ""  # 추천작 카드 제목
     layout: str = ""           # letterbox = 위쪽 검은 칸 릴스 (format: reel 전용)
+    aside: str = ""            # 캐릭터 옆 작은 혼잣말 (공감툰, 예: "나는 추운데 ㅋ")
+    aside_pos: str = ""        # 혼잣말 위치 "가로,세로" (0~1, 최종 이미지 기준, 글자 왼쪽 가운데)
     copy: str = ""             # 완성 이미지(images:) 위에 프로그램이 얹는 글귀 (줄바꿈 그대로, 빈 줄 = 문장 사이 띄움)
 
     @property
@@ -305,6 +307,8 @@ def load_post(slot_dir: Path, config: dict) -> Post:
         recommend_title=str(raw.get("recommend_title", "") or ""),
         layout=str(raw.get("layout", "") or "").lower(),
         copy=str(raw.get("copy", "") or "").strip("\n"),
+        aside=str(raw.get("aside", "") or ""),
+        aside_pos=str(raw.get("aside_pos", "") or ""),
     )
 
     act = sources.get("actor", {})

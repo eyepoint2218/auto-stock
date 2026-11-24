@@ -7,6 +7,8 @@ images: [img/post.jpg]
 copy: |
   같이 걷는 길은,
   조금 덜 추워.
+aside: "나는 추운데 ㅋ"     # 봄이 옆 작은 혼잣말 (프로그램이 넣음)
+aside_pos: "0.47,0.70"
 caption: |
   같이 걷는 길은,
   조금 덜 추워.

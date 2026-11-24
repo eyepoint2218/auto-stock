@@ -1126,6 +1126,24 @@ def _image_copy(im: Image.Image, text: str, cfg: dict) -> Image.Image:
     return _soft_text(im, lines, f, top, line_h, float(cfg.get("scrim", 0.30)))
 
 
+def _image_aside(im: Image.Image, text: str, pos: str, cfg: dict) -> Image.Image:
+    """캐릭터 옆 작은 혼잣말: 글귀와 같은 폰트, 더 작게, 옅은 그림자 (박스·말풍선 없음)."""
+    im = im.convert("RGBA")
+    w, h = im.size
+    try:
+        x, y = (float(v) for v in pos.split(","))
+    except Exception:  # noqa: BLE001
+        x, y = 0.55, 0.70
+    glyph = h * float(cfg.get("aside_glyph", 0.017))
+    f = _font_for_glyph(cfg.get("font", PT_MEDIUM), glyph)
+    sh = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    ds = ImageDraw.Draw(sh)
+    ds.text((w * x, h * y), text, font=f, fill=(0, 0, 0, 200), anchor="lm", stroke_width=max(2, round(glyph * 0.12)), stroke_fill=(0, 0, 0, 200))
+    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(max(2, glyph * 0.18))))
+    ImageDraw.Draw(im).text((w * x, h * y), text, font=f, fill=(255, 255, 255, 245), anchor="lm")
+    return im.convert("RGB")
+
+
 def _image_watermark(im: Image.Image, text: str, cfg: dict | None = None) -> Image.Image:
     """완성 이미지(images:) 하단 가운데 채널명: 글귀와 같은 폰트, 더 작게, 옅은 번짐."""
     cfg = cfg or {}
@@ -1559,6 +1577,8 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
             cs = config.get("copy_style") or {}
             if post.copy and rel == post.images[0]:  # 첫 장 그림 위 글귀
                 im = _image_copy(im, post.copy, cs)
+            if post.aside and rel == post.images[0]:  # 캐릭터 옆 작은 혼잣말
+                im = _image_aside(im, post.aside, post.aside_pos, cs)
             if config.get("image_watermark"):  # 채널명 (예: 공감툰 하단 가운데)
                 im = _image_watermark(im, str(config["image_watermark"]), cs)
             out.append(im)
