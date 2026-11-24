@@ -118,7 +118,7 @@ channels:
     # image_watermark: "온이봄이 @onibomi.toon"   # 끔 (2026-11-24): 채널명은 운영자가 직접 넣음
     copy_style:                 # post.yml copy: 글귀 (프로그램이 넣음, 고정)
       font: Pretendard-Medium.otf
-      glyph: 0.016              # 글자 높이 = 세로의 1.6%
+      glyph: 0.020              # 글자 높이 = 세로의 2.0% (2026-11-24 키움)
       line: 1.75                # 줄 간격 (글자 높이 배수)
       top: 0.19                 # 첫 줄 위치 (3줄 이하)
       top_long: 0.16            # 4줄 이상일 때
