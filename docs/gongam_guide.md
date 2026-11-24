@@ -6,7 +6,7 @@
 그림은 ChatGPT(GPT 이미지)로 만들고, **글귀도 GPT가 그림 안에 넣는다.** 프로그램은 그림을 그대로 올린다.
 
 - **캐릭터·선 굵기·채색·글귀 기준 (1순위, 첫 번째로 첨부)**: `assets/brand/siblings_style_ref.jpg` (비 오는 공원, 우산)
-- 캐릭터 시트 (두 번째로 첨부): `assets/brand/siblings_character.png` (기본 + 패딩·겨울 버전), 크리스마스 회차는 `assets/brand/siblings_christmas.png`
+- 캐릭터 시트 (두 번째로 첨부): 기본 `assets/brand/siblings_character.png`, 겨울(패딩) 회차는 `assets/brand/siblings_winter.png`, 크리스마스 회차는 `assets/brand/siblings_christmas.png`
 - 첫 게시물 초안: `drafts/gongam_rain_umbrella/`
 
 ---
@@ -46,7 +46,7 @@
 | 버전 | 언제 | 두 번째 첨부 시트 |
 |---|---|---|
 | **기본** (후드 점퍼·코트) | 실내 장면, 봄·가을 | `siblings_character.png` (윗부분) |
-| **패딩** (겨울) | 12~2월 실외 장면 | `siblings_character.png` (아래 '패딩 버전'·'겨울 버전') |
+| **패딩** (겨울) | 12~2월 실외 장면 | `siblings_winter.png` (겨울 캐릭터 기준, 로고 지운 버전) |
 | **크리스마스** | 12/21~12/25 회차 (12/23·12/25) | `siblings_christmas.png` |
 
 기본:

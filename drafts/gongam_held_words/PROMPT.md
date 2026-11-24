@@ -2,7 +2,7 @@
 
 글귀(원문 그대로): "참아온 말들이 언젠가 한꺼번에 터져 나와도 괜찮다. / 그만큼 오래, 혼자 마음을 다독여 왔으니까."
 
-첨부 순서: ① assets/brand/siblings_style_ref.jpg (캐릭터·선 굵기 기준) ② assets/brand/siblings_character.png (패딩·겨울 버전 칸 참고)
+첨부 순서: ① assets/brand/siblings_style_ref.jpg (캐릭터·선 굵기 기준) ② assets/brand/siblings_winter.png (겨울 캐릭터, 가방은 무시)
 
 ```
 첫 번째 첨부 이미지(비 오는 공원)의 오빠와 동생을 그대로 그려줘. 얼굴, 머리, 눈, 볼터치, 선 굵기, 채색 느낌까지 똑같이.

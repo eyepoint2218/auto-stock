@@ -2,7 +2,7 @@
 
 글귀(원문 그대로, 5줄): "주변에서 무슨 일이 일어나든 / 하루 종일 마음을 차분하게 / 유지하려고 노력하면 / 기쁨, 평온함, 균형이 / 찾아온데요"
 
-첨부 순서: ① assets/brand/siblings_style_ref.jpg (캐릭터·선 굵기 기준) ② assets/brand/siblings_character.png (패딩·겨울 버전 칸 참고)
+첨부 순서: ① assets/brand/siblings_style_ref.jpg (캐릭터·선 굵기 기준) ② assets/brand/siblings_winter.png (겨울 캐릭터, 가방은 무시)
 
 ```
 첫 번째 첨부 이미지(비 오는 공원)의 오빠와 동생을 그대로 그려줘. 얼굴, 머리, 눈, 볼터치, 선 굵기, 채색 느낌까지 똑같이.
