@@ -3,7 +3,7 @@
 인스타 **온이봄이 @onibomi.toon** · 오빠 **온이**(따뜻할 온) · 동생 **봄이**(봄). 프로필 사진 `assets/brand/gongam_profile.png`
 
 오빠·동생 캐릭터를 **실사 배경**에 넣은 공감 한 장. 월·수·금 21:00 연재 (`channel: gongam`).
-그림은 ChatGPT(GPT 이미지)로 **글자 없이 그림만** 만든다. **글귀와 하단 채널명은 프로그램이 넣는다** (post.yml `copy:`, 2026-11-24 변경: GPT 글귀는 오타·폰트·크기가 매번 달라서).
+그림은 ChatGPT(GPT 이미지)로 **글자 없이 그림만** 만든다. **글귀는 프로그램이 넣고, 채널명은 운영자가 직접 넣는다** (post.yml `copy:`, 2026-11-24 변경: GPT 글귀는 오타·폰트·크기가 매번 달라서).
 
 - **캐릭터·선 굵기·채색·글귀 기준 (1순위, 첫 번째로 첨부)**: `assets/brand/siblings_style_ref.jpg` (비 오는 공원, 우산)
 - 캐릭터 시트 (두 번째로 첨부): 기본 `assets/brand/siblings_character.png`, 겨울(패딩) 회차는 `assets/brand/siblings_winter.png`, 크리스마스 회차는 `assets/brand/siblings_christmas.png`
@@ -127,7 +127,7 @@
 ### 글귀·채널명은 프로그램이 넣는다 (고정)
 - post.yml 에 `copy: |` 로 글귀를 적으면 미리보기·업로드 때 그림 위에 얹는다. 줄바꿈 그대로, 빈 줄은 문장 사이 띄움.
 - 폰트 Pretendard Medium(고딕), 흰색, 글자 높이 세로 1.6%, 가운데 정렬, 첫 줄 위에서 19% (4줄 이상이면 16%), 줄 간격 글자 높이 1.75배, 글귀 뒤에만 옅은 반투명 번짐(박스 없음).
-- 하단 채널명 "온이봄이 @onibomi.toon": 같은 폰트, 글자 높이 1.2%, 위에서 91.5%, 옅은 번짐.
+- 하단 채널명은 **넣지 않는다** (2026-11-24): 운영자가 직접 넣는다. 프로그램 채널명(`image_watermark`)은 꺼 둔다.
 - 값은 `config.yml` `channels.gongam.copy_style` / `image_watermark`. 바꾸면 모든 회차가 같이 바뀐다.
 - GPT 그림에는 글자를 하나도 넣지 않는다 (옷의 ONIBOMI 로고만 예외). 위쪽 15~36%는 글귀 자리로 차분한 톤, 맨 아래 89~94% 가운데는 채널명 자리.
 
