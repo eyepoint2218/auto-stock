@@ -12,9 +12,9 @@
 publish_at: "2026-11-24 13:00"
 format: carousel
 channel: deals
-draft: true
+draft: false
 cover_style: photo
-cover_url: https://commons.wikimedia.org/wiki/File:Kyochon_Honey_Combo_Chicken_20200717_001.jpg
+cover_image: img/cover.jpg   # Wikimedia Commons 'Kyochon Honey Combo Chicken 20200717 001' (Mobius6, CC BY-SA 4.0), 사람 없음
 theme: dark
 title: "교촌치킨 앱\n100P로 사는\n4,000원 쿠폰"
 items:
@@ -23,7 +23,7 @@ items:
     desc: |
       11/19~12/2 교촌치킨 앱 쿠폰상점 접속
       매일 오전 11시 선착순, 100P로 쿠폰 구매
-      허니콤보 등 치킨 6종 주문 시 4,000원 할인
+      허니콤보 등 6종 주문 시 4,000원 할인
 caption: |
   교촌치킨 할인쿠폰, 앱 블랙프라이데이 100포인트로 치킨 4,000원 할인 (12/2까지)
 
