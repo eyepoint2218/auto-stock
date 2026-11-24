@@ -115,7 +115,17 @@ channels:
   gongam:                       # 오누이 공감툰: 오빠·동생 캐릭터 + 실사 배경 한 장 (월·수·금 21시)
     brand: "온이봄이"
     handle: "@onibomi.toon"
-    # image_watermark: "온이봄이 @onibomi.toon"   # 채널명은 GPT가 그림 안에 넣음 (켜면 두 번 찍힘)
+    image_watermark: "온이봄이 @onibomi.toon"   # 하단 가운데 채널명 (프로그램이 넣음, GPT 그림에는 글자 없음)
+    copy_style:                 # post.yml copy: 글귀 (프로그램이 넣음, 고정)
+      font: Pretendard-Medium.otf
+      glyph: 0.016              # 글자 높이 = 세로의 1.6%
+      line: 1.75                # 줄 간격 (글자 높이 배수)
+      top: 0.19                 # 첫 줄 위치 (3줄 이하)
+      top_long: 0.16            # 4줄 이상일 때
+      scrim: 0.30               # 글귀 뒤 옅은 번짐 진하기 (0~1)
+      name_glyph: 0.012         # 채널명 글자 높이 1.2%
+      name_y: 0.915             # 채널명 위치 (위에서 91.5%)
+      name_scrim: 0.22
     image_size: [1440, 1800]    # 업로드 이미지 고정 크기 (인스타 4:5 최대 해상도)
     png: true                   # out/ 에 PNG 도 함께 저장 (직접 올릴 때 고화질용)
     ig_secret_suffix: GONGAM    # GitHub Secrets: IG_ACCESS_TOKEN_GONGAM, IG_USER_ID_GONGAM

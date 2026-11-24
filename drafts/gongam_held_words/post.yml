@@ -3,7 +3,14 @@ publish_at: "2026-11-24 09:46"   # 즉시 게시 (운영자 문장)
 format: carousel
 draft: true
 channel: gongam
-images: [img/post.jpg]    # ChatGPT 완성본을 이 이름으로 넣기
+images: [img/post.jpg]    # ChatGPT 그림 (글자 없이)
+copy: |                   # 프로그램이 그림 위에 넣는 글귀
+  참아온 말들이 언젠가
+  한꺼번에 터져 나와도
+  괜찮다.
+
+  그만큼 오래, 혼자
+  마음을 다독여 왔으니까.
 caption: |
   참아온 말들이 언젠가 한꺼번에 터져 나와도 괜찮다.
   그만큼 오래, 혼자 마음을 다독여 왔으니까.

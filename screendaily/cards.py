@@ -1064,60 +1064,77 @@ def _watermark(canvas: Image.Image, config: dict, color=(255, 255, 255, 170), sh
     d.text((W / 2, H - 38), config.get("handle", ""), font=font(B, 24), fill=color, anchor="mm", **kw)
 
 
-def _image_watermark(im: Image.Image, text: str) -> Image.Image:
-    """완성 이미지(images:) 하단 가운데에 작은 채널명. 크기는 이미지 폭에 비례, 옅은 그림자로 어떤 배경에서도 읽히게."""
+PT_MEDIUM = "Pretendard-Medium.otf"
+
+
+def _font_for_glyph(name: str, glyph_px: float) -> ImageFont.FreeTypeFont:
+    """한글 글자 높이(가 기준)가 glyph_px 가 되는 폰트 크기."""
+    ref = font(name, 100)
+    bb = ref.getbbox("가")
+    ratio = (bb[3] - bb[1]) / 100
+    return font(name, max(8, round(glyph_px / ratio)))
+
+
+def _soft_text(im: Image.Image, lines: list[str], f, top: float, line_h: float, scrim: float,
+               blank_h: float | None = None) -> Image.Image:
+    """가운데 정렬 흰 글씨 + 글자 뒤 아주 옅은 반투명 번짐(박스 안 보이게) + 옅은 그림자."""
     im = im.convert("RGBA")
     w, h = im.size
-    f = font(PT_BOLD, max(14, round(w * 0.024)))
-    y = h - round(h * 0.035)
+    blank_h = line_h * 0.6 if blank_h is None else blank_h
+    pos, y = [], top
+    for ln in lines:
+        if ln.strip():
+            pos.append((ln, y))
+            y += line_h
+        else:
+            y += blank_h
+    if not pos:
+        return im.convert("RGB")
+    d0 = ImageDraw.Draw(im)
+    widths = [d0.textlength(t, font=f) for t, _ in pos]
+    x0, x1 = w / 2 - max(widths) / 2, w / 2 + max(widths) / 2
+    y0, y1 = pos[0][1], pos[-1][1] + line_h
+    if scrim > 0:  # 번짐: 글자 영역보다 넓게, 크게 흐려서 테두리 없이
+        pad_x, pad_y = line_h * 1.6, line_h * 1.0
+        m = Image.new("L", im.size, 0)
+        ImageDraw.Draw(m).rounded_rectangle((x0 - pad_x, y0 - pad_y, x1 + pad_x, y1 + pad_y),
+                                            radius=line_h * 1.5, fill=int(255 * scrim))
+        m = m.filter(ImageFilter.GaussianBlur(line_h * 1.1))
+        dark = Image.new("RGBA", im.size, (8, 10, 18, 255))
+        dark.putalpha(m)
+        im.alpha_composite(dark)
     sh = Image.new("RGBA", im.size, (0, 0, 0, 0))
-    ImageDraw.Draw(sh).text((w / 2, y + 2), text, font=f, fill=(0, 0, 0, 120), anchor="mm")
-    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(3)))
-    ImageDraw.Draw(im).text((w / 2, y), text, font=f, fill=(255, 255, 255, 225), anchor="mm")
+    ds = ImageDraw.Draw(sh)
+    for t, yy in pos:
+        ds.text((w / 2, yy + line_h * 0.04), t, font=f, fill=(0, 0, 0, 110), anchor="ma")
+    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(max(1, line_h * 0.05))))
+    d = ImageDraw.Draw(im)
+    for t, yy in pos:
+        d.text((w / 2, yy), t, font=f, fill=(255, 255, 255, 250), anchor="ma")
     return im.convert("RGB")
 
 
-def render_image_follow_card(config: dict, size: tuple[int, int]) -> Image.Image:
-    """완성 이미지 캐러셀(공감툰)의 마지막 장: 크림 배경 + 프로필 원 + 채널 이름·아이디 + 한 줄 + 팔로우 버튼.
-    config image_follow_card: {profile, title, sub, button, bg, ink, accent}. 크기는 첫 장과 같게."""
-    from . import ROOT
-    fc = config.get("image_follow_card") or {}
-    w, h = size
-    k = w / 1080
-    bg = hex2rgb(fc.get("bg", "#FFF6E0"))
-    ink = hex2rgb(fc.get("ink", "#3B2416"))
-    accent = hex2rgb(fc.get("accent", "#C33721"))
-    canvas = Image.new("RGBA", (w, h), bg + (255,))
-    d = ImageDraw.Draw(canvas)
-    # 프로필 원 (가운데 위쪽)
-    r = int(250 * k)
-    cy = int(h * 0.29)
-    prof = fc.get("profile")
-    if prof and (ROOT / prof).is_file():
-        pim = ImageOps.fit(Image.open(ROOT / prof).convert("RGB"), (2 * r, 2 * r), Image.LANCZOS)
-        m = Image.new("L", (2 * r * 4, 2 * r * 4), 0)
-        ImageDraw.Draw(m).ellipse((0, 0, 2 * r * 4 - 1, 2 * r * 4 - 1), fill=255)
-        m = m.resize((2 * r, 2 * r), Image.LANCZOS)
-        ring = int(10 * k)
-        d.ellipse((w / 2 - r - ring, cy - r - ring, w / 2 + r + ring, cy + r + ring), fill=(255, 255, 255))
-        canvas.paste(pim, (int(w / 2 - r), cy - r), m)
-    d = ImageDraw.Draw(canvas)
-    y = cy + r + int(80 * k)
-    d.text((w / 2, y), fc.get("title") or config.get("brand", ""), font=font(PT_BLACK, int(92 * k)), fill=ink, anchor="ma")
-    y += int(130 * k)
-    d.text((w / 2, y), config.get("handle", ""), font=font(PT_BOLD, int(40 * k)), fill=ink + (170,), anchor="ma")
-    y += int(100 * k)
-    for t in str(fc.get("sub", "")).split("\n"):
-        if t.strip():
-            d.text((w / 2, y), t, font=font(PT_BOLD, int(44 * k)), fill=ink, anchor="ma")
-            y += int(66 * k)
-    btn = fc.get("button", "팔로우")
-    bf = font(PT_BLACK, int(46 * k))
-    bw, bh = _tw(bf, btn) + int(150 * k), int(104 * k)
-    by = max(y + int(70 * k), h - int(300 * k))
-    d.rounded_rectangle((w / 2 - bw / 2, by, w / 2 + bw / 2, by + bh), radius=bh // 2, fill=accent)
-    d.text((w / 2, by + bh / 2), btn, font=bf, fill=(255, 255, 255), anchor="mm")
-    return canvas.convert("RGB")
+def _image_copy(im: Image.Image, text: str, cfg: dict) -> Image.Image:
+    """그림 위 글귀 (공감툰): 고정 폰트·크기·위치. config copy_style 로 조정."""
+    w, h = im.size
+    lines = text.split("\n")
+    glyph = h * float(cfg.get("glyph", 0.016))
+    f = _font_for_glyph(cfg.get("font", PT_MEDIUM), glyph)
+    line_h = glyph * float(cfg.get("line", 1.75))
+    n = sum(1 for ln in lines if ln.strip())
+    top = h * float(cfg.get("top", 0.19) if n <= 3 else cfg.get("top_long", 0.16))
+    return _soft_text(im, lines, f, top, line_h, float(cfg.get("scrim", 0.30)))
+
+
+def _image_watermark(im: Image.Image, text: str, cfg: dict | None = None) -> Image.Image:
+    """완성 이미지(images:) 하단 가운데 채널명: 글귀와 같은 폰트, 더 작게, 옅은 번짐."""
+    cfg = cfg or {}
+    w, h = im.size
+    glyph = h * float(cfg.get("name_glyph", 0.012))
+    f = _font_for_glyph(cfg.get("font", PT_MEDIUM), glyph)
+    line_h = glyph * 1.75
+    top = h * float(cfg.get("name_y", 0.915)) - line_h / 2
+    return _soft_text(im, [text], f, top, line_h, float(cfg.get("name_scrim", 0.22)))
 
 
 def _shadow_text(canvas: Image.Image, xy, text: str, f, fill, blur: int = 10, alpha: int = 170):
@@ -1539,8 +1556,11 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
                 im = cover_crop(im.convert("RGB"), size, _focus(post, (0.5, 0.5)))
             elif ratio < 0.8 or ratio > 1.91:  # 인스타 피드 비율(4:5 ~ 1.91:1) 밖이면 4:5 로 맞춤
                 im = cover_crop(im, (W, H), _focus(post, (0.5, 0.5)))  # 위치는 cover_focus 로 조정
+            cs = config.get("copy_style") or {}
+            if post.copy and rel == post.images[0]:  # 첫 장 그림 위 글귀
+                im = _image_copy(im, post.copy, cs)
             if config.get("image_watermark"):  # 채널명 (예: 공감툰 하단 가운데)
-                im = _image_watermark(im, str(config["image_watermark"]))
+                im = _image_watermark(im, str(config["image_watermark"]), cs)
             out.append(im)
         if post.outro and config.get("image_follow_card"):  # 마지막 장 고정 팔로우 카드
             out.append(render_image_follow_card(config, out[0].size if out else (W, H)))
