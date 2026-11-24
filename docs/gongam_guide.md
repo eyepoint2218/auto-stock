@@ -9,6 +9,14 @@
 - 캐릭터 시트 (두 번째로 첨부): 기본 `assets/brand/siblings_character.png`, 겨울(패딩) 회차는 `assets/brand/siblings_winter.png`, 크리스마스 회차는 `assets/brand/siblings_christmas.png`
 - 첫 게시물 초안: `drafts/gongam_rain_umbrella/`
 
+
+> **2026-11-24 기준 이미지 교체**: 예전 시트(`siblings_character.png`·`siblings_winter.png`·`siblings_christmas.png`)와 우산 그림(`siblings_style_ref.jpg`)·프로필은 모두 삭제했다. 이제 기준은 두 장뿐이다.
+> - `assets/brand/onibomi_character.png`: 온이&봄이 캐릭터 시트 (얼굴·머리·선·채색·표정·손, 기본 의상 온이 빨간 후드점퍼+노란 반바지 / 봄이 노란 후드 코트, 계절 코디 봄·여름·가을·겨울·비 오는 날·운동복·특별 코디)
+> - `assets/brand/onibomi_wardrobe.png`: 옷장 시트 (의상·아이템 01~43번)
+> - 그림 요청은 **만능 프롬프트 `docs/gongam_universal_prompt.md`** 로 한다 (첨부: 캐릭터 시트 → 옷장 시트 → 배경 사진). 아래 본문의 옛 파일 이름·의상 블록은 참고용이다.
+> - 성격(새 시트): 온이 밝고 활발한 장난꾸러기, 운동·탐험·맛있는 간식 / 봄이 다정하고 호기심 많은 아이, 그림·일기·예쁜 것들
+
+
 ---
 
 ## 1. 캐릭터 고정 (절대 바꾸지 않는 것)
