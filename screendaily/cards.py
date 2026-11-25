@@ -1122,7 +1122,7 @@ def _image_copy(im: Image.Image, text: str, cfg: dict) -> Image.Image:
     f = _font_for_glyph(cfg.get("font", PT_MEDIUM), glyph)
     line_h = glyph * float(cfg.get("line", 1.75))
     n = sum(1 for ln in lines if ln.strip())
-    top = h * float(cfg.get("top", 0.19) if n <= 3 else cfg.get("top_long", 0.16))
+    top = h * float(cfg.get("copy_y") or (cfg.get("top", 0.19) if n <= 3 else cfg.get("top_long", 0.16)))
     return _soft_text(im, lines, f, top, line_h, float(cfg.get("scrim", 0.30)), cx=float(cfg.get("copy_x", 0.5)))
 
 
@@ -1576,7 +1576,7 @@ def render_all(post: Post, config: dict) -> list[Image.Image]:
                 im = cover_crop(im, (W, H), _focus(post, (0.5, 0.5)))  # 위치는 cover_focus 로 조정
             cs = config.get("copy_style") or {}
             if post.copy and rel == post.images[0]:  # 첫 장 그림 위 글귀
-                im = _image_copy(im, post.copy, dict(cs, copy_x=float(post.copy_x or 0.5)))
+                im = _image_copy(im, post.copy, dict(cs, copy_x=float(post.copy_x or 0.5), copy_y=post.copy_y or None))
             if post.aside and rel == post.images[0]:  # 캐릭터 옆 작은 혼잣말
                 im = _image_aside(im, post.aside, post.aside_pos, cs)
             if config.get("image_watermark"):  # 채널명 (예: 공감툰 하단 가운데)
