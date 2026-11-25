@@ -75,8 +75,8 @@ const fitText = (html, size, maxW, style = '', grow = 0) => `<span class="fit" d
 const rows = (r, y1, y2, h, boxW, labelSizes, numSize, divX, sepY) => {
   const one = (row, y, bg, numColor) => `
 <div class="a" style="left:92px;top:${y}px;width:${boxW}px;height:${h}px;background:${bg};display:flex;flex-direction:column;justify-content:center;align-items:center;white-space:normal">
-  <div style="font-size:${labelSizes[0]}px;font-weight:900;letter-spacing:-0.03em;line-height:1.2">${esc(row.label[0])}</div>
-  <div style="font-size:${labelSizes[1]}px;font-weight:${labelSizes[1] < labelSizes[0] ? 800 : 900};letter-spacing:-0.03em;line-height:1.25">${esc(row.label[1])}</div>
+  <div style="font-weight:900;letter-spacing:-0.03em;line-height:1.2;white-space:nowrap">${fitText(esc(row.label[0]), labelSizes[0], boxW - 28, 'transform-origin:center')}</div>
+  <div style="font-weight:${labelSizes[1] < labelSizes[0] ? 800 : 900};letter-spacing:-0.03em;line-height:1.25;white-space:nowrap">${fitText(esc(row.label[1]), labelSizes[1], boxW - 28, 'transform-origin:center')}</div>
 </div>
 <div class="a" style="left:${divX}px;top:${y + 28}px;width:2px;height:${h - 56}px;background:var(--rule)"></div>
 <div class="a h" style="left:${divX + 40}px;top:${y}px;height:${h}px;display:flex;align-items:center;color:${numColor}">${fitText(esc(row.value), numSize, 1000 - divX - 50, '', Math.round(numSize * 1.4))}</div>`;
