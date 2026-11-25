@@ -12,8 +12,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: https://www.slist.kr/news/articleView.html?idxno=768310
-cover_candidates: true
+cover_wiki: Pizza
 theme: dark
 title: "SKT T day\n피자헛 포장\n50% 할인"
 items:
