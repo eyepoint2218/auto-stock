@@ -1,5 +1,5 @@
 ep: 34
-status: draft
+status: done
 
 quiz: ["그는", "[누구]일까요?"]
 
@@ -19,6 +19,10 @@ slides:
   4:
     lines: ["[하나]가 곧 모두라며", "신분을 가리지 않고", "제자를 길렀어요."]
     note: 재구성 연출
+    size: 84
+    top: 80
+    crop: 0
+    shade: 180
   5:
     intro: 그의 이름은
     name: 의상
