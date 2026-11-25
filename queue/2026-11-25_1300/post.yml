@@ -10,9 +10,9 @@
 publish_at: "2026-11-25 13:00"
 format: carousel
 channel: deals
-draft: true
+draft: false
 cover_style: photo
-cover_wiki: Pizza
+cover_image: img/cover.jpg   # Wikimedia Commons 'Pizza-3007395.jpg' (igorovsyannykov, CC0), 사람 없음
 theme: dark
 title: "SKT T day\n피자헛 포장\n50% 할인"
 items:
