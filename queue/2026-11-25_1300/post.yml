@@ -1,0 +1,39 @@
+# 혜택알람: SKT T day 피자헛 방문 포장 50% 할인/적립 (쿠폰 받기 11/25 하루)
+# 확인 2026-11-25 — 출처(검색 결과로 확인, 이 세션에서 페이지 본문 직접 열람은 네트워크 차단):
+#   T 멤버십 T day 공식 페이지 https://sktmembership.tworld.co.kr/mps/pc-bff/program/tday.do
+#     (11/25 피자헛 방문 포장 50% 할인/적립, 다운로드 11/25 09:00~23:59, 사용 ~11/29(일) 23:59,
+#      프리미엄·US 오리진 M/L 1판, 정가 45,000원 한도 내 50%(최대 22,500원/22,500P), 결제 1건당 쿠폰 1장,
+#      세트·다른 할인 중복 불가, 잠실야구장점·천안삼성SDI점 제외)
+#   drafts/telecom_tday_nov (T 멤버십 앱 T day 달력 2026-11-13 캡처: 25일 피자헛)
+#   과거 같은 행사 방식 참고: newstap.co.kr/news/articleView.html?idxno=334564 (9/23 T day, 홈페이지·앱 포장 주문 + 매직 바코드)
+# 미확인(카드에 쓰지 않음): 전화·키오스크 주문 가능 여부 (출처 요약끼리 엇갈림)
+publish_at: "2026-11-25 13:00"
+format: carousel
+channel: deals
+draft: true
+cover_style: photo
+cover_url: https://www.slist.kr/news/articleView.html?idxno=768310
+cover_candidates: true
+theme: dark
+title: "SKT T day\n피자헛 포장\n50% 할인"
+items:
+  - type: steps
+    title: 혜택 받는 법
+    desc: |
+      11/25 하루 T 멤버십 앱에서 T day 쿠폰 받기
+      피자헛 앱·홈페이지에서 포장 주문 선택
+      결제 때 매직 바코드 입력, 50% 할인 또는 적립
+caption: |
+  SKT T day 피자헛 방문 포장 50% 할인, 쿠폰은 11월 25일 오늘 하루만
+
+  쿠폰 받기: 2026년 11월 25일(수) 오전 9시 ~ 밤 11시 59분, T 멤버십 앱
+  사용 기간: 11월 29일(일)까지
+  대상: SKT T 멤버십 고객
+  혜택: 프리미엄·US 오리진 피자 M/L 1판 포장 주문 금액 50% 할인 또는 적립 (정가 45,000원 한도, 최대 22,500원)
+  방법: 피자헛 앱·홈페이지에서 포장 주문 후 결제 단계에서 T day 매직 바코드 입력
+  세트 메뉴·다른 쿠폰과 중복 불가, 잠실야구장점·천안삼성SDI점 제외
+
+  세부 조건은 T 멤버십 앱에서 확인하세요.
+
+  팔로우하고 혜택알람 받아보세요
+hashtags: [피자헛, Tday, 피자할인, SKT혜택]
