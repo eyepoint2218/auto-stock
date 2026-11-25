@@ -1,0 +1,54 @@
+# 인스타툰 캐러셀 시안: 말없이 들어주는 것만으로도 (식빵찐빵 채널)
+# 기준 그림: assets/brand/toon_duo_sheet.jpg, 그림 6컷: PROMPTS.md
+publish_at: "2026-12-31 21:00"
+format: carousel
+channel: sikppang
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "말없이 들어주는 것만으로도\n위로가 될 때"
+subtitle: "식빵은 아무 말도 안 했어요"
+bubble: "있잖아, 오늘..."
+bubble_pos: left-top
+items:
+  - type: toon
+    title: "찐빵이 한참을 이야기했어요"
+    desc: "속상했던 일, 억울했던 일"
+    image: img/p2.jpg
+    bubble: "그래서 내가..."
+    bubble_pos: left-top
+  - type: toon
+    title: "식빵은 아무 말도 안 했어요"
+    desc: "그냥 옆에 꼭 붙어 있었어요"
+    image: img/p3.jpg
+    bubble: "..."
+    bubble_pos: left-top
+  - type: toon
+    title: "조언도, 해결책도 없었는데"
+    desc: "이상하게 마음이 풀렸어요"
+    image: img/p4.jpg
+    bubble: "들어줘서 고마워"
+    bubble_pos: left-top
+  - type: toon
+    title: "가끔은 그거면 충분해요"
+    desc: "끝까지 들어주는 한 사람"
+    image: img/p5.jpg
+    bubble: "또 말해"
+    bubble_pos: left-top
+  - type: toon
+    title: "요즘 누가 내 얘기 들어줬나요?"
+    desc: "댓글로 고마움을 남겨 보세요"
+    image: img/p6.jpg
+    bubble: "누구야?"
+    bubble_pos: left-top
+outro_question: "요즘 누가 내 얘기 들어줬나요?"
+caption: |
+  힘든 날, 해결책보다 필요한 건
+  끝까지 들어주는 한 사람이더라고요.
+
+  아무 말 안 해도 괜찮아요.
+  옆에 있어 주는 것만으로도 충분히 위로가 돼요.
+
+  요즘 누가 내 얘기 들어줬나요? 댓글로 고마움을 남겨 보세요.
+hashtags: [식빵찐빵, 위로글]
