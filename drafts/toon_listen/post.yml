@@ -22,8 +22,6 @@ items:
     title: "식빵은 아무 말도 안 했어요"
     desc: "그냥 옆에 꼭 붙어 있었어요"
     image: img/p3.jpg
-    bubble: "..."
-    bubble_pos: left-top
   - type: toon
     title: "조언도, 해결책도 없었는데"
     desc: "이상하게 마음이 풀렸어요"
