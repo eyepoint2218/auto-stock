@@ -1,5 +1,5 @@
 ep: 35
-status: draft
+status: done
 
 badge: 문무 특집
 
@@ -18,9 +18,14 @@ slides:
   3.5:
     lines: ["당과 20여 년을 버텼지만", "668년 [평양성]이", "무너졌죠."]
     note: 재구성 연출
+    crop: 0
   4:
     lines: ["당이 그를 요동에 보내자", "말갈과 손잡고", "[고구려 부흥]을 꾀했어요."]
     note: 재구성 연출
+    size: 84
+    top: 80
+    crop: 0
+    shade: 180
   5:
     intro: 그의 이름은
     name: 보장왕
