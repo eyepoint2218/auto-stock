@@ -6,6 +6,7 @@
 #   스마트경제 http://www.dailysmart.co.kr/news/articleView.html?idxno=133028
 #   현대경제신문 http://www.finomy.com/news/articleView.html?idxno=267772
 #   데일리한국 https://daily.hankooki.com/news/articleView.html?idxno=1428223 · 스페셜타임스 · 더뷰어스
+#   기사 공식 배너(cdn.dailysmart.co.kr/news/photo/202611/133028_132309_616.png): "BLACK Chicken FESTIVAL 블랙프라이데이 기념 매일 랜덤 쿠폰부터 1만원 페이백까지"
 #   확인된 내용: 이달 23일~30일 bhc 앱 고객 대상, 앱 랜덤 뽑기 참여 시 중복 사용 가능 500원 쿠폰,
 #   달콤바삭치즈볼 중복 1,000원 쿠폰, 4,000원 쿠폰 중 하나 / 최대 치킨 한 마리 당첨(행사 종료 후 모바일 교환권),
 #   기간 내 누적 주문 10만원 이상 고객 중 30명 추첨 1만원 쿠폰(3만원 이상 주문 시 사용)
@@ -15,8 +16,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: http://www.dailysmart.co.kr/news/articleView.html?idxno=133028
-cover_candidates: true
+cover_url: https://commons.wikimedia.org/wiki/File:Korean_fried_chicken_240206.jpg
 theme: dark
 title: "bhc 블랙프라이데이\n앱 랜덤 뽑기\n치킨 1마리까지"
 items:
