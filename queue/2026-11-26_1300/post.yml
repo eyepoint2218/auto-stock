@@ -14,9 +14,9 @@
 publish_at: "2026-11-26 13:00"
 format: carousel
 channel: deals
-draft: true
+draft: false
 cover_style: photo
-cover_url: https://commons.wikimedia.org/wiki/File:Korean_fried_chicken_240206.jpg
+cover_image: img/cover.jpg   # Wikimedia Commons 'Korean fried chicken 240206.jpg' (Startandstar, CC0), 사람 없음
 theme: dark
 title: "bhc 블랙프라이데이\n앱 랜덤 뽑기\n치킨 1마리까지"
 items:
