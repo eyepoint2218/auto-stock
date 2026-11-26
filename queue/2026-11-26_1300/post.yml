@@ -1,0 +1,41 @@
+# 혜택알람: bhc 블랙프라이데이 앱 랜덤 뽑기 (11/23~11/30)
+# 확인 2026-11-26 — 출처(검색 결과로 확인, 이 세션에서 기사 본문 직접 열람은 네트워크 차단):
+#   로이슈 https://www.lawissue.co.kr/view.php?ud=202611241824471595204ead0791_12 (2026-11-24)
+#   투어코리아 https://www.tournews21.com/news/articleView.html?idxno=149201
+#   아이뉴스24 https://m.inews24.com/v/2029855
+#   스마트경제 http://www.dailysmart.co.kr/news/articleView.html?idxno=133028
+#   현대경제신문 http://www.finomy.com/news/articleView.html?idxno=267772
+#   데일리한국 https://daily.hankooki.com/news/articleView.html?idxno=1428223 · 스페셜타임스 · 더뷰어스
+#   확인된 내용: 이달 23일~30일 bhc 앱 고객 대상, 앱 랜덤 뽑기 참여 시 중복 사용 가능 500원 쿠폰,
+#   달콤바삭치즈볼 중복 1,000원 쿠폰, 4,000원 쿠폰 중 하나 / 최대 치킨 한 마리 당첨(행사 종료 후 모바일 교환권),
+#   기간 내 누적 주문 10만원 이상 고객 중 30명 추첨 1만원 쿠폰(3만원 이상 주문 시 사용)
+# 미확인(카드에 쓰지 않음): 뽑기 참여 횟수(하루 1회 여부), 쿠폰 최소 주문금액·사용 기한, 배달·포장 구분
+publish_at: "2026-11-26 13:00"
+format: carousel
+channel: deals
+draft: true
+cover_style: photo
+cover_url: http://www.dailysmart.co.kr/news/articleView.html?idxno=133028
+cover_candidates: true
+theme: dark
+title: "bhc 블랙프라이데이\n앱 랜덤 뽑기\n치킨 1마리까지"
+items:
+  - type: steps
+    title: 혜택 받는 법
+    desc: |
+      11/23~11/30 bhc 앱 블랙프라이데이 이벤트 접속
+      랜덤 뽑기로 500원·1,000원·4,000원 쿠폰 받기
+      치킨 1마리 당첨은 행사 후 모바일 교환권 지급
+caption: |
+  bhc 블랙프라이데이 할인쿠폰, 앱 랜덤 뽑기로 4,000원 쿠폰부터 치킨 한 마리까지 (11/30까지)
+
+  기간: 2026년 11월 23일 ~ 11월 30일
+  대상: bhc 앱 고객
+  혜택: 랜덤 뽑기로 중복 사용 가능한 500원 쿠폰, 달콤바삭치즈볼 중복 1,000원 쿠폰, 4,000원 쿠폰 중 하나, 최대 치킨 한 마리 당첨 (치킨 당첨자는 행사 종료 후 모바일 교환권)
+  추가: 기간 내 누적 주문 10만원 이상 고객 중 30명 추첨, 1만원 할인쿠폰 (3만원 이상 주문 시 사용)
+  방법: bhc 앱 이벤트 페이지에서 뽑기 참여 후 주문 때 쿠폰 적용
+
+  세부 조건은 bhc 앱에서 확인하세요.
+
+  팔로우하고 혜택알람 받아보세요
+hashtags: [bhc, bhc치킨, 블랙프라이데이, 치킨할인]
