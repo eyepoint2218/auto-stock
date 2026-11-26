@@ -45,10 +45,13 @@ recommend:
   - title: 참교육
     ott: 넷플릭스
     tmdb: tv/276161
-  - title: 범죄도시4
+    role: 나화진
+  - title: 범죄도시 4
     ott: 영화
+    role: 백창기
   - title: 악인전
     ott: 영화
+    role: 정태석
 caption: |
   뮤지컬로 1년에 20만 원을 벌던 배우가 있어요
   판자촌에서 살고, 공장과 경비, 배달 아르바이트로 버틴 시간. 이 배우는 누굴까요?
