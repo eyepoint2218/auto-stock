@@ -14,9 +14,10 @@
     ]
   },
   "cover": {
-    "key": "http://www.dailysmart.co.kr/news/articleView.html?idxno=133028",
-    "page_url": "http://www.dailysmart.co.kr/news/articleView.html?idxno=133028",
-    "image": "img/cover_web.png",
-    "src": "https://cdn.dailysmart.co.kr/news/photo/202611/133028_132309_616.png"
+    "key": "https://commons.wikimedia.org/wiki/File:Korean_fried_chicken_240206.jpg",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Korean_fried_chicken_240206.jpg",
+    "credit": "사진 출처 · Startandstar · CC0 · Wikimedia Commons",
+    "image": "img/cover_web.jpg",
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/Korean_fried_chicken_240206.jpg/1280px-Korean_fried_chicken_240206.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
   }
 }
