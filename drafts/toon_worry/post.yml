@@ -1,0 +1,53 @@
+# 인스타툰 캐러셀 시안: 아직 안 일어난 일에 미리 겁먹지 마세요 (식빵찐빵 채널)
+# 기준 그림: assets/brand/toon_duo_sheet.png
+publish_at: "2026-12-31 21:00"
+format: carousel
+channel: sikppang
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "아직 안 일어난 일에\n미리 겁먹지 마세요"
+subtitle: "걱정 많은 찐빵에게"
+bubble: "내일 망하면 어떡해"
+bubble_pos: left-top
+items:
+  - type: toon
+    title: "걱정은 꼬리에 꼬리를 물고"
+    desc: "먹구름이 자꾸 늘어나요"
+    image: img/p2.jpg
+  - type: toon
+    title: "그때 식빵이 툭 기대며"
+    desc: "그 일, 아직 안 일어났잖아"
+    image: img/p3.jpg
+    bubble: "어?"
+    bubble_pos: left-top
+  - type: toon
+    title: "걱정했던 일은"
+    desc: "안 일어날 수도 있고, 닥쳐도 잘 이겨낼 거야"
+    image: img/p4.jpg
+    bubble: "그렇네!"
+    bubble_pos: left-top
+  - type: toon
+    title: "오늘의 마음까지"
+    desc: "내일의 걱정에 빼앗기지 마세요"
+    image: img/p5.jpg
+    bubble: "푹 자"
+    bubble_pos: center-top
+  - type: toon
+    title: "요즘 미리 걱정하는 일 있나요?"
+    desc: "댓글에 털어놓고 가세요"
+    image: img/p6.jpg
+    bubble: "말해 봐"
+    bubble_pos: left-top
+outro_question: "요즘 미리 걱정하는 일 있나요?"
+caption: |
+  아직 일어나지 않은 일에 미리 겁먹지 마세요.
+
+  걱정했던 일이 실제로 일어나지 않을 수도 있고,
+  막상 닥치면 생각보다 잘 이겨낼 수도 있어요.
+
+  오늘의 마음까지 내일의 걱정에 빼앗기지 마세요.
+
+  요즘 미리 걱정하는 일 있나요? 댓글에 털어놓고 가세요.
+hashtags: [식빵찐빵, 위로글]
