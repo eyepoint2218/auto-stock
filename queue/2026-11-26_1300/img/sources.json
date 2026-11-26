@@ -1,0 +1,22 @@
+{
+  "by_title": {},
+  "cover_candidates": {
+    "page_url": "http://www.dailysmart.co.kr/news/articleView.html?idxno=133028",
+    "files": [
+      {
+        "image": "img/cand_01.png",
+        "src": "https://cdn.dailysmart.co.kr/news/photo/202611/133028_132309_616.png"
+      },
+      {
+        "image": "img/cand_03.jpg",
+        "src": "https://cdn.dailysmart.co.kr/news/thumbnail/custom/20261126/133153_132426_5057_1795654258_250.jpg"
+      }
+    ]
+  },
+  "cover": {
+    "key": "http://www.dailysmart.co.kr/news/articleView.html?idxno=133028",
+    "page_url": "http://www.dailysmart.co.kr/news/articleView.html?idxno=133028",
+    "image": "img/cover_web.png",
+    "src": "https://cdn.dailysmart.co.kr/news/photo/202611/133028_132309_616.png"
+  }
+}
