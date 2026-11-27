@@ -22,7 +22,7 @@ items:
     title: "미국 대학의 한 실험에서"
     desc: "눈에 띄는 티셔츠를 입고 강의실에 들어갔더니"
     image: img/p3.jpg
-    bubble: "들어 봐"
+    bubble: "실험?"
     bubble_pos: left-top
   - type: toon
     title: "본인은 절반이 알아볼 거라 했지만"
@@ -34,7 +34,7 @@ items:
     title: "다른 사람들도 지금"
     desc: "자기 머리 걱정하느라 바빠요"
     image: img/p5.jpg
-    bubble: "나도 뻗쳤어"
+    bubble: "너도 뻗쳤네!"
     bubble_pos: left-top
   - type: toon
     title: "오늘 신경 쓰였던 거, 뭐였어요?"
