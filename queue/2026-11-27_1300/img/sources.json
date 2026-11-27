@@ -1,0 +1,42 @@
+{
+  "by_title": {},
+  "cover_candidates": {
+    "page_url": "https://biz.heraldcorp.com/article/10927911",
+    "files": [
+      {
+        "image": "img/cand_02.jpg",
+        "src": "https://wimg.heraldcorp.com/news/cms/2026/11/06/news-p.v1.20261106.f24f94679ce043228eae861e1c4ed189_P1.jpg"
+      },
+      {
+        "image": "img/cand_04.png",
+        "src": "https://wimg.heraldcorp.com/news/cms/2026/11/27/news-p.v1.20260826.fd8059c4281c440c9f0cf05cceb7eef5_R.png?type=h&h=240"
+      },
+      {
+        "image": "img/cand_09.png",
+        "src": "https://wimg.heraldcorp.com/news/cms/2026/11/26/news-p.v1.20261126.5286aa0663d3454fa4abb8f309d46f7b_T1.png?type=h&h=240"
+      },
+      {
+        "image": "img/cand_12.png",
+        "src": "https://wimg.heraldcorp.com/news/cms/2026/11/25/news-a.v1.20261124.bc1fbe43bace4f6ab03f25c26b17bdbd_T1.png?type=h&h=240"
+      },
+      {
+        "image": "img/cand_13.jpg",
+        "src": "https://wimg.heraldcorp.com/news/cms/2026/11/27/news-p.v1.20261127.fb2b2f9fdfc54a2f8ad020de00a1c9dc_T1.jpg"
+      },
+      {
+        "image": "img/cand_14.png",
+        "src": "https://wimg.heraldcorp.com/news/cms/2026/11/27/news-p.v1.20261127.81826f504d5e49dea91b56e653f59982_T1.png"
+      },
+      {
+        "image": "img/cand_15.png",
+        "src": "https://wimg.heraldcorp.com/news/cms/2026/11/27/news-p.v1.20261126.b6970c8657174968bcc9b4c39e0d50d7_T1.png"
+      }
+    ]
+  },
+  "cover": {
+    "key": "https://biz.heraldcorp.com/article/10927911",
+    "page_url": "https://biz.heraldcorp.com/article/10927911",
+    "image": "img/cover_web.jpg",
+    "src": "https://wimg.heraldcorp.com/news/cms/2026/11/06/news-p.v1.20261106.f24f94679ce043228eae861e1c4ed189_P1.jpg"
+  }
+}
