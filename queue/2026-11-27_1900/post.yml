@@ -1,5 +1,5 @@
 publish_at: "2026-11-27 18:00"   # 19시 → 18시 (사용자 요청)
-format: reel
+format: carousel   # 릴스 게시 오류(인스타 내부 오류 2회)로 캐러셀 전환 (사용자 요청)
 label: WEEKEND
 theme: dark
 title: "생각 끄고
