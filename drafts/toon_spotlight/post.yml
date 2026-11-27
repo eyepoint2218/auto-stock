@@ -1,0 +1,59 @@
+# 인스타툰 캐러셀 시안: 다들 나만 쳐다보는 것 같을 때 - 스포트라이트 효과 (식빵찐빵 채널)
+# 사실 확인: 미국 대학 실험(눈에 띄는 티셔츠), 본인 예상 약 절반 vs 실제 알아본 사람 약 4분의 1
+publish_at: "2026-12-31 21:00"
+format: carousel
+channel: sikppang
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "다들 나만\n쳐다보는 것 같을 때"
+subtitle: "스포트라이트 효과"
+bubble: "머리 망했어..."
+bubble_pos: left-top
+items:
+  - type: toon
+    title: "밖에 나가니 다들 나만 보는 것 같고"
+    desc: "온 세상이 내 머리만 보는 기분"
+    image: img/p2.jpg
+    bubble: "다 쳐다봐ㅠ"
+    bubble_pos: left-top
+  - type: toon
+    title: "미국 대학의 한 실험에서"
+    desc: "눈에 띄는 티셔츠를 입고 강의실에 들어갔더니"
+    image: img/p3.jpg
+    bubble: "들어 봐"
+    bubble_pos: left-top
+  - type: toon
+    title: "본인은 절반이 알아볼 거라 했지만"
+    desc: "실제로 알아본 건 4분의 1 정도"
+    image: img/p4.jpg
+    bubble: "겨우?"
+    bubble_pos: left-top
+  - type: toon
+    title: "다른 사람들도 지금"
+    desc: "자기 머리 걱정하느라 바빠요"
+    image: img/p5.jpg
+    bubble: "나도 뻗쳤어"
+    bubble_pos: left-top
+  - type: toon
+    title: "오늘 신경 쓰였던 거, 뭐였어요?"
+    desc: "댓글로 털어놓고 가요"
+    image: img/p6.jpg
+    bubble: "너는?"
+    bubble_pos: left-top
+outro_question: "오늘 신경 쓰였던 거, 뭐였어요?"
+caption: |
+  모두 자기 인생의 주인공이고, 남의 인생에는 행인이에요.
+
+  사람들은 내가 생각하는 것만큼 나를 쳐다보지 않아요.
+  심리학에서는 이걸 스포트라이트 효과라고 불러요.
+  미국 대학에서 학생에게 눈에 띄는 티셔츠를 입고 강의실에 들어가게 한 실험이 있었는데,
+  본인은 절반 가까운 사람이 알아볼 거라고 예상했지만
+  실제로 알아본 사람은 4분의 1 정도였다고 해요.
+
+  오늘 머리가 이상하거나 옷에 묻은 얼룩 때문에 신경 쓰였다면 기억하세요.
+  다른 사람들도 지금 자기 머리와 자기 얼룩 걱정하느라 바쁘답니다.
+
+  오늘 신경 쓰였던 거, 뭐였어요? 댓글로 털어놓고 가요.
+hashtags: [식빵찐빵, 스포트라이트효과]
