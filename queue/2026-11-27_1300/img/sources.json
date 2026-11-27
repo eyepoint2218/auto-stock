@@ -34,9 +34,10 @@
     ]
   },
   "cover": {
-    "key": "https://biz.heraldcorp.com/article/10927911",
-    "page_url": "https://biz.heraldcorp.com/article/10927911",
+    "key": "wiki:Fried chicken",
+    "page_url": "https://en.wikipedia.org/wiki/Fried_chicken",
+    "credit": "사진 출처 · Evan-Amos · CC0 · Wikimedia Commons",
     "image": "img/cover_web.jpg",
-    "src": "https://wimg.heraldcorp.com/news/cms/2026/11/06/news-p.v1.20261106.f24f94679ce043228eae861e1c4ed189_P1.jpg"
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Fried-Chicken-Set.jpg/1280px-Fried-Chicken-Set.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
   }
 }
