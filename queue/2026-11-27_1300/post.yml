@@ -11,9 +11,9 @@
 publish_at: "2026-11-27 13:00"
 format: carousel
 channel: deals
-draft: true
+draft: false
 cover_style: photo
-cover_wiki: Fried chicken
+cover_image: img/cover.jpg   # Wikimedia Commons 'Fried-Chicken-Set.jpg' (Evan-Amos, CC0), 사람 없음
 theme: dark
 title: "BBQ 오늘 금요일\n황금올리브\n4,000원 할인"
 items:
