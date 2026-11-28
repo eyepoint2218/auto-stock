@@ -153,5 +153,112 @@ def preview():
     print(out / "preview_sheet.png")
 
 
-if __name__ == "__main__":
-    {"preview": preview}[sys.argv[1] if len(sys.argv) > 1 else "preview"]()
+
+
+# ---------- 영상 합성 ----------
+import subprocess
+
+FPS, SCENE_FRAMES, FADE_FRAMES = 30, 150, 6
+CLIPS = ["clip01.mp4", "clip02.mp4", "clip03.mp4", "clip04.mp4"]
+
+
+def overlay(scene, kind):
+    """(고정 레이어, 자막 레이어). 고정: B 어둡게 덮기 + 워터마크 + 상상화. 자막: 장면 전환 때 페이드."""
+    is_b = kind == "B"
+    if scene.get("reveal"):
+        band = (int(H * 0.58), int(H * 0.78))
+    else:
+        size = fit(scene["lines"], TEXT_SIZE)
+        lh = int(size * 1.42)
+        cy = int(H * scene.get("center", TOP_CENTER))
+        band = (cy - lh, cy + lh)
+
+    def text_layer(draw_fn, shadow):
+        txt = Image.new("RGB", (W, H), (0, 0, 0))
+        draw_fn(txt)
+        mask = txt.convert("L").point(lambda v: 255 if v > 8 else v * 32)
+        lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        if shadow:
+            sh = mask.filter(ImageFilter.GaussianBlur(10)).point(lambda v: int(v * 0.6))
+            lay = Image.merge("RGBA", (*[Image.new("L", (W, H))] * 3, sh))
+        t = txt.convert("RGBA")
+        t.putalpha(mask)
+        return Image.alpha_composite(lay, t)
+
+    static = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    if is_b:
+        g = Image.new("L", (1, H))
+        y0, y1 = band
+        for y in range(H):
+            dist = 0 if y0 <= y <= y1 else min(abs(y - y0), abs(y - y1))
+            g.putpixel((0, y), 77 + int(max(0, 1 - dist / 260) * 70))
+        static.putalpha(g.resize((W, H)))
+
+    def marks(img):
+        watermark(img)
+        if is_b and scene.get("reveal"):
+            label(img, "상상화")
+    static = Image.alpha_composite(static, text_layer(marks, is_b))
+    if scene.get("reveal"):
+        text = text_layer(lambda im: reveal(im, False), is_b)
+    else:
+        text = text_layer(lambda im: draw_lines(im, scene["lines"], cy, size, False), is_b)
+    return static, text
+
+
+def build(kind):
+    out = HERE / "out"
+    out.mkdir(exist_ok=True)
+    parts_ = []
+    for i, sc in enumerate(SCENES):
+        ov = out / f"overlay_{kind}_{i + 1:02d}.png"
+        st = out / f"static_{kind}_{i + 1:02d}.png"
+        static, text = overlay(sc, kind)
+        static.save(st)
+        text.save(ov)
+        part = out / f"part_{kind}_{i + 1:02d}.mp4"
+        dur = SCENE_FRAMES / FPS
+        fd = FADE_FRAMES / FPS
+        fades = []
+        if i > 0:
+            fades.append(f"fade=t=in:st=0:d={fd}:alpha=1")
+        if i < len(SCENES) - 1:
+            fades.append(f"fade=t=out:st={dur - fd}:d={fd}:alpha=1")
+        ovf = ",".join(["format=rgba"] + fades)
+        if kind == "A":
+            src = ["-f", "lavfi", "-i", f"color=c=black:s={W}x{H}:r={FPS}:d={dur}"]
+            bg = "[0:v]setsar=1[bg]"
+        else:
+            src = ["-i", str(HERE / "video" / CLIPS[i])]
+            bg = (f"[0:v]fps={FPS},scale=-2:{H}:flags=lanczos,crop={W}:{H},"
+                  f"unsharp=5:5:0.6,setsar=1,trim=end_frame={SCENE_FRAMES},setpts=PTS-STARTPTS[bg]")
+        fc = (f"{bg};[1:v]format=rgba[st];[2:v]{ovf}[ov];[bg][st]overlay=0:0[b2];"
+              f"[b2][ov]overlay=0:0,format=yuv420p[v]")
+        cmd = ["ffmpeg", "-v", "error", "-y", *src,
+               "-loop", "1", "-t", str(dur), "-framerate", str(FPS), "-i", str(st),
+               "-loop", "1", "-t", str(dur), "-framerate", str(FPS), "-i", str(ov), "-filter_complex", fc, "-map", "[v]", "-frames:v", str(SCENE_FRAMES),
+               "-r", str(FPS), "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-an", str(part)]
+        subprocess.run(cmd, check=True)
+        parts_.append(part)
+    lst = out / f"list_{kind}.txt"
+    lst.write_text("".join(f"file '{p.name}'\n" for p in parts_))
+    final = out / f"R01_gangamchan_TYPE{kind}.mp4"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(lst),
+                    "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p",
+                    "-r", str(FPS), "-movflags", "+faststart", "-an", str(final)], check=True)
+    print(final)
+
+
+def thumbs():
+    out = HERE / "out"
+    for kind in "AB":
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", "1.0", "-i",
+                        str(out / f"R01_gangamchan_TYPE{kind}.mp4"), "-frames:v", "1",
+                        str(out / f"R01_gangamchan_TYPE{kind}_thumb.png")], check=True)
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] in ("A", "B", "thumbs"):
+    build(sys.argv[1]) if sys.argv[1] != "thumbs" else thumbs()
+
+if __name__ == "__main__" and (len(sys.argv) == 1 or sys.argv[1] == "preview"):
+    preview()
