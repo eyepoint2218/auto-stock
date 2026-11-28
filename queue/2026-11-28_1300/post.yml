@@ -12,10 +12,9 @@
 publish_at: "2026-11-28 13:00"
 format: carousel
 channel: deals
-draft: true
+draft: false
 cover_style: photo
-cover_url: https://commons.wikimedia.org/wiki/File:Ice_cream_cake.jpg   # 기사 사진은 모델 얼굴이 있어 제외
-cover_candidates: true
+cover_image: img/cover.jpg   # Wikimedia Commons 'Ice cream cake.jpg' (Jinho Jung, CC BY-SA 2.0), 배스킨라빈스 아이스크림 케이크, 사람 없음 (기사 사진은 모델 얼굴이 있어 제외)
 theme: dark
 title: "배스킨라빈스\n크리스마스 케이크\n최대 30% 할인"
 items:

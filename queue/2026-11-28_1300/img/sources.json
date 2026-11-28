@@ -1,19 +1,10 @@
 {
   "by_title": {},
-  "cover_candidates": {
-    "page_url": "https://commons.wikimedia.org/wiki/File:Ice_cream_cake.jpg",
-    "files": [
-      {
-        "image": "img/cand_01.jpg",
-        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Ice_cream_cake.jpg/1920px-Ice_cream_cake.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20210611085106"
-      }
-    ]
-  },
   "cover": {
     "key": "https://commons.wikimedia.org/wiki/File:Ice_cream_cake.jpg",
     "page_url": "https://commons.wikimedia.org/wiki/File:Ice_cream_cake.jpg",
     "credit": "사진 출처 · Jinho Jung · CC BY-SA 2.0 · Wikimedia Commons",
-    "image": "img/cover_web.jpg",
-    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Ice_cream_cake.jpg/1280px-Ice_cream_cake.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail"
+    "image": "img/cover.jpg",
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Ice_cream_cake.jpg/1920px-Ice_cream_cake.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20210611085106"
   }
 }
