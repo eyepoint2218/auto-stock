@@ -14,7 +14,7 @@ format: carousel
 channel: deals
 draft: true
 cover_style: photo
-cover_url: http://www.smedaily.co.kr/news/articleView.html?idxno=366635
+cover_url: https://commons.wikimedia.org/wiki/File:Ice_cream_cake.jpg   # 기사 사진은 모델 얼굴이 있어 제외
 cover_candidates: true
 theme: dark
 title: "배스킨라빈스\n크리스마스 케이크\n최대 30% 할인"
