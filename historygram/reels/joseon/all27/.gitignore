@@ -3,3 +3,4 @@ out/*.zip
 video/
 out/tmp/
 out/*.mp4
+out/carousel/*.zip
