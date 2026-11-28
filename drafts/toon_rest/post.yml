@@ -1,0 +1,57 @@
+# 인스타툰 캐러셀 시안: 진짜 쉰다는 것 (식빵찐빵 채널)
+# 기준 그림: assets/brand/toon_duo_sheet.png, 그림 6컷: PROMPTS.md
+publish_at: "2026-12-31 21:00"
+format: carousel
+channel: sikppang
+draft: true
+label: MOOD
+cover_style: toon
+cover_image: img/p1.jpg
+title: "누워서 폰 보는 건\n쉬는 게 아니었다"
+subtitle: "식빵이 쉬는 법"
+bubble: "쉬는 중이야~"
+bubble_pos: left-top
+items:
+  - type: toon
+    title: "주말 내내 누워 있었는데"
+    desc: "월요일 아침, 더 피곤해요"
+    image: img/p2.jpg
+    bubble: "왜 더 피곤해"
+    bubble_pos: left-top
+  - type: toon
+    title: "식빵은 다르게 쉬어요"
+    desc: "폰은 바구니에 넣어 저 멀리"
+    image: img/p3.jpg
+    bubble: "폰 어딨어?"
+    bubble_pos: left-top
+  - type: toon
+    title: "햇볕 쬐며 멍때리기"
+    desc: "아무것도 안 하는 것도 쉬는 거예요"
+    image: img/p4.jpg
+    bubble: "따뜻하다"
+    bubble_pos: left-top
+  - type: toon
+    title: "그날 밤엔"
+    desc: "오랜만에 푹 잤어요"
+    image: img/p5.jpg
+    bubble: "잘 자"
+    bubble_pos: left-top
+  - type: toon
+    title: "여러분의 진짜 쉬는 방법은?"
+    desc: "댓글로 알려주세요"
+    image: img/p6.jpg
+    bubble: "너는?"
+    bubble_pos: left-top
+outro_question: "여러분의 진짜 쉬는 방법은?"
+caption: |
+  하루 종일 누워 있었는데 왜 더 피곤할까요.
+
+  몸은 누워 있어도
+  눈과 머리는 계속 화면을 따라다니고 있었나 봐요.
+
+  폰은 잠깐 멀리 두고,
+  햇볕 쬐며 멍하니 있어 보기.
+  아무것도 안 하는 시간도 충분히 쉬는 거예요.
+
+  여러분의 진짜 쉬는 방법은? 댓글로 알려주세요.
+hashtags: [식빵찐빵, 쉼]
