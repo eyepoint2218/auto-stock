@@ -1,0 +1,18 @@
+{
+  "by_title": {},
+  "cover_candidates": {
+    "page_url": "http://www.smedaily.co.kr/news/articleView.html?idxno=366635",
+    "files": [
+      {
+        "image": "img/cand_01.jpg",
+        "src": "https://cdn.smedaily.co.kr/news/photo/202611/366635_301667_2516.jpg"
+      }
+    ]
+  },
+  "cover": {
+    "key": "http://www.smedaily.co.kr/news/articleView.html?idxno=366635",
+    "page_url": "http://www.smedaily.co.kr/news/articleView.html?idxno=366635",
+    "image": "img/cover_web.jpg",
+    "src": "https://cdn.smedaily.co.kr/news/thumbnail/202611/366635_301667_2516_v150.jpg"
+  }
+}
