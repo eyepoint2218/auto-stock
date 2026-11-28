@@ -1,2 +1,5 @@
 seedance_input/
 out/*.zip
+video/
+out/tmp/
+out/*.mp4

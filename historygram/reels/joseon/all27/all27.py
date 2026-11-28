@@ -188,3 +188,70 @@ def build():
 
 if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "build":
     build()
+
+
+# ---------- 시댄스 클립 영상 (왕별 3.3초) ----------
+CLIP_F = 100   # 왕별 프레임(3.33초)
+
+
+def clip_overlay(n):
+    """시댄스 클립 위에 얹는 레이어: 아래쪽 어둡게 + 글자."""
+    g = Image.new("L", (1, H))
+    for yy in range(H):
+        a = 0
+        if yy > 980:
+            a = min(235, int((yy - 980) / 300 * 235))
+        if yy < 360:
+            a = max(a, int((360 - yy) / 360 * 150))
+        g.putpixel((0, yy), a)
+    dark = Image.new("RGBA", (W, H), (10, 8, 9, 255))
+    dark.putalpha(g.resize((W, H)))
+    return Image.alpha_composite(dark, text_layer(n))
+
+
+def clip_part(n, out):
+    ov = out / f"ov_k{n:02d}.png"
+    clip_overlay(n).save(ov)
+    part = out / f"part_k{n:02d}.mp4"
+    src = HERE / "video" / f"k{n:02d}.mp4"
+    fc = (f"[0:v]fps={FPS},scale=-2:{H}:flags=lanczos,crop={W}:{H},unsharp=5:5:0.5,setsar=1,"
+          f"trim=end_frame={CLIP_F},setpts=PTS-STARTPTS[bg];[bg][1:v]overlay=0:0,format=yuv420p[v]")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-loop", "1", "-framerate", str(FPS),
+                    "-i", str(ov), "-filter_complex", fc, "-map", "[v]", "-frames:v", str(CLIP_F),
+                    "-c:v", "libx264", "-preset", "slow", "-crf", "16", "-an", str(part)], check=True)
+    return part
+
+
+def still_part(img, frames, name, out):
+    png = out / f"{name}.png"
+    img.save(png)
+    part = out / f"part_{name}.mp4"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-framerate", str(FPS), "-i", str(png),
+                    "-frames:v", str(frames), "-vf", "format=yuv420p", "-c:v", "libx264", "-preset", "slow",
+                    "-crf", "16", str(part)], check=True)
+    return part
+
+
+def build_clips(kings=range(1, 28), name="joseon_27kings"):
+    out = HERE / "out"
+    tmp = out / "tmp"
+    tmp.mkdir(parents=True, exist_ok=True)
+    parts = []
+    if len(kings) == 27:
+        parts.append(still_part(title_card(["조선 518년,", "왕 [27명]을 한 번에"]), 90, "intro", tmp))
+    parts += [clip_part(n, tmp) for n in kings]
+    if len(kings) == 27:
+        parts.append(still_part(title_card(["가장 오래 다스린 왕은", "[영조] 52년"], "저장해 두고 복습하세요"),
+                                90, "outro", tmp))
+    lst = tmp / "list.txt"
+    lst.write_text("".join(f"file '{p.name}'\n" for p in parts))
+    final = out / f"{name}.mp4"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(lst),
+                    "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-r", str(FPS),
+                    "-movflags", "+faststart", "-an", str(final)], check=True)
+    print(final)
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "clips":
+    ks = [int(x) for x in sys.argv[2].split(",")] if len(sys.argv) > 2 else list(range(1, 28))
+    build_clips(ks, "joseon_27kings" if len(ks) == 27 else "joseon_test")
