@@ -118,3 +118,73 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "sample"
     if cmd == "sample":
         sample(int(sys.argv[2]) if len(sys.argv) > 2 else 4)
+
+
+# ---------- 60초 영상 ----------
+INTRO_F, KING_F, OUTRO_F, FADE_F = 90, 60, 90, 6
+
+
+def title_card(lines, sub=None):
+    img = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(img)
+    f = font(BLACK_F, 104)
+    lh = 150
+    top = int(H * 0.42) - lh * len(lines) // 2
+    for i, l in enumerate(lines):
+        segs, x = [], 0
+        import re
+        for m in re.finditer(r"\[([^\]]+)\]|([^\[]+)", l):
+            t, c = (m.group(1), YELLOW) if m.group(1) else (m.group(2), WHITE)
+            segs.append((t, c))
+            x += f.getlength(t)
+        x = (W - x) / 2
+        for t, c in segs:
+            d.text((x, top + i * lh), t, font=f, fill=c)
+            x += f.getlength(t)
+    if sub:
+        d.text((W / 2, top + lh * len(lines) + 70), sub, font=font(BOLD_F, 44), fill=(200, 200, 200), anchor="mm")
+    d.text((W / 2, 300), "@historygram.kr", font=font(BOLD_F, 30), fill=(220, 220, 220), anchor="mm")
+    return img
+
+
+def king_frames(n):
+    base = portrait(n)
+    text = text_layer(n)
+    for i in range(KING_F):
+        z = 1 + 0.04 * i / (KING_F - 1)
+        cw, ch = round(W / z), round(H / z)
+        x, y = (W - cw) // 2, int((H - ch) * 0.3)
+        fr = base.crop((x, y, x + cw, y + ch)).resize((W, H), Image.BILINEAR).convert("RGBA")
+        yield Image.alpha_composite(fr, text).convert("RGB")
+
+
+def build():
+    out = HERE / "out"
+    out.mkdir(exist_ok=True)
+    final = out / "joseon_27kings_60s.mp4"
+    p = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24",
+                          "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-preset", "slow",
+                          "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(final)],
+                         stdin=subprocess.PIPE)
+    segments = [[title_card(["조선 518년,", "왕 [27명]을 1분에"])] * INTRO_F]
+    segments += [king_frames(n) for n in range(1, 28)]
+    segments.append([title_card(["가장 오래 다스린 왕은", "[영조] 52년"], "저장해 두고 복습하세요")] * OUTRO_F)
+    prev_tail = []
+    count = 0
+    for seg in segments:
+        frames = list(seg)
+        # 앞 구간 마지막 FADE_F 프레임과 이번 구간 첫 프레임들을 섞어 크로스페이드
+        if prev_tail:
+            for k in range(FADE_F):
+                frames[k] = Image.blend(prev_tail[k], frames[k], (k + 1) / (FADE_F + 1))
+        body, prev_tail = frames, frames[-FADE_F:]
+        for fr in body:
+            p.stdin.write(fr.tobytes())
+            count += 1
+    p.stdin.close()
+    p.wait()
+    print(final, count)
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "build":
+    build()
