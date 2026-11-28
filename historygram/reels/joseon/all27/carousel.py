@@ -33,23 +33,13 @@ def handle(d):
 
 
 def cover():
-    img = Image.new("RGB", (W, H), BG)
+    """후킹 문구 표지: 검정 배경, 글자만 (매일 캐러셀 1장과 같은 방식)."""
+    lines = ["조선 왕 27명,", "[몇 명]이나", "아세요?"]
+    rows = [(l, 128, a.BLACK_F) for l in lines]
+    top = (H - r.block_height(rows)) / 2 - 40
+    img = r.draw_block(Image.new("RGB", (W, H), (0, 0, 0)), rows, top, shadow=False, leading=1.25)
     d = ImageDraw.Draw(img)
-    d.text((W / 2, 120), "조선 왕 27명", font=a.font(a.BLACK_F, 120), fill=a.YELLOW, anchor="mm")
-    d.text((W / 2, 230), "한 번에 정리", font=a.font(a.BLACK_F, 68), fill=a.WHITE, anchor="mm")
-    cols, gap = 6, 8
-    cw = (W - 80 - (cols - 1) * gap) // cols
-    ch = int(cw * 1.1)
-    y0 = 300
-    for i in range(27):
-        row, c = divmod(i, cols)
-        n_in_row = min(cols, 27 - row * cols)
-        x0 = (W - (n_in_row * cw + (n_in_row - 1) * gap)) // 2
-        x, y = x0 + c * (cw + gap), y0 + row * (ch + gap)
-        img.paste(face_crop(i + 1, cw, ch), (x, y))
-        d.text((x + cw - 6, y + ch - 6), str(i + 1), font=a.font(a.BLACK_F, 30), fill=a.YELLOW,
-               anchor="rs", stroke_width=3, stroke_fill=(0, 0, 0))
-    d.text((W / 2, H - 95), "1대 태조부터 27대 순종까지  →", font=a.font(a.BOLD_F, 40), fill=GRAY, anchor="mm")
+    d.text((W / 2, H - 170), "1대 태조부터 27대 순종까지  →", font=a.font(a.BOLD_F, 40), fill=GRAY, anchor="mm")
     handle(d)
     return img
 
